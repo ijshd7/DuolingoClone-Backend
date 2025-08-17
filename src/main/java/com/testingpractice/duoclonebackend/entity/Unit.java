@@ -22,6 +22,6 @@ public class Unit {
     private Integer orderIndex;
 
     @Column(name = "course_id")
-    private Integer courseIndex;
+    private Integer courseId;
 
 }
