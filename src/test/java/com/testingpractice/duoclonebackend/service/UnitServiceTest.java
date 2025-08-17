@@ -1,7 +1,6 @@
 package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.UnitDto;
-import com.testingpractice.duoclonebackend.entity.Unit;
 import com.testingpractice.duoclonebackend.mapper.UnitMapperImpl;
 import com.testingpractice.duoclonebackend.repository.UnitRepository;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
-import static com.testingpractice.duoclonebackend.testutils.UnitUtils.makeUnit;
+import static com.testingpractice.duoclonebackend.testutils.TestUtils.makeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
