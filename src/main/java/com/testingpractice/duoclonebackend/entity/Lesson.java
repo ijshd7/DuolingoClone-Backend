@@ -1,11 +1,19 @@
 package com.testingpractice.duoclonebackend.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 
 @Entity
+@Table(name = "lessons")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Lesson {
 
    @Id
@@ -20,5 +28,6 @@ public class Lesson {
 
    @Column(name = "order_index")
     private Integer orderIndex;
+
 
 }
