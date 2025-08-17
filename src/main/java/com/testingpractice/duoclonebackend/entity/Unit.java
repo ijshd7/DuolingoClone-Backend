@@ -1,12 +1,15 @@
 package com.testingpractice.duoclonebackend.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(name = "units")
 @Data
+@NoArgsConstructor
 public class Unit {
 
     @Id
@@ -28,4 +31,16 @@ public class Unit {
     @Column(name = "section")
     private Integer section;
 
+    @Builder
+    public Unit(String title,
+                String description,
+                Integer orderIndex,
+                Integer courseId,
+                Integer section) {
+        this.title = title;
+        this.description = description;
+        this.orderIndex = orderIndex;
+        this.courseId = courseId;
+        this.section = section;
+    }
 }

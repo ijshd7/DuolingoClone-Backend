@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
+import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
+import static com.testingpractice.duoclonebackend.testutils.UnitUtils.makeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -20,30 +22,22 @@ class UnitServiceTest {
     @Autowired private UnitServiceImpl service;
     @Autowired private UnitRepository repo;
 
-    private Unit unit(String title, int courseId, int section) {
-        Unit u = new Unit();
-        u.setTitle(title);
-        u.setCourseId(courseId);
-        u.setSection(section);
-        return u;
-    }
 
     @Test
     void getUnitsByCourse_returnsExpectedDtos() {
 
         repo.saveAll(List.of(
-                unit("Discuss a new Job", 10, 1),
-                unit("Talk about your Habits", 10, 2),
-                unit("Pack for a Vacation", 20, 1)
+                makeUnit(UNIT_1_TITLE, 10, 1, 1),
+                makeUnit(UNIT_2_TITLE, 10, 2, 5),
+                makeUnit(UNIT_3_TITLE, 20, 1, 2)
         ));
 
         List<UnitDto> result = service.getUnitsByCourse(10);
 
         assertThat(result).hasSize(2);
         assertThat(result).extracting(UnitDto::title)
-                .containsExactlyInAnyOrder("Discuss a new Job", "Talk about your Habits");
+                .containsExactlyInAnyOrder(UNIT_1_TITLE, UNIT_2_TITLE);
     }
-
 
 
 }
