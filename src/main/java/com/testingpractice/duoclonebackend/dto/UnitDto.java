@@ -4,6 +4,6 @@ public record UnitDto(
         Integer id,
         String title,
         String description,
-        Integer orderIndex
-) {
-}
+        Integer orderIndex,
+        Integer section
+) {}

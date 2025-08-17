@@ -5,6 +5,7 @@ import lombok.Data;
 
 
 @Entity
+@Table(name = "units")
 @Data
 public class Unit {
 
@@ -23,5 +24,8 @@ public class Unit {
 
     @Column(name = "course_id")
     private Integer courseId;
+
+    @Column(name = "section")
+    private Integer section;
 
 }
