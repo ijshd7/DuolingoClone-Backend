@@ -1,0 +1,54 @@
+package com.testingpractice.duoclonebackend.controller;
+
+import com.testingpractice.duoclonebackend.constants.pathConstants;
+import com.testingpractice.duoclonebackend.repository.LessonRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.List;
+
+import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
+import static com.testingpractice.duoclonebackend.testutils.TestConstants.LESSON_4_TITLE;
+import static com.testingpractice.duoclonebackend.testutils.TestUtils.makeLesson;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+public class UnitControllerIT extends AbstractIntegrationTest {
+
+    @Autowired
+    LessonRepository lessonRepo;
+
+    @BeforeEach
+    void seed () {
+        lessonRepo.deleteAll();
+
+        lessonRepo.saveAll(List.of(
+                makeLesson(LESSON_1_TITLE, 2, 1),
+                makeLesson(LESSON_2_TITLE, 2, 2),
+                makeLesson(LESSON_3_TITLE, 2, 3),
+                makeLesson(LESSON_4_TITLE, 1, 3)
+        ));
+
+    }
+
+    @Test
+    void getLessonsByUnit_returnsLessonsForThatUnit () {
+        given()
+                .when().get(pathConstants.UNIT_LESSONS, 2)
+                .then()
+                .statusCode(200)
+                .body("$", hasSize(3))
+                .body("title", containsInAnyOrder(LESSON_1_TITLE, LESSON_2_TITLE, LESSON_3_TITLE))
+                .body("[0].id", notNullValue())
+                .body("[1].unitId", notNullValue());
+
+    }
+
+
+
+}
