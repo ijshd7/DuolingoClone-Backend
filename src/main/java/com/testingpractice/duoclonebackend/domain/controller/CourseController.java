@@ -1,5 +1,6 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
+import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.UnitDto;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.testingpractice.duoclonebackend.constants.pathConstants.COURSES;
+
 @RestController
-@RequestMapping("/api/courses")
+@RequestMapping(pathConstants.COURSES)
 public class CourseController {
 
     private final UnitService unitService;
@@ -20,7 +23,7 @@ public class CourseController {
         this.unitService = unitService;
     }
 
-    @GetMapping("/{courseId}/units")
+    @GetMapping(pathConstants.COURSE_UNITS)
     public List<UnitDto> getUnitsByCourse(@PathVariable Integer courseId) {
         return unitService.getUnitsByCourse(courseId);
     }
