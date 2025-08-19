@@ -1,12 +1,16 @@
 package com.testingpractice.duoclonebackend.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Entity
+@Table(name = "units")
 @Data
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -30,5 +34,20 @@ public class User {
 
     @Column(name="created_at")
     private Timestamp createdAt;
+
+    @Builder
+    public User(String username,
+                String firstName,
+                String lastName,
+                String pfpSrc,
+                String points,
+                Timestamp createdAt) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.pfpSrc = pfpSrc;
+        this.points = points;
+        this.createdAt = createdAt;
+    }
 
 }
