@@ -1,7 +1,7 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
-import com.testingpractice.duoclonebackend.dto.SectionDTO;
+import com.testingpractice.duoclonebackend.dto.SectionDto;
 import com.testingpractice.duoclonebackend.dto.UnitDto;
 import com.testingpractice.duoclonebackend.service.SectionService;
 import com.testingpractice.duoclonebackend.service.UnitService;
@@ -22,7 +22,7 @@ public class SectionController {
     }
 
     @GetMapping(pathConstants.SECTIONS_FROM_IDS)
-   public List<SectionDTO> getSectionsByIds (@RequestParam List<Integer> sectionIds) {
+   public List<SectionDto> getSectionsByIds (@RequestParam List<Integer> sectionIds) {
        return sectionService.getSectionsByIds(sectionIds);
    }
 

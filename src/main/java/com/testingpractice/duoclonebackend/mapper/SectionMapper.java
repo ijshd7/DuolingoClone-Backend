@@ -1,6 +1,6 @@
 package com.testingpractice.duoclonebackend.mapper;
 
-import com.testingpractice.duoclonebackend.dto.SectionDTO;
+import com.testingpractice.duoclonebackend.dto.SectionDto;
 import com.testingpractice.duoclonebackend.entity.Section;
 import org.mapstruct.Mapper;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SectionMapper {
 
-    SectionDTO toDto (Section section);
-    List<SectionDTO> toDtoList(List<Section> sections);
+    SectionDto toDto (Section section);
+    List<SectionDto> toDtoList(List<Section> sections);
 
 }

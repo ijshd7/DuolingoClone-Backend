@@ -1,6 +1,6 @@
 package com.testingpractice.duoclonebackend.dto;
 
-public record SectionDTO (
+public record SectionDto(
         Integer id,
         String title,
         Integer courseId,

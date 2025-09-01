@@ -1,6 +1,6 @@
 package com.testingpractice.duoclonebackend.service;
 
-import com.testingpractice.duoclonebackend.dto.SectionDTO;
+import com.testingpractice.duoclonebackend.dto.SectionDto;
 import com.testingpractice.duoclonebackend.entity.Section;
 import com.testingpractice.duoclonebackend.mapper.SectionMapper;
 import com.testingpractice.duoclonebackend.repository.SectionRepository;
@@ -21,7 +21,7 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public List<SectionDTO> getSectionsByIds (List<Integer> sectionIds) {
+    public List<SectionDto> getSectionsByIds (List<Integer> sectionIds) {
         List<Section> sections = sectionRepository.findAllById(sectionIds);
         return sectionMapper.toDtoList(sections);
     }
