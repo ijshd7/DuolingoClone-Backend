@@ -1,4 +1,4 @@
-package com.testingpractice.duoclonebackend.service;
+package com.testingpractice.duoclonebackend.repository;
 
 import com.testingpractice.duoclonebackend.entity.Course;
 import org.springframework.data.repository.Repository;

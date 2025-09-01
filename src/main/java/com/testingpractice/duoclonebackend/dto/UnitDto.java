@@ -5,5 +5,5 @@ public record UnitDto(
         String title,
         String description,
         Integer orderIndex,
-        Integer section
+        Integer sectionId
 ) {}

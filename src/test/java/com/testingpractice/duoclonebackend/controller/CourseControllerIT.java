@@ -38,7 +38,7 @@ class CourseControllerIT extends AbstractIntegrationTest {
     @Test
     void getUnitsByCourse_returnsUnitsForThatCourse() {
         given()
-                .when().get(pathConstants.COURSES + pathConstants.COURSE_UNITS, 10)
+                .when().get(pathConstants.COURSES + pathConstants.SECTION_UNITS, 10)
                 .then()
                 .statusCode(200)
                 .body("$", hasSize(2))

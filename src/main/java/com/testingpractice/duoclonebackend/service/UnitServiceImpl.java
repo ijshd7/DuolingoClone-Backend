@@ -22,8 +22,8 @@ public class UnitServiceImpl implements UnitService{
     }
 
     @Override
-    public List<UnitDto> getUnitsByCourse (Integer courseId) {
-        List<Unit> units = unitRepository.findAllByCourseId(courseId);
+    public List<UnitDto> getUnitsBySection (Integer sectionId) {
+        List<Unit> units = unitRepository.findAllBySectionId(sectionId);
         return unitMapper.toDtoList(units);
     }
 
@@ -34,8 +34,8 @@ public class UnitServiceImpl implements UnitService{
     }
 
     @Override
-    public List<Integer> getUnitIdsByCourse(Integer courseId) {
-        List<Integer> unitIds = unitRepository.findAllUnitIdsByCourseId(courseId);
+    public List<Integer> getUnitIdsBySection(Integer sectionId) {
+        List<Integer> unitIds = unitRepository.findAllUnitIdsBySectionId(sectionId);
         return unitIds;
     }
 

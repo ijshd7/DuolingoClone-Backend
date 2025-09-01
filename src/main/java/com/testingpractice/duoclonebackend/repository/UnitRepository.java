@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface UnitRepository extends JpaRepository<Unit, Integer> {
 
-    public List<Unit> findAllByCourseId (Integer courseId);
+    List<Unit> findAllBySectionId(Integer sectionId);
 
-    @Query("select unit.id from Unit unit where unit.courseId = :courseId")
-    List<Integer> findAllUnitIdsByCourseId(Integer courseId);
+    @Query("select unit.id from Unit unit where unit.sectionId = :sectionId")
+    List<Integer> findAllUnitIdsBySectionId(Integer sectionId);
 
 }

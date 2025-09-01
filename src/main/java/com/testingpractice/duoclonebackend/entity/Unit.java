@@ -28,19 +28,19 @@ public class Unit {
     @Column(name = "course_id")
     private Integer courseId;
 
-    @Column(name = "section")
-    private Integer section;
+    @Column(name = "section_id")
+    private Integer sectionId;
 
     @Builder
     public Unit(String title,
                 String description,
                 Integer orderIndex,
                 Integer courseId,
-                Integer section) {
+                Integer sectionId) {
         this.title = title;
         this.description = description;
         this.orderIndex = orderIndex;
         this.courseId = courseId;
-        this.section = section;
+        this.sectionId = sectionId;
     }
 }
