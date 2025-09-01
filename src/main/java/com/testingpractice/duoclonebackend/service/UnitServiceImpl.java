@@ -27,4 +27,18 @@ public class UnitServiceImpl implements UnitService{
         return unitMapper.toDtoList(units);
     }
 
+    @Override
+    public List<UnitDto> getUnitsByIds (List<Integer> unitIds) {
+        List<Unit> units = unitRepository.findAllById(unitIds);
+        return unitMapper.toDtoList(units);
+    }
+
+    @Override
+    public List<Integer> getUnitIdsByCourse(Integer courseId) {
+        List<Integer> unitIds = unitRepository.findAllUnitIdsByCourseId(courseId);
+        return unitIds;
+    }
+
+
+
 }

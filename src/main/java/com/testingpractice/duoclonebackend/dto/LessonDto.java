@@ -4,5 +4,6 @@ public record LessonDto(
         Integer id,
         String title,
         Integer unitId,
-        Integer orderIndex
+        Integer orderIndex,
+        String lessonType
 ) {}

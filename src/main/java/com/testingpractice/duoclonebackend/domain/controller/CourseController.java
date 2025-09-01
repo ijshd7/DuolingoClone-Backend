@@ -28,4 +28,9 @@ public class CourseController {
         return unitService.getUnitsByCourse(courseId);
     }
 
+    @GetMapping(pathConstants.COURSE_UNITS_IDS)
+    public List<Integer> getUnitIdsByCourse(@PathVariable Integer courseId) {
+        return unitService.getUnitIdsByCourse(courseId);
+    }
+
 }

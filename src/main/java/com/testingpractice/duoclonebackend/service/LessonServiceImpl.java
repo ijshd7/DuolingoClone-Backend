@@ -21,7 +21,17 @@ public class LessonServiceImpl implements LessonService {
 
     public List<LessonDto> getLessonsByUnit (Integer unitId) {
         List<Lesson> lessons = lessonRepository.findAllByUnitId(unitId);
-        return lessonMapper.toLessonDto(lessons);
+        return lessonMapper.toDtoList(lessons);
+    }
+
+    public List<LessonDto> getLessonsByIds (List<Integer> lessonIds) {
+        List<Lesson> lessons = lessonRepository.findAllById(lessonIds);
+        return lessonMapper.toDtoList(lessons);
+    }
+
+    public List<Integer> getLessonIdsByUnit (Integer unitId) {
+        List<Integer> lessonIds = lessonRepository.findAllLessonIdsByUnitId(unitId);
+        return lessonIds;
     }
 
 }

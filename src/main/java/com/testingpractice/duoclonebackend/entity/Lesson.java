@@ -26,6 +26,9 @@ public class Lesson {
    @Column(name = "unit_id")
     private Integer unitId;
 
+   @Column(name = "lesson_type")
+   private String lessonType;
+
    @Column(name = "order_index")
     private Integer orderIndex;
 

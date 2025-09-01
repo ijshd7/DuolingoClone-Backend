@@ -10,6 +10,6 @@ import java.util.List;
 public interface LessonMapper {
 
     LessonDto toDto (Lesson lesson);
-    List<LessonDto> toLessonDto (List<Lesson> lessons);
+    List<LessonDto> toDtoList(List<Lesson> lessons);
 
 }
