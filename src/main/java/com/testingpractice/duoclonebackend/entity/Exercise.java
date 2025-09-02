@@ -19,7 +19,7 @@ public class Exercise {
     private Integer id;
 
     @Column(name = "prompt")
-    private String title;
+    private String prompt;
 
     @Column(name = "lesson_id")
     private Integer lessonId;

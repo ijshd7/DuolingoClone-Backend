@@ -6,6 +6,8 @@ public class pathConstants {
 
     public static final String COURSES = API_V1 + "/courses";
 
+    public static final String EXERCISES = API_V1 + "/exercises";
+
 
     public static final String UNITS = API_V1 + "/units";
     public static final String UNIT_LESSONS = "/{unitId}/lessons";
@@ -15,6 +17,7 @@ public class pathConstants {
 
     public static final String LESSONS = API_V1 + "/lessons";
     public static final String LESSONS_FROM_IDS = "/ids";
+    public static final String LESSON_EXERCISES = "{lessonId}/exercises";
 
     public static final String SECTIONS = API_V1 + "/sections";
     public static final String SECTIONS_FROM_IDS = "/ids";
