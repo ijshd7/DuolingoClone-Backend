@@ -13,4 +13,7 @@ public interface UnitRepository extends JpaRepository<Unit, Integer> {
     @Query("select unit.id from Unit unit where unit.sectionId = :sectionId")
     List<Integer> findAllUnitIdsBySectionId(Integer sectionId);
 
+    Unit findFirstBySectionIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(Integer sectionId, Integer orderIndex);
+    Unit findFirstBySectionIdOrderByOrderIndexAsc(Integer sectionId);
+
 }

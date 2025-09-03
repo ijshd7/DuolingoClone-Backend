@@ -7,6 +7,7 @@ public class pathConstants {
     public static final String COURSES = API_V1 + "/courses";
 
     public static final String EXERCISES = API_V1 + "/exercises";
+    public static final String SUBMIT_EXERCSIE = "/submit";
 
 
     public static final String UNITS = API_V1 + "/units";

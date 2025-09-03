@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,8 +28,9 @@ public class ExerciseAttempt {
     @Column(name = "user_id")
     private Integer userId;
 
+
     @Column(name = "submitted_at")
-    private LocalDateTime submittedAt;
+    private Timestamp submittedAt;
 
     @Column(name = "option_id")
     private Integer optionId;

@@ -13,6 +13,8 @@ public interface SectionRepository extends JpaRepository<Section, Integer> {
     @Query("select section.id from Section section where section.courseId= :courseId")
     List<Integer> findAllSectionIdsByCourseId(Integer courseId);
 
+    Section findFirstByCourseIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(Integer courseId, Integer orderIndex);
+    Section findFirstByCourseIdOrderByOrderIndexAsc(Integer courseId);
 
 
 }

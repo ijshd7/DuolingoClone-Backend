@@ -11,4 +11,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
 
     @Query("select lesson.id from Lesson lesson where lesson.unitId = :unitId")
     List<Integer> findAllLessonIdsByUnitId(Integer unitId);
+
+    Lesson findFirstByUnitIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(Integer unitId, Integer orderIndex);
+    Lesson findFirstByUnitIdOrderByOrderIndexAsc(Integer unitId);
 }

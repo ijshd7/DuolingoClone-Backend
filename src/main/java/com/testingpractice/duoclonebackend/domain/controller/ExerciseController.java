@@ -1,14 +1,28 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.testingpractice.duoclonebackend.dto.ExerciseAttemptRequest;
+import com.testingpractice.duoclonebackend.dto.ExerciseAttemptResponse;
+import com.testingpractice.duoclonebackend.service.ExerciseService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(pathConstants.EXERCISES)
 public class ExerciseController {
 
+    private final ExerciseService exerciseService;
+
+    public ExerciseController(ExerciseService exerciseService) {
+        this.exerciseService = exerciseService;
+    }
+
+    @PostMapping(pathConstants.SUBMIT_EXERCSIE)
+    public ExerciseAttemptResponse submitExerciseAttempt (
+            @RequestBody ExerciseAttemptRequest exerciseAttemptRequest
+            //Add Later Authentication Auth
+            ) {
+        return exerciseService.submitExerciseAttempt(exerciseAttemptRequest.exerciseId(), exerciseAttemptRequest.optionId(), exerciseAttemptRequest.userId());
+    }
 
 
 }

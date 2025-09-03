@@ -28,6 +28,7 @@ public class LessonController {
 
     @GetMapping(pathConstants.LESSON_EXERCISES)
     public List<ExerciseDto> getExercisesByLessonId (@PathVariable Integer lessonId) {
+
         return exerciseService.getExercisesForLesson(lessonId);
     }
 
