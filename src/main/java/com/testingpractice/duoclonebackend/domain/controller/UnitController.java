@@ -3,7 +3,6 @@ package com.testingpractice.duoclonebackend.domain.controller;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.dto.UnitDto;
-import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.service.LessonService;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +11,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(pathConstants.UNITS)
-public class Unitcontroller {
+public class UnitController {
 
     private final LessonService lessonService;
     private final UnitService unitService;
 
-    public Unitcontroller(LessonService lessonService, UnitService unitService) {
+    public UnitController(LessonService lessonService, UnitService unitService) {
         this.lessonService = lessonService;
         this.unitService = unitService;
     }

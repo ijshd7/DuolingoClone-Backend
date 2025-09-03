@@ -1,5 +1,7 @@
 package com.testingpractice.duoclonebackend.dto;
 
+import java.util.List;
+
 public record LessonDto(
         Integer id,
         String title,

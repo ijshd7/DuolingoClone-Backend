@@ -16,4 +16,5 @@ public interface UnitRepository extends JpaRepository<Unit, Integer> {
     Unit findFirstBySectionIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(Integer sectionId, Integer orderIndex);
     Unit findFirstBySectionIdOrderByOrderIndexAsc(Integer sectionId);
 
+    List<Unit> findAllBySectionIdOrderByOrderIndexAsc(Integer sectionId);
 }

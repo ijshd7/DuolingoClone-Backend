@@ -1,6 +1,7 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
+import com.testingpractice.duoclonebackend.dto.BulkTree.SectionTreeNode;
 import com.testingpractice.duoclonebackend.dto.SectionDto;
 import com.testingpractice.duoclonebackend.dto.UnitDto;
 import com.testingpractice.duoclonebackend.service.SectionService;
@@ -27,13 +28,18 @@ public class SectionController {
    }
 
     @GetMapping(pathConstants.SECTION_UNITS)
-    public List<UnitDto> getUnitsBySection(@PathVariable Integer courseId) {
-        return unitService.getUnitsBySection(courseId);
+    public List<UnitDto> getUnitsBySection(@PathVariable Integer sectionId) {
+        return unitService.getUnitsBySection(sectionId);
     }
 
     @GetMapping(pathConstants.SECTION_UNITS_IDS)
-    public List<Integer> getUnitIdsBySection(@PathVariable Integer courseId) {
-        return unitService.getUnitIdsBySection(courseId);
+    public List<Integer> getUnitIdsBySection(@PathVariable Integer sectionId) {
+        return unitService.getUnitIdsBySection(sectionId);
+    }
+
+    @GetMapping("/getBulk")
+    public SectionTreeNode getBulkSection(@PathVariable Integer sectionId) {
+        return sectionService.getBulkSection(sectionId);
     }
 
 }

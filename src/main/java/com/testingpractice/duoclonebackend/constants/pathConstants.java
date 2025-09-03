@@ -22,7 +22,7 @@ public class pathConstants {
 
     public static final String SECTIONS = API_V1 + "/sections";
     public static final String SECTIONS_FROM_IDS = "/ids";
-    public static final String SECTION_UNITS = "/{courseId}/units";
+    public static final String SECTION_UNITS = "/{sectionId}/units";
     public static final String SECTION_UNITS_IDS = SECTION_UNITS + "/ids";
     public static final String SECTIONS_FROM_COURSE_ID = SECTION_UNITS + "/ids";
 }
