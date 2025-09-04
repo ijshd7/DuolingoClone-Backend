@@ -95,17 +95,14 @@ public class LessonServiceImpl implements LessonService {
             userCourseProgress.setCurrentLessonId(nextLesson.getId());
         }
 
-        boolean hasAlreadyCompletedLesson = lessonCompletionRepository.existsByUserIdAndLessonId(userId, lessonId);
+        boolean hasAlreadyCompletedLesson = lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId);
 
         if (!hasAlreadyCompletedLesson) {
-
-            LessonCompletion lessonCompletion = LessonCompletion.builder()
-                    .userId(userId)
-                    .lessonId(lessonId)
-                    .courseId(courseId)
-                    .score(15)
-                    .completedAt(Timestamp.from(Instant.now()))
-                    .build();
+            LessonCompletion lessonCompletion = new LessonCompletion();
+            lessonCompletion.setId(new LessonCompletionId(userId, lessonId));
+            lessonCompletion.setCourseId(courseId);
+            lessonCompletion.setScore(15);
+            lessonCompletion.setCompletedAt(Timestamp.from(Instant.now()));
 
             lessonCompletionRepository.save(lessonCompletion);
         }
@@ -116,7 +113,7 @@ public class LessonServiceImpl implements LessonService {
 
 
         LessonCompleteResponse response = new LessonCompleteResponse(scoreForLesson, lessonId,
-                lessonMapper.toDto(lesson, lessonCompletionRepository.existsByUserIdAndLessonId(userId, lessonId)),
+                lessonMapper.toDto(lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
                 userCourseProgressMapper.toDto(userCourseProgress),
                 "Lesson Complete!"
                 );
