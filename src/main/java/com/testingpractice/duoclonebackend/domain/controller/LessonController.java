@@ -29,9 +29,9 @@ public class LessonController {
     }
 
     @GetMapping(pathConstants.LESSON_EXERCISES)
-    public List<ExerciseDto> getExercisesByLessonId (@PathVariable Integer lessonId) {
+    public List<ExerciseDto> getExercisesByLessonId (@PathVariable Integer lessonId, @PathVariable Integer userId) {
 
-        return exerciseService.getExercisesForLesson(lessonId);
+        return exerciseService.getExercisesForLesson(lessonId, userId);
     }
 
     @PostMapping("/completedLesson")

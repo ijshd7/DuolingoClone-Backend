@@ -7,6 +7,6 @@ import com.testingpractice.duoclonebackend.dto.ExerciseDto;
 import java.util.List;
 
 public interface ExerciseService {
-    List<ExerciseDto> getExercisesForLesson (Integer lessonId);
+    List<ExerciseDto> getExercisesForLesson (Integer lessonId, Integer userId);
     ExerciseAttemptResponse submitExerciseAttempt (Integer exerciseId, Integer optionId, Integer userId);
 }

@@ -28,6 +28,9 @@ public class ExerciseAttempt {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Column(name = "is_checked", nullable = false)
+    private boolean isChecked = false;
+
 
     @Column(name = "submitted_at")
     private Timestamp submittedAt;

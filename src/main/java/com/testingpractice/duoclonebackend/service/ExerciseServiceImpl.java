@@ -40,7 +40,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     //TODO add user id
-    public List<ExerciseDto> getExercisesForLesson (Integer lessonId) {
+    @Transactional
+    public List<ExerciseDto> getExercisesForLesson (Integer lessonId, Integer userId) {
+
+        exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
+
         List<Exercise> exercises = exerciseRepository.findAllByLessonId(lessonId);
         return exercises.stream().map(exercise -> {
                     List<ExerciseOption> exerciseOptions = exerciseOptionRepository.findAllByExerciseId(exercise.getId());
@@ -54,7 +58,6 @@ public class ExerciseServiceImpl implements ExerciseService {
     public ExerciseAttemptResponse submitExerciseAttempt(Integer exerciseId, Integer optionId, Integer userId) {
 
         //Check if user allowed to submit exercise
-
 
         //Check if option correct
         Optional<ExerciseOption> option = exerciseOptionRepository.findById(optionId);

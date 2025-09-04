@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,14 +70,19 @@ public class LessonServiceImpl implements LessonService {
         Integer scoreForLesson = getScoreForLesson(lessonId, userId);
         user.setPoints(user.getPoints() + scoreForLesson);
 
-        Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
-        if (optionalLesson.isEmpty()) throw new ApiException(ErrorCode.LESSON_NOT_FOUND, HttpStatus.NOT_FOUND);
-        Lesson lesson = optionalLesson.get();
+        if (userCourseProgress.getCurrentLessonId().equals(lessonId)) {
 
-        //UPDATE USERS CURRENT LESSON
-        Lesson nextLesson = getNextLesson(lesson, userId, courseId);
-        if (nextLesson == null) throw new ApiException(ErrorCode.LESSON_NOT_FOUND, HttpStatus.NOT_FOUND);
-        userCourseProgress.setCurrentLessonId(nextLesson.getId());
+            Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
+            if (optionalLesson.isEmpty()) throw new ApiException(ErrorCode.LESSON_NOT_FOUND, HttpStatus.NOT_FOUND);
+            Lesson lesson = optionalLesson.get();
+
+            //UPDATE USERS CURRENT LESSON
+            Lesson nextLesson = getNextLesson(lesson, userId, courseId);
+            if (nextLesson == null) throw new ApiException(ErrorCode.LESSON_NOT_FOUND, HttpStatus.NOT_FOUND);
+            userCourseProgress.setCurrentLessonId(nextLesson.getId());
+        }
+
+
 
         LessonCompleteResponse response = new LessonCompleteResponse(scoreForLesson, lessonId, "COURSE COMPLETE");
 
@@ -100,7 +104,9 @@ public class LessonServiceImpl implements LessonService {
                 .toList();
 
         List<ExerciseAttempt> exerciseAttempts =
-                exerciseAttemptRepository.findAllByExerciseIdInAndUserId(exerciseIds, userId);
+                exerciseAttemptRepository.findAllByExerciseIdInAndUserIdAndUnchecked(exerciseIds, userId);
+
+        exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
 
         if (exerciseAttempts.isEmpty()) {
             return 0;

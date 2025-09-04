@@ -9,5 +9,6 @@ public record ExerciseAttemptDto(
         Integer userId,
         Timestamp submittedAt,
         Integer optionId,
-        Integer score
+        Integer score,
+        Integer isChecked
 ) {}
