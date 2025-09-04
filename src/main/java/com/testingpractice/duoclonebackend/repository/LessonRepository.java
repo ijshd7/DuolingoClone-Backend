@@ -16,6 +16,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer> {
     Lesson findFirstByUnitIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(Integer unitId, Integer orderIndex);
     Lesson findFirstByUnitIdOrderByOrderIndexAsc(Integer unitId);
 
-
     List<Lesson> findAllByUnitIdInOrderByUnitIdAscOrderIndexAsc(Collection<Integer> unitIds);
 }

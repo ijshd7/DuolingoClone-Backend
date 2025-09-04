@@ -12,10 +12,11 @@ import java.util.List;
 public interface ExerciseAttemptRepository extends JpaRepository<ExerciseAttempt, Integer> {
 
     @Query("""
-      SELECT ea FROM ExerciseAttempt ea
-      JOIN Exercise e ON e.id = ea.exerciseId
-      WHERE e.lessonId = :lessonId AND ea.userId = :userId
-    """)
-
-    List<ExerciseAttempt> findAllByExerciseIdInAndUserId(Collection<Integer> exerciseIds, Integer userId);
+    SELECT ea FROM ExerciseAttempt ea
+    WHERE ea.userId = :userId
+      AND ea.exerciseId IN :exerciseIds
+  """)
+    List<ExerciseAttempt> findAllByExerciseIdInAndUserId(
+            @Param("exerciseIds") Collection<Integer> exerciseIds,
+            @Param("userId") Integer userId);
 }

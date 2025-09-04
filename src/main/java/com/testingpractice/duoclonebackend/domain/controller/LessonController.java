@@ -2,6 +2,8 @@ package com.testingpractice.duoclonebackend.domain.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.ExerciseDto;
+import com.testingpractice.duoclonebackend.dto.LessonCompleteRequest;
+import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.service.ExerciseService;
 import com.testingpractice.duoclonebackend.service.LessonService;
@@ -31,5 +33,16 @@ public class LessonController {
 
         return exerciseService.getExercisesForLesson(lessonId);
     }
+
+    @PostMapping("/completedLesson")
+    public LessonCompleteResponse completeLesson (
+            @RequestBody LessonCompleteRequest lessonCompleteRequest
+            ) {
+
+        return lessonService.getCompletedLesson(lessonCompleteRequest.lessonId(), lessonCompleteRequest.userId(), lessonCompleteRequest.courseId());
+
+    }
+
+
 
 }

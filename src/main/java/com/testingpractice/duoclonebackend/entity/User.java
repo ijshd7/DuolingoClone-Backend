@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "units")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 public class User {

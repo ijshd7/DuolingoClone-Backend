@@ -11,5 +11,5 @@ public interface LessonService {
     List<LessonDto> getLessonsByUnit (Integer lessonId);
     List<LessonDto> getLessonsByIds (List<Integer> lessonIds);
     List<Integer> getLessonIdsByUnit (Integer unitId);
-    public LessonCompleteResponse getCompletedLesson (Integer lessonId, Integer userId, Integer courseId);
+     LessonCompleteResponse getCompletedLesson (Integer lessonId, Integer userId, Integer courseId);
 }

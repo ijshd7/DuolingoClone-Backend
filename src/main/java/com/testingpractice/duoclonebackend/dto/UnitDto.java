@@ -7,6 +7,5 @@ public record UnitDto(
         String title,
         String description,
         Integer orderIndex,
-        Integer sectionId,
-        List<Integer> unitLessons
+        Integer sectionId
 ) {}

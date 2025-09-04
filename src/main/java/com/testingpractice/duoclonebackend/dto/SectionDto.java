@@ -6,6 +6,5 @@ public record SectionDto(
         Integer id,
         String title,
         Integer courseId,
-        Integer orderIndex,
-        List<Integer> unitIds
+        Integer orderIndex
 ){ }

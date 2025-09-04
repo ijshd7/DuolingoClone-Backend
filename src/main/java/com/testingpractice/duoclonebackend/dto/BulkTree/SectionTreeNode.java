@@ -4,7 +4,7 @@ import com.testingpractice.duoclonebackend.dto.SectionDto;
 
 import java.util.List;
 
-public record SectionTreeNode(SectionDto section, List<UnitTreeNode> unitTreeNodes) {
+public record SectionTreeNode(SectionDto section, List<UnitTreeNode> units) {
 
 
 
