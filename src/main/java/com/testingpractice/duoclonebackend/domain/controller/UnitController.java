@@ -22,8 +22,8 @@ public class UnitController {
     }
 
     @GetMapping(pathConstants.UNIT_LESSONS)
-    public List<LessonDto> getLessonsByUnit (@PathVariable Integer unitId) {
-        return lessonService.getLessonsByUnit(unitId);
+    public List<LessonDto> getLessonsByUnit (@PathVariable Integer unitId, @PathVariable Integer userId) {
+        return lessonService.getLessonsByUnit(unitId, userId);
     }
 
     @GetMapping(pathConstants.UNITS_FROM_IDS)

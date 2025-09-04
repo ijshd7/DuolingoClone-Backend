@@ -9,9 +9,11 @@ public class pathConstants {
     public static final String EXERCISES = API_V1 + "/exercises";
     public static final String SUBMIT_EXERCSIE = "/submit";
 
+    public static final String USERS = API_V1 + "/users";
+    public static final String GET_USER_COURSE_PROGRESS = "/progress/{courseId}/{userId}";
 
     public static final String UNITS = API_V1 + "/units";
-    public static final String UNIT_LESSONS = "/{unitId}/lessons";
+    public static final String UNIT_LESSONS = "/{unitId}/{userId}/lessons";
     public static final String LESSONS_UNITS_IDS = UNIT_LESSONS + "/ids";
     public static final String UNITS_FROM_IDS = "/ids";
 

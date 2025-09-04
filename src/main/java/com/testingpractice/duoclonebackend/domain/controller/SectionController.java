@@ -37,9 +37,9 @@ public class SectionController {
         return unitService.getUnitIdsBySection(sectionId);
     }
 
-    @GetMapping("/getBulk/{sectionId}")
-    public SectionTreeNode getBulkSection(@PathVariable("sectionId") Integer sectionId) {
-        return sectionService.getBulkSection(sectionId); // will throw if not found
+    @GetMapping("/getBulk/{sectionId}/{userId}")
+    public SectionTreeNode getBulkSection(@PathVariable("sectionId") Integer sectionId, @PathVariable("userId") Integer userId) {
+        return sectionService.getBulkSection(sectionId, userId); // will throw if not found
     }
 
 }

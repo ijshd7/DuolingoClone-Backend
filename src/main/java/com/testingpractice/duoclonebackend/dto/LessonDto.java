@@ -7,5 +7,6 @@ public record LessonDto(
         String title,
         Integer unitId,
         Integer orderIndex,
-        String lessonType
+        String lessonType,
+        boolean isPassed
 ) {}

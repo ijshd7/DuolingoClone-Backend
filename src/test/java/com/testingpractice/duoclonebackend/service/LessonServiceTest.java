@@ -32,7 +32,7 @@ public class LessonServiceTest {
                 makeLesson(LESSON_4_TITLE, 1, 3)
         ));
 
-        List<LessonDto> result = service.getLessonsByUnit(2);
+        List<LessonDto> result = service.getLessonsByUnit(2, 1);
         assertThat(result).hasSize(3);
 
     }

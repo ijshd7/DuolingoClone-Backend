@@ -24,8 +24,8 @@ public class LessonController {
     }
 
     @GetMapping(pathConstants.LESSONS_FROM_IDS)
-    public List<LessonDto> getLessonsByIds (@RequestParam List<Integer> lessonIds) {
-       return lessonService.getLessonsByIds(lessonIds);
+    public List<LessonDto> getLessonsByIds (@RequestParam List<Integer> lessonIds, @RequestParam Integer userId) {
+       return lessonService.getLessonsByIds(lessonIds, userId);
     }
 
     @GetMapping(pathConstants.LESSON_EXERCISES)

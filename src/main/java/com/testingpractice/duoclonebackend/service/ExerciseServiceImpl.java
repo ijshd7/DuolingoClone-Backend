@@ -43,6 +43,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Transactional
     public List<ExerciseDto> getExercisesForLesson (Integer lessonId, Integer userId) {
 
+
+
         exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
 
         List<Exercise> exercises = exerciseRepository.findAllByLessonId(lessonId);

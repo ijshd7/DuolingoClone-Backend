@@ -8,5 +8,5 @@ import java.util.List;
 public interface SectionService {
     List<SectionDto> getSectionsByIds (List<Integer> sectionIds);
     List<Integer> getSectionIdsByCourse (Integer courseId);
-    SectionTreeNode getBulkSection (Integer sectionId);
+    SectionTreeNode getBulkSection (Integer sectionId, Integer userId);
 }

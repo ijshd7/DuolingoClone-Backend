@@ -31,15 +31,17 @@ public class SectionServiceImpl implements SectionService {
     private final UnitMapper unitMapper;
     private final LessonRepository lessonRepository;
     private final LessonMapper lessonMapper;
+    private final LessonService lessonService;
 
 
-    public SectionServiceImpl(SectionRepository sectionRepository, SectionMapper sectionMapper, UnitRepository unitRepository, UnitMapper unitMapper, LessonRepository lessonRepository, LessonMapper lessonMapper) {
+    public SectionServiceImpl(SectionRepository sectionRepository, SectionMapper sectionMapper, UnitRepository unitRepository, UnitMapper unitMapper, LessonRepository lessonRepository, LessonMapper lessonMapper, LessonService lessonService) {
         this.sectionMapper = sectionMapper;
         this.sectionRepository = sectionRepository;
         this.unitRepository = unitRepository;
         this.unitMapper = unitMapper;
         this.lessonRepository = lessonRepository;
         this.lessonMapper = lessonMapper;
+        this.lessonService = lessonService;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class SectionServiceImpl implements SectionService {
         return sectionIds;
     }
 
-    public SectionTreeNode getBulkSection (Integer sectionId) {
+    public SectionTreeNode getBulkSection (Integer sectionId, Integer userId) {
         Section section = sectionRepository.findById(sectionId).orElse(null);
         if (section == null) return null;
 
@@ -77,7 +79,7 @@ public class SectionServiceImpl implements SectionService {
             List<Lesson> ls = lessonsByUnit.getOrDefault(u.getId(), List.of());
             return new UnitTreeNode(
                     unitMapper.toDto(u),
-                    lessonMapper.toDtoList(ls)
+                    lessonMapper.toDtoList(ls, lessonService.completedSetFor(userId, ls.stream().map(Lesson::getId).toList()))
             );
         }).toList();
 
