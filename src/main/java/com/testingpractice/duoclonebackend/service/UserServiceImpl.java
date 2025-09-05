@@ -9,17 +9,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl {
 
-    private final UserCourseProgressRepository userCourseProgressRepository;
-    private final UserCourseProgressMapper userCourseProgressMapper;
+  private final UserCourseProgressRepository userCourseProgressRepository;
+  private final UserCourseProgressMapper userCourseProgressMapper;
 
-    public UserServiceImpl(UserCourseProgressRepository userCourseProgressRepository, UserCourseProgressMapper userCourseProgressMapper) {
-        this.userCourseProgressRepository = userCourseProgressRepository;
-        this.userCourseProgressMapper = userCourseProgressMapper;
-    }
+  public UserServiceImpl(
+      UserCourseProgressRepository userCourseProgressRepository,
+      UserCourseProgressMapper userCourseProgressMapper) {
+    this.userCourseProgressRepository = userCourseProgressRepository;
+    this.userCourseProgressMapper = userCourseProgressMapper;
+  }
 
-    public UserCourseProgressDto getUserCourseProgress (Integer courseId, Integer userId) {
-        UserCourseProgress userCourseProgress = userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
-        return userCourseProgressMapper.toDto(userCourseProgress);
-    }
-
+  public UserCourseProgressDto getUserCourseProgress(Integer courseId, Integer userId) {
+    UserCourseProgress userCourseProgress =
+        userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
+    return userCourseProgressMapper.toDto(userCourseProgress);
+  }
 }

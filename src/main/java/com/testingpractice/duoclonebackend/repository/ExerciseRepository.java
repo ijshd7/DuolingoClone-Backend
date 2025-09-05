@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ExerciseRepository extends JpaRepository<Exercise, Integer> {
-    List<Exercise> findAllByLessonId(Integer lessonId);
+  List<Exercise> findAllByLessonId(Integer lessonId);
 
-    Integer lessonId(Integer lessonId);
+  Integer lessonId(Integer lessonId);
 }

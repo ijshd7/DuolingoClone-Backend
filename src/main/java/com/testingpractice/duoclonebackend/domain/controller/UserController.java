@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(pathConstants.USERS)
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+  private final UserServiceImpl userServiceImpl;
 
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
-    }
+  public UserController(UserServiceImpl userServiceImpl) {
+    this.userServiceImpl = userServiceImpl;
+  }
 
-    @GetMapping(pathConstants.GET_USER_COURSE_PROGRESS)
-    public UserCourseProgressDto getUserCourseProgress (@PathVariable Integer courseId, @PathVariable Integer userId) {
-        return userServiceImpl.getUserCourseProgress(courseId, userId);
-    }
-
+  @GetMapping(pathConstants.GET_USER_COURSE_PROGRESS)
+  public UserCourseProgressDto getUserCourseProgress(
+      @PathVariable Integer courseId, @PathVariable Integer userId) {
+    return userServiceImpl.getUserCourseProgress(courseId, userId);
+  }
 }

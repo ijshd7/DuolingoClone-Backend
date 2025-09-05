@@ -1,13 +1,12 @@
 package com.testingpractice.duoclonebackend.repository;
 
 import com.testingpractice.duoclonebackend.entity.ExerciseAttempt;
+import java.util.Collection;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.Collection;
-import java.util.List;
 
 public interface ExerciseAttemptRepository extends JpaRepository<ExerciseAttempt, Integer> {
 

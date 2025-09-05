@@ -10,16 +10,14 @@ import com.testingpractice.duoclonebackend.mapper.UserCourseProgressMapper;
 import com.testingpractice.duoclonebackend.repository.*;
 import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 @Service
 public class LessonServiceImpl implements LessonService {
@@ -159,7 +157,7 @@ public class LessonServiceImpl implements LessonService {
         Section nextSection = sectionRepository.findFirstByCourseIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(currentSection.get().getCourseId(), currentSection.get().getOrderIndex());
         if (nextSection != null) {
             Unit firstUnitOfSection = unitRepository.findFirstBySectionIdOrderByOrderIndexAsc(nextSection.getId());
-            if (firstUnitOfSection == null) throw new ApiException(ErrorCode.COURSE_END, HttpStatus.NOT_FOUND);;
+            if (firstUnitOfSection == null) throw new ApiException(ErrorCode.COURSE_END, HttpStatus.NOT_FOUND);
             return lessonRepository.findFirstByUnitIdOrderByOrderIndexAsc(firstUnitOfSection.getId());
         }
 

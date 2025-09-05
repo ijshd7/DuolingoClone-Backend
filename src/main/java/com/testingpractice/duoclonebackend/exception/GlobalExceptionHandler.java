@@ -12,23 +12,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ApiException.class)
-    public ResponseEntity<ProblemDetail> handleApi(ApiException ex) {
-        ProblemDetail pd = ProblemDetail.forStatus(ex.status());
-        pd.setTitle(ex.code().name());
-        pd.setDetail(ex.getMessage());
-        pd.setProperty("code", ex.code().name());
-        return ResponseEntity.status(ex.status()).body(pd);
-    }
+  @ExceptionHandler(ApiException.class)
+  public ResponseEntity<ProblemDetail> handleApi(ApiException ex) {
+    ProblemDetail pd = ProblemDetail.forStatus(ex.status());
+    pd.setTitle(ex.code().name());
+    pd.setDetail(ex.getMessage());
+    pd.setProperty("code", ex.code().name());
+    return ResponseEntity.status(ex.status()).body(pd);
+  }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleAny(Exception ex, HttpServletRequest req) {
-        ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        log.error("Unhandled {} {} ", req.getMethod(), req.getRequestURI(), ex); // <-- prints stacktrace
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ProblemDetail> handleAny(Exception ex, HttpServletRequest req) {
+    ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+    log.error(
+        "Unhandled {} {} ", req.getMethod(), req.getRequestURI(), ex); // <-- prints stacktrace
 
-        pd.setTitle("INTERNAL_ERROR");
-        pd.setDetail("Unexpected error");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pd);
-    }
-
+    pd.setTitle("INTERNAL_ERROR");
+    pd.setDetail("Unexpected error");
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pd);
+  }
 }

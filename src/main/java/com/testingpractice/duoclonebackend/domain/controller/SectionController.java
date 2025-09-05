@@ -6,40 +6,39 @@ import com.testingpractice.duoclonebackend.dto.SectionDto;
 import com.testingpractice.duoclonebackend.dto.UnitDto;
 import com.testingpractice.duoclonebackend.service.SectionService;
 import com.testingpractice.duoclonebackend.service.UnitService;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(pathConstants.SECTIONS)
 public class SectionController {
 
-    private final SectionService sectionService;
-    private final UnitService unitService;
+  private final SectionService sectionService;
+  private final UnitService unitService;
 
-    public SectionController(SectionService sectionService, UnitService unitService) {
-        this.sectionService = sectionService;
-        this.unitService = unitService;
-    }
+  public SectionController(SectionService sectionService, UnitService unitService) {
+    this.sectionService = sectionService;
+    this.unitService = unitService;
+  }
 
-    @GetMapping(pathConstants.SECTIONS_FROM_IDS)
-   public List<SectionDto> getSectionsByIds (@RequestParam List<Integer> sectionIds) {
-       return sectionService.getSectionsByIds(sectionIds);
-   }
+  @GetMapping(pathConstants.GET_SECTIONS_FROM_IDS)
+  public List<SectionDto> getSectionsByIds(@RequestParam List<Integer> sectionIds) {
+    return sectionService.getSectionsByIds(sectionIds);
+  }
 
-    @GetMapping(pathConstants.SECTION_UNITS)
-    public List<UnitDto> getUnitsBySection(@PathVariable Integer sectionId) {
-        return unitService.getUnitsBySection(sectionId);
-    }
+  @GetMapping(pathConstants.GET_UNITS_BY_SECTION)
+  public List<UnitDto> getUnitsBySection(@PathVariable Integer sectionId) {
+    return unitService.getUnitsBySection(sectionId);
+  }
 
-    @GetMapping(pathConstants.SECTION_UNITS_IDS)
-    public List<Integer> getUnitIdsBySection(@PathVariable Integer sectionId) {
-        return unitService.getUnitIdsBySection(sectionId);
-    }
+  @GetMapping(pathConstants.GET_UNIT_IDS_BY_SECTION)
+  public List<Integer> getUnitIdsBySection(@PathVariable Integer sectionId) {
+    return unitService.getUnitIdsBySection(sectionId);
+  }
 
-    @GetMapping("/getBulk/{sectionId}/{userId}")
-    public SectionTreeNode getBulkSection(@PathVariable("sectionId") Integer sectionId, @PathVariable("userId") Integer userId) {
-        return sectionService.getBulkSection(sectionId, userId); // will throw if not found
-    }
-
+  @GetMapping("/getBulk/{sectionId}/{userId}")
+  public SectionTreeNode getBulkSection(
+      @PathVariable("sectionId") Integer sectionId, @PathVariable("userId") Integer userId) {
+    return sectionService.getBulkSection(sectionId, userId); // will throw if not found
+  }
 }

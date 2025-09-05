@@ -15,17 +15,16 @@ import java.util.List;
 @RequestMapping(pathConstants.COURSES)
 public class CourseController {
 
-    private final UnitService unitService;
-    private final SectionService sectionService;
+  private final UnitService unitService;
+  private final SectionService sectionService;
 
-    public CourseController(UnitService unitService, SectionService sectionService) {
-        this.unitService = unitService;
-        this.sectionService = sectionService;
-    }
+  public CourseController(UnitService unitService, SectionService sectionService) {
+    this.unitService = unitService;
+    this.sectionService = sectionService;
+  }
 
-    @GetMapping(pathConstants.SECTIONS_FROM_COURSE_ID)
-    public List<Integer> getSectionIdsByCourse(@PathVariable Integer courseId) {
-        return sectionService.getSectionIdsByCourse(courseId);
-    }
-
+  @GetMapping(pathConstants.GET_SECTION_IDS_BY_COURSE)
+  public List<Integer> getSectionIdsByCourse(@PathVariable Integer courseId) {
+    return sectionService.getSectionIdsByCourse(courseId);
+  }
 }

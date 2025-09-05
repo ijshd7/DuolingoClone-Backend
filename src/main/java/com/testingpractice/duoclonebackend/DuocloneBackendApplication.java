@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DuocloneBackendApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DuocloneBackendApplication.class, args);
-    }
-
+  public static void main(String[] args) {
+    SpringApplication.run(DuocloneBackendApplication.class, args);
+  }
 }

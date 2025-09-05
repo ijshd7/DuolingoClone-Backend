@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(pathConstants.EXERCISES)
 public class ExerciseController {
 
-    private final ExerciseService exerciseService;
+  private final ExerciseService exerciseService;
 
-    public ExerciseController(ExerciseService exerciseService) {
-        this.exerciseService = exerciseService;
-    }
+  public ExerciseController(ExerciseService exerciseService) {
+    this.exerciseService = exerciseService;
+  }
 
-    @PostMapping(pathConstants.SUBMIT_EXERCSIE)
-    public ExerciseAttemptResponse submitExerciseAttempt (
-            @RequestBody ExerciseAttemptRequest exerciseAttemptRequest
-            //Add Later Authentication Auth
-            ) {
-        return exerciseService.submitExerciseAttempt(exerciseAttemptRequest.exerciseId(), exerciseAttemptRequest.optionId(), exerciseAttemptRequest.userId());
-    }
-
-
+  @PostMapping(pathConstants.SUBMIT_EXERCSIE)
+  public ExerciseAttemptResponse submitExerciseAttempt(
+      @RequestBody ExerciseAttemptRequest exerciseAttemptRequest
+      // Add Later Authentication Auth
+      ) {
+    return exerciseService.submitExerciseAttempt(
+        exerciseAttemptRequest.exerciseId(),
+        exerciseAttemptRequest.optionId(),
+        exerciseAttemptRequest.userId());
+  }
 }

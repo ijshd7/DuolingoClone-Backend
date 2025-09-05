@@ -7,16 +7,13 @@ import lombok.Data;
 @Data
 public class Course {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
-    @Column(name = "title")
-    private String title;
+  @Column(name = "title")
+  private String title;
 
-    @Column(name = "image_src")
-    private String imgSrc;
-
-
-
+  @Column(name = "image_src")
+  private String imgSrc;
 }

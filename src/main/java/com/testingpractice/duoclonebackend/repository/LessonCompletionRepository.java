@@ -13,27 +13,29 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LessonCompletionRepository
-        extends JpaRepository<LessonCompletion, LessonCompletionId> {
+    extends JpaRepository<LessonCompletion, LessonCompletionId> {
 
-    boolean existsByIdUserIdAndIdLessonId(Integer userId, Integer lessonId);
+  boolean existsByIdUserIdAndIdLessonId(Integer userId, Integer lessonId);
 
-    Optional<LessonCompletion> findByIdUserIdAndIdLessonId(Integer userId, Integer lessonId);
+  Optional<LessonCompletion> findByIdUserIdAndIdLessonId(Integer userId, Integer lessonId);
 
-    @Query("""
+  @Query(
+      """
     select lc.id.lessonId
     from LessonCompletion lc
     where lc.id.userId = :userId and lc.id.lessonId in :lessonIds
   """)
-    List<Integer> findCompletedLessonIdsIn(@Param("userId") Integer userId,
-                                           @Param("lessonIds") Collection<Integer> lessonIds);
+  List<Integer> findCompletedLessonIdsIn(
+      @Param("userId") Integer userId, @Param("lessonIds") Collection<Integer> lessonIds);
 
-
-    @Modifying
-    @Query(value = """
+  @Modifying
+  @Query(
+      value =
+          """
   INSERT IGNORE INTO lesson_completions
     (user_id, lesson_id, course_id, score, completed_at)
   VALUES (:userId, :lessonId, :courseId, :score, :completedAt)
-  """, nativeQuery = true)
-    int insertIfAbsent(long userId, long lessonId, long courseId, int score, Timestamp completedAt);
-
+  """,
+      nativeQuery = true)
+  int insertIfAbsent(long userId, long lessonId, long courseId, int score, Timestamp completedAt);
 }

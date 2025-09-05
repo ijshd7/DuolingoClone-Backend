@@ -10,8 +10,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
-import static com.testingpractice.duoclonebackend.constants.pathConstants.UNITS;
-import static com.testingpractice.duoclonebackend.constants.pathConstants.UNIT_LESSONS;
 import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
 import static com.testingpractice.duoclonebackend.testutils.TestConstants.LESSON_4_TITLE;
 import static com.testingpractice.duoclonebackend.testutils.TestUtils.makeLesson;
@@ -41,7 +39,7 @@ public class UnitControllerIT extends AbstractIntegrationTest {
     @Test
     void getLessonsByUnit_returnsLessonsForThatUnit () {
         given()
-                .when().get(pathConstants.UNITS + pathConstants.UNIT_LESSONS, 2)
+                .when().get(pathConstants.UNITS + pathConstants.GET_LESSONS_BY_UNIT, 2)
                 .then()
                 .statusCode(200)
                 .body("$", hasSize(3))

@@ -2,9 +2,7 @@ package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.BulkTree.SectionTreeNode;
 import com.testingpractice.duoclonebackend.dto.BulkTree.UnitTreeNode;
-import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.dto.SectionDto;
-import com.testingpractice.duoclonebackend.dto.UnitDto;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.Section;
 import com.testingpractice.duoclonebackend.entity.Unit;
@@ -14,13 +12,11 @@ import com.testingpractice.duoclonebackend.mapper.UnitMapper;
 import com.testingpractice.duoclonebackend.repository.LessonRepository;
 import com.testingpractice.duoclonebackend.repository.SectionRepository;
 import com.testingpractice.duoclonebackend.repository.UnitRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SectionServiceImpl implements SectionService {

@@ -1,11 +1,10 @@
 package com.testingpractice.duoclonebackend.entity;
 
 import jakarta.persistence.*;
+import java.sql.Timestamp;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "users")
@@ -13,41 +12,41 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
-    @Column(name = "username")
-    private String username;
+  @Column(name = "username")
+  private String username;
 
-    @Column(name = "first_name")
-    private String firstName;
+  @Column(name = "first_name")
+  private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
+  @Column(name = "last_name")
+  private String lastName;
 
-    @Column(name = "pfp_source")
-    private String pfpSrc;
+  @Column(name = "pfp_source")
+  private String pfpSrc;
 
-    @Column(name="points")
-    private String points;
+  @Column(name = "points")
+  private String points;
 
-    @Column(name="created_at")
-    private Timestamp createdAt;
+  @Column(name = "created_at")
+  private Timestamp createdAt;
 
-    @Builder
-    public User(String username,
-                String firstName,
-                String lastName,
-                String pfpSrc,
-                String points,
-                Timestamp createdAt) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.pfpSrc = pfpSrc;
-        this.points = points;
-        this.createdAt = createdAt;
-    }
-
+  @Builder
+  public User(
+      String username,
+      String firstName,
+      String lastName,
+      String pfpSrc,
+      String points,
+      Timestamp createdAt) {
+    this.username = username;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.pfpSrc = pfpSrc;
+    this.points = points;
+    this.createdAt = createdAt;
+  }
 }

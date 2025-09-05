@@ -1,10 +1,9 @@
 package com.testingpractice.duoclonebackend.repository;
 
 import com.testingpractice.duoclonebackend.entity.Unit;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 public interface UnitRepository extends JpaRepository<Unit, Integer> {
 

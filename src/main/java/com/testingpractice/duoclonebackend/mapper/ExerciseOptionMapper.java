@@ -1,16 +1,14 @@
 package com.testingpractice.duoclonebackend.mapper;
 
-
 import com.testingpractice.duoclonebackend.dto.ExerciseOptionDto;
 import com.testingpractice.duoclonebackend.entity.ExerciseOption;
-import org.mapstruct.Mapper;
-
 import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ExerciseOptionMapper {
 
-    ExerciseOptionDto toDto(ExerciseOption option);
+  ExerciseOptionDto toDto(ExerciseOption option);
 
-    List<ExerciseOptionDto> toDtoList(List<ExerciseOption> options);
+  List<ExerciseOptionDto> toDtoList(List<ExerciseOption> options);
 }

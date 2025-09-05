@@ -14,19 +14,19 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ExerciseOption {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
-    @Column(name = "exercise_id")
-    private Integer exerciseId;
+  @Column(name = "exercise_id")
+  private Integer exerciseId;
 
-    @Column(name = "content")
-    private String content;
+  @Column(name = "content")
+  private String content;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+  @Column(name = "image_url")
+  private String imageUrl;
 
-    @Column(name = "is_correct")
-    private Boolean isCorrect;
+  @Column(name = "is_correct")
+  private Boolean isCorrect;
 }
