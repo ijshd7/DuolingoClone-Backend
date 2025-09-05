@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
@@ -95,19 +96,10 @@ public class LessonServiceImpl implements LessonService {
             userCourseProgress.setCurrentLessonId(nextLesson.getId());
         }
 
-        boolean hasAlreadyCompletedLesson = lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId);
-
-        if (!hasAlreadyCompletedLesson) {
-            LessonCompletion lessonCompletion = new LessonCompletion();
-            lessonCompletion.setId(new LessonCompletionId(userId, lessonId));
-            lessonCompletion.setCourseId(courseId);
-            lessonCompletion.setScore(15);
-            lessonCompletion.setCompletedAt(Timestamp.from(Instant.now()));
-
-            lessonCompletionRepository.save(lessonCompletion);
-        }
+        lessonCompletionRepository.insertIfAbsent(userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
 
         userRepository.save(user);
+
 
         userCourseProgressRepository.save(userCourseProgress);
 
@@ -123,6 +115,7 @@ public class LessonServiceImpl implements LessonService {
 
     }
 
+    @Transactional
     private Integer getScoreForLesson (Integer lessonId, Integer userId) {
         List<Exercise> lessonExercises = exerciseRepository.findAllByLessonId(lessonId);
 
