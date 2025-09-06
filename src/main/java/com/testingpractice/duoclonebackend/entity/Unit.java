@@ -18,6 +18,9 @@ public class Unit {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "animation_path")
+    private String animationPath;
+
     @Column(name = "description")
     private String description;
 

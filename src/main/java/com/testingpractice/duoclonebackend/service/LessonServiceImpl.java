@@ -1,5 +1,4 @@
 package com.testingpractice.duoclonebackend.service;
-
 import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.entity.*;
@@ -86,8 +85,6 @@ public class LessonServiceImpl implements LessonService {
 
         if (userCourseProgress.getCurrentLessonId().equals(lessonId)) {
 
-
-
             //UPDATE USERS CURRENT LESSON
             Lesson nextLesson = getNextLesson(lesson, userId, courseId);
             if (nextLesson == null) throw new ApiException(ErrorCode.LESSON_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -98,10 +95,9 @@ public class LessonServiceImpl implements LessonService {
 
         userRepository.save(user);
 
-
         userCourseProgressRepository.save(userCourseProgress);
 
-        Integer completedLessonsInCourse = lessonCompletionRepository.countByUserIdAndCourseId(userId, courseId);
+        Integer completedLessonsInCourse = lessonCompletionRepository.countByUserAndCourse(userId, courseId);
         if (completedLessonsInCourse == null) completedLessonsInCourse = 0;
 
         LessonCompleteResponse response = new LessonCompleteResponse(scoreForLesson, lessonId,
@@ -157,6 +153,7 @@ public class LessonServiceImpl implements LessonService {
         if (currentSection.isEmpty()) throw new ApiException(ErrorCode.SECTION_NOT_FOUND, HttpStatus.NOT_FOUND);
 
         Section nextSection = sectionRepository.findFirstByCourseIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(currentSection.get().getCourseId(), currentSection.get().getOrderIndex());
+
         if (nextSection != null) {
             Unit firstUnitOfSection = unitRepository.findFirstBySectionIdOrderByOrderIndexAsc(nextSection.getId());
             if (firstUnitOfSection == null) throw new ApiException(ErrorCode.COURSE_END, HttpStatus.NOT_FOUND);

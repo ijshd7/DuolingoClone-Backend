@@ -26,7 +26,7 @@ public class UserServiceImpl {
     UserCourseProgress userCourseProgress =
         userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
 
-    Integer totalLessonCount = lessonCompletionRepository.countByUserIdAndCourseId(userId, courseId);
+    Integer totalLessonCount = lessonCompletionRepository.countByUserAndCourse(userId, courseId);
     if (totalLessonCount == null) totalLessonCount = 0;
 
     return userCourseProgressMapper.toDto(userCourseProgress, totalLessonCount);

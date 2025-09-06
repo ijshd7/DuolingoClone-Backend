@@ -1,6 +1,4 @@
 package com.testingpractice.duoclonebackend.service;
-
-import com.testingpractice.duoclonebackend.dto.ExerciseAttemptDto;
 import com.testingpractice.duoclonebackend.dto.ExerciseAttemptResponse;
 import com.testingpractice.duoclonebackend.dto.ExerciseDto;
 

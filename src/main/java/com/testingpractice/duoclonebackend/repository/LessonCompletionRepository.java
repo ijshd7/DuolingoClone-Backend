@@ -39,5 +39,11 @@ public interface LessonCompletionRepository
       nativeQuery = true)
   int insertIfAbsent(long userId, long lessonId, long courseId, int score, Timestamp completedAt);
 
-  Integer countByUserIdAndCourseId(Integer userId, Integer courseId);
+  @Query("""
+  select count(lc)
+  from LessonCompletion lc
+  where lc.id.userId = :userId and lc.courseId = :courseId
+""")
+  Integer countByUserAndCourse(@Param("userId") Integer userId,
+                               @Param("courseId") Integer courseId);
 }
