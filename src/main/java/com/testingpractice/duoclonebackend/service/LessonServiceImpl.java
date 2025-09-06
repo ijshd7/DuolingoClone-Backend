@@ -101,10 +101,12 @@ public class LessonServiceImpl implements LessonService {
 
         userCourseProgressRepository.save(userCourseProgress);
 
+        Integer completedLessonsInCourse = lessonCompletionRepository.countByUserIdAndCourseId(userId, courseId);
+        if (completedLessonsInCourse == null) completedLessonsInCourse = 0;
 
         LessonCompleteResponse response = new LessonCompleteResponse(scoreForLesson, lessonId,
                 lessonMapper.toDto(lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
-                userCourseProgressMapper.toDto(userCourseProgress),
+                userCourseProgressMapper.toDto(userCourseProgress, completedLessonsInCourse),
                 "Lesson Complete!"
                 );
 
@@ -114,7 +116,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Transactional
-    private Integer getScoreForLesson (Integer lessonId, Integer userId) {
+    public Integer getScoreForLesson (Integer lessonId, Integer userId) {
         List<Exercise> lessonExercises = exerciseRepository.findAllByLessonId(lessonId);
 
         if (lessonExercises.isEmpty()) return 0;

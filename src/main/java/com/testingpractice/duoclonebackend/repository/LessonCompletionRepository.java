@@ -38,4 +38,6 @@ public interface LessonCompletionRepository
   """,
       nativeQuery = true)
   int insertIfAbsent(long userId, long lessonId, long courseId, int score, Timestamp completedAt);
+
+  Integer countByUserIdAndCourseId(Integer userId, Integer courseId);
 }

@@ -34,7 +34,7 @@ public class LessonController {
     return exerciseService.getExercisesForLesson(lessonId, userId);
   }
 
-  @PostMapping("/completedLesson")
+  @PostMapping(pathConstants.SUBMIT_COMPLETED_LESSON)
   public LessonCompleteResponse completeLesson(
       @RequestBody LessonCompleteRequest lessonCompleteRequest) {
 
