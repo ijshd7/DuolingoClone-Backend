@@ -9,33 +9,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UnitServiceImpl implements UnitService{
+public class UnitServiceImpl implements UnitService {
 
-    private final UnitRepository unitRepository;
-    private final UnitMapper unitMapper;
+  private final UnitRepository unitRepository;
+  private final UnitMapper unitMapper;
 
-    @Autowired
-    public UnitServiceImpl (UnitRepository unitRepository, UnitMapper unitMapper) {
-        this.unitRepository = unitRepository;
-        this.unitMapper = unitMapper;
-    }
+  @Autowired
+  public UnitServiceImpl(UnitRepository unitRepository, UnitMapper unitMapper) {
+    this.unitRepository = unitRepository;
+    this.unitMapper = unitMapper;
+  }
 
-    @Override
-    public List<UnitDto> getUnitsBySection (Integer sectionId) {
-        List<Unit> units = unitRepository.findAllBySectionId(sectionId);
-        return unitMapper.toDtoList(units);
-    }
+  @Override
+  public List<UnitDto> getUnitsBySection(Integer sectionId) {
+    List<Unit> units = unitRepository.findAllBySectionId(sectionId);
+    return unitMapper.toDtoList(units);
+  }
 
-    @Override
-    public List<UnitDto> getUnitsByIds (List<Integer> unitIds) {
-        List<Unit> units = unitRepository.findAllById(unitIds);
-        return unitMapper.toDtoList(units);
-    }
+  @Override
+  public List<UnitDto> getUnitsByIds(List<Integer> unitIds) {
+    List<Unit> units = unitRepository.findAllById(unitIds);
+    return unitMapper.toDtoList(units);
+  }
 
-    @Override
-    public List<Integer> getUnitIdsBySection(Integer sectionId) {
-        List<Integer> unitIds = unitRepository.findAllUnitIdsBySectionId(sectionId);
-        return unitIds;
-    }
-
+  @Override
+  public List<Integer> getUnitIdsBySection(Integer sectionId) {
+    List<Integer> unitIds = unitRepository.findAllUnitIdsBySectionId(sectionId);
+    return unitIds;
+  }
 }

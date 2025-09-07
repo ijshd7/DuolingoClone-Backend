@@ -1,6 +1,5 @@
 package com.testingpractice.duoclonebackend.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,10 +16,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PathIcon {
-    @Id
-    @Column(name = "unit_id")
-    private Integer unitId;
+  @Id
+  @Column(name = "unit_id")
+  private Integer unitId;
 
-    @Column(name = "icon", nullable = false)
-    private String icon;
+  @Column(name = "icon", nullable = false)
+  private String icon;
 }

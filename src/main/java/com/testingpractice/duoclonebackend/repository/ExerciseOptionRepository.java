@@ -5,5 +5,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ExerciseOptionRepository extends JpaRepository<ExerciseOption, Integer> {
-    List<ExerciseOption> findAllByExerciseId(Integer exerciseId);
+  List<ExerciseOption> findAllByExerciseId(Integer exerciseId);
 }

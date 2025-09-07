@@ -15,8 +15,9 @@ public class UserServiceImpl {
   private final LessonCompletionRepository lessonCompletionRepository;
 
   public UserServiceImpl(
-          UserCourseProgressRepository userCourseProgressRepository,
-          UserCourseProgressMapper userCourseProgressMapper, LessonCompletionRepository lessonCompletionRepository) {
+      UserCourseProgressRepository userCourseProgressRepository,
+      UserCourseProgressMapper userCourseProgressMapper,
+      LessonCompletionRepository lessonCompletionRepository) {
     this.userCourseProgressRepository = userCourseProgressRepository;
     this.userCourseProgressMapper = userCourseProgressMapper;
     this.lessonCompletionRepository = lessonCompletionRepository;

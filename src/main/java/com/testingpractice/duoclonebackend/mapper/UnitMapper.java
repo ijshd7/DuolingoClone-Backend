@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface UnitMapper {
 
-    UnitDto toDto(Unit unit);
-    List<UnitDto> toDtoList(List<Unit> units);
+  UnitDto toDto(Unit unit);
 
+  List<UnitDto> toDtoList(List<Unit> units);
 }

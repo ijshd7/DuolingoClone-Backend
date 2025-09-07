@@ -15,34 +15,33 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class AbstractIntegrationTest {
 
-    @Container
-    @SuppressWarnings("resource")
-    protected static final PostgreSQLContainer<?> POSTGRES =
-            new PostgreSQLContainer<>("postgres:16-alpine")
-                    .withDatabaseName("duotest")
-                    .withUsername("test")
-                    .withPassword("test");
+  @Container
+  @SuppressWarnings("resource")
+  protected static final PostgreSQLContainer<?> POSTGRES =
+      new PostgreSQLContainer<>("postgres:16-alpine")
+          .withDatabaseName("duotest")
+          .withUsername("test")
+          .withPassword("test");
 
-    @DynamicPropertySource
-    static void postgresProps(DynamicPropertyRegistry r) {
-        r.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        r.add("spring.datasource.username", POSTGRES::getUsername);
-        r.add("spring.datasource.password", POSTGRES::getPassword);
-        r.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
-        r.add("spring.jpa.hibernate.ddl-auto", () -> "update");
-    }
+  @DynamicPropertySource
+  static void postgresProps(DynamicPropertyRegistry r) {
+    r.add("spring.datasource.url", POSTGRES::getJdbcUrl);
+    r.add("spring.datasource.username", POSTGRES::getUsername);
+    r.add("spring.datasource.password", POSTGRES::getPassword);
+    r.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
+    r.add("spring.jpa.hibernate.ddl-auto", () -> "update");
+  }
 
-    @LocalServerPort
-    protected int port;
+  @LocalServerPort protected int port;
 
-    @BeforeAll
-    static void restAssuredLogging() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    }
+  @BeforeAll
+  static void restAssuredLogging() {
+    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+  }
 
-    @BeforeEach
-    void restAssuredBase() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = port;
-    }
+  @BeforeEach
+  void restAssuredBase() {
+    RestAssured.baseURI = "http://localhost";
+    RestAssured.port = port;
+  }
 }

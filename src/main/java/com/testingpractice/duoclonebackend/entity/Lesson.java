@@ -14,21 +14,19 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Lesson {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
-   private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
-   @Column(name = "title")
-    private String title;
+  @Column(name = "title")
+  private String title;
 
-   @Column(name = "unit_id")
-    private Integer unitId;
+  @Column(name = "unit_id")
+  private Integer unitId;
 
-   @Column(name = "lesson_type")
-   private String lessonType;
+  @Column(name = "lesson_type")
+  private String lessonType;
 
-   @Column(name = "order_index")
-    private Integer orderIndex;
-
-
+  @Column(name = "order_index")
+  private Integer orderIndex;
 }

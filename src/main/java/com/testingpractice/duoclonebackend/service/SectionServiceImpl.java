@@ -21,68 +21,73 @@ import org.springframework.stereotype.Service;
 @Service
 public class SectionServiceImpl implements SectionService {
 
-    private final SectionRepository sectionRepository;
-    private final SectionMapper sectionMapper;
-    private final UnitRepository unitRepository;
-    private final UnitMapper unitMapper;
-    private final LessonRepository lessonRepository;
-    private final LessonMapper lessonMapper;
-    private final LessonService lessonService;
+  private final SectionRepository sectionRepository;
+  private final SectionMapper sectionMapper;
+  private final UnitRepository unitRepository;
+  private final UnitMapper unitMapper;
+  private final LessonRepository lessonRepository;
+  private final LessonMapper lessonMapper;
+  private final LessonService lessonService;
 
+  public SectionServiceImpl(
+      SectionRepository sectionRepository,
+      SectionMapper sectionMapper,
+      UnitRepository unitRepository,
+      UnitMapper unitMapper,
+      LessonRepository lessonRepository,
+      LessonMapper lessonMapper,
+      LessonService lessonService) {
+    this.sectionMapper = sectionMapper;
+    this.sectionRepository = sectionRepository;
+    this.unitRepository = unitRepository;
+    this.unitMapper = unitMapper;
+    this.lessonRepository = lessonRepository;
+    this.lessonMapper = lessonMapper;
+    this.lessonService = lessonService;
+  }
 
-    public SectionServiceImpl(SectionRepository sectionRepository, SectionMapper sectionMapper, UnitRepository unitRepository, UnitMapper unitMapper, LessonRepository lessonRepository, LessonMapper lessonMapper, LessonService lessonService) {
-        this.sectionMapper = sectionMapper;
-        this.sectionRepository = sectionRepository;
-        this.unitRepository = unitRepository;
-        this.unitMapper = unitMapper;
-        this.lessonRepository = lessonRepository;
-        this.lessonMapper = lessonMapper;
-        this.lessonService = lessonService;
-    }
+  @Override
+  public List<SectionDto> getSectionsByIds(List<Integer> sectionIds) {
+    List<Section> sections = sectionRepository.findAllById(sectionIds);
+    return sectionMapper.toDtoList(sections);
+  }
 
-    @Override
-    public List<SectionDto> getSectionsByIds (List<Integer> sectionIds) {
-        List<Section> sections = sectionRepository.findAllById(sectionIds);
-        return sectionMapper.toDtoList(sections);
-    }
+  @Override
+  public List<Integer> getSectionIdsByCourse(Integer courseId) {
+    List<Integer> sectionIds = sectionRepository.findAllSectionIdsByCourseId(courseId);
+    return sectionIds;
+  }
 
-    @Override
-    public List<Integer> getSectionIdsByCourse (Integer courseId) {
-        List<Integer> sectionIds = sectionRepository.findAllSectionIdsByCourseId(courseId);
-        return sectionIds;
-    }
+  public SectionTreeNode getBulkSection(Integer sectionId, Integer userId) {
+    Section section = sectionRepository.findById(sectionId).orElse(null);
+    if (section == null) return null;
 
-    public SectionTreeNode getBulkSection (Integer sectionId, Integer userId) {
-        Section section = sectionRepository.findById(sectionId).orElse(null);
-        if (section == null) return null;
+    SectionDto sectionDto = sectionMapper.toDto(section);
 
-        SectionDto sectionDto = sectionMapper.toDto(section);
+    List<Unit> units = unitRepository.findAllBySectionIdOrderByOrderIndexAsc(sectionId);
+    List<Integer> unitIds = units.stream().map(Unit::getId).toList();
 
-        List<Unit> units = unitRepository.findAllBySectionIdOrderByOrderIndexAsc(sectionId);
-        List<Integer> unitIds = units.stream().map(Unit::getId).toList();
+    List<Lesson> lessons = lessonRepository.findAllByUnitIdInOrderByUnitIdAscOrderIndexAsc(unitIds);
 
-        List<Lesson> lessons = lessonRepository
-                .findAllByUnitIdInOrderByUnitIdAscOrderIndexAsc(unitIds);
+    Map<Integer, List<Lesson>> lessonsByUnit =
+        lessons.stream()
+            .collect(
+                Collectors.groupingBy(Lesson::getUnitId, LinkedHashMap::new, Collectors.toList()));
 
-        Map<Integer, List<Lesson>> lessonsByUnit =
-                lessons.stream().collect(Collectors.groupingBy(
-                        Lesson::getUnitId,
-                        LinkedHashMap::new,
-                        Collectors.toList()
-                ));
+    List<UnitTreeNode> unitNodes =
+        units.stream()
+            .map(
+                u -> {
+                  List<Lesson> ls = lessonsByUnit.getOrDefault(u.getId(), List.of());
+                  return new UnitTreeNode(
+                      unitMapper.toDto(u),
+                      lessonMapper.toDtoList(
+                          ls,
+                          lessonService.completedSetFor(
+                              userId, ls.stream().map(Lesson::getId).toList())));
+                })
+            .toList();
 
-        List<UnitTreeNode> unitNodes = units.stream().map(u -> {
-            List<Lesson> ls = lessonsByUnit.getOrDefault(u.getId(), List.of());
-            return new UnitTreeNode(
-                    unitMapper.toDto(u),
-                    lessonMapper.toDtoList(ls, lessonService.completedSetFor(userId, ls.stream().map(Lesson::getId).toList()))
-            );
-        }).toList();
-
-        return new SectionTreeNode(sectionDto, unitNodes);
-    }
-
-
-
-
+    return new SectionTreeNode(sectionDto, unitNodes);
+  }
 }

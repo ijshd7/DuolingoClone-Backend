@@ -15,27 +15,32 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LessonCompletion {
 
-    @EmbeddedId
-    private LessonCompletionId id;
+  @EmbeddedId private LessonCompletionId id;
 
-    @Column(name = "course_id")
-    private Integer courseId;
+  @Column(name = "course_id")
+  private Integer courseId;
 
-    @Column(name = "score")
-    private Integer score;
+  @Column(name = "score")
+  private Integer score;
 
-    @Column(name = "completed_at")
-    private Timestamp completedAt;
+  @Column(name = "completed_at")
+  private Timestamp completedAt;
 
-    public Integer getUserId() { return id != null ? id.getUserId() : null; }
-    public void setUserId(Integer userId) {
-        if (id == null) id = new LessonCompletionId();
-        id.setUserId(userId);
-    }
-    public Integer getLessonId() { return id != null ? id.getLessonId() : null; }
-    public void setLessonId(Integer lessonId) {
-        if (id == null) id = new LessonCompletionId();
-        id.setLessonId(lessonId);
-    }
+  public Integer getUserId() {
+    return id != null ? id.getUserId() : null;
+  }
 
+  public void setUserId(Integer userId) {
+    if (id == null) id = new LessonCompletionId();
+    id.setUserId(userId);
+  }
+
+  public Integer getLessonId() {
+    return id != null ? id.getLessonId() : null;
+  }
+
+  public void setLessonId(Integer lessonId) {
+    if (id == null) id = new LessonCompletionId();
+    id.setLessonId(lessonId);
+  }
 }

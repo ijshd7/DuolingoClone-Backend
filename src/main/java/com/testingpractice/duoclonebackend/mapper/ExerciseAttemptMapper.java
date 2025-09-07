@@ -8,10 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ExerciseAttemptMapper {
 
-    ExerciseAttemptDto toDto(ExerciseAttempt attempt);
+  ExerciseAttemptDto toDto(ExerciseAttempt attempt);
 
-    List<ExerciseAttemptDto> toDtoList(List<ExerciseAttempt> attempts);
-
-
-
+  List<ExerciseAttemptDto> toDtoList(List<ExerciseAttempt> attempts);
 }

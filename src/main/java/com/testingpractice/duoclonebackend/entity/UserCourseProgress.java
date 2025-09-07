@@ -15,20 +15,22 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserCourseProgress {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
-    @Column(name = "user_id", nullable = false)
-    private Integer userId;
+  @Column(name = "user_id", nullable = false)
+  private Integer userId;
 
-    @Column(name = "course_id", nullable = false)
-    private Integer courseId;
+  @Column(name = "course_id", nullable = false)
+  private Integer courseId;
 
-    @Column(name = "current_lesson_id", nullable = false)
-    private Integer currentLessonId;
+  @Column(name = "current_lesson_id", nullable = false)
+  private Integer currentLessonId;
 
-    @Column(name = "updated_at", nullable = false,
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    private Timestamp updatedAt;
+  @Column(
+      name = "updated_at",
+      nullable = false,
+      columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+  private Timestamp updatedAt;
 }

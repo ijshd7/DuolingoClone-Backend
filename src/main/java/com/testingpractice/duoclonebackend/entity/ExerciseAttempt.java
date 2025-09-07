@@ -1,6 +1,5 @@
 package com.testingpractice.duoclonebackend.entity;
 
-
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
@@ -16,26 +15,25 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ExerciseAttempt {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
-    @Column(name = "exercise_id")
-    private Integer exerciseId;
+  @Column(name = "exercise_id")
+  private Integer exerciseId;
 
-    @Column(name = "user_id")
-    private Integer userId;
+  @Column(name = "user_id")
+  private Integer userId;
 
-    @Column(name = "is_checked", nullable = false)
-    private boolean isChecked = false;
+  @Column(name = "is_checked", nullable = false)
+  private boolean isChecked = false;
 
+  @Column(name = "submitted_at")
+  private Timestamp submittedAt;
 
-    @Column(name = "submitted_at")
-    private Timestamp submittedAt;
+  @Column(name = "option_id")
+  private Integer optionId;
 
-    @Column(name = "option_id")
-    private Integer optionId;
-
-    @Column(name = "score")
-    private Integer score;
+  @Column(name = "score")
+  private Integer score;
 }

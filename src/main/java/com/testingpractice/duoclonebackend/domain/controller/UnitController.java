@@ -12,28 +12,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(pathConstants.UNITS)
 public class UnitController {
 
-    private final LessonService lessonService;
-    private final UnitService unitService;
+  private final LessonService lessonService;
+  private final UnitService unitService;
 
-    public UnitController(LessonService lessonService, UnitService unitService) {
-        this.lessonService = lessonService;
-        this.unitService = unitService;
-    }
+  public UnitController(LessonService lessonService, UnitService unitService) {
+    this.lessonService = lessonService;
+    this.unitService = unitService;
+  }
 
-    @GetMapping(pathConstants.GET_LESSONS_BY_UNIT)
-    public List<LessonDto> getLessonsByUnit (@PathVariable Integer unitId, @PathVariable Integer userId) {
-        return lessonService.getLessonsByUnit(unitId, userId);
-    }
+  @GetMapping(pathConstants.GET_LESSONS_BY_UNIT)
+  public List<LessonDto> getLessonsByUnit(
+      @PathVariable Integer unitId, @PathVariable Integer userId) {
+    return lessonService.getLessonsByUnit(unitId, userId);
+  }
 
-    @GetMapping(pathConstants.GET_UNITS_FROM_IDS)
-    public List<UnitDto> getUnitsByIds (@RequestParam List<Integer> unitIds) {
-        return unitService.getUnitsByIds(unitIds);
-    }
+  @GetMapping(pathConstants.GET_UNITS_FROM_IDS)
+  public List<UnitDto> getUnitsByIds(@RequestParam List<Integer> unitIds) {
+    return unitService.getUnitsByIds(unitIds);
+  }
 
-    @GetMapping(pathConstants.GET_LESSON_IDS_BY_UNIT)
-    public List<Integer> getLessonIdsByUnit(@PathVariable Integer unitId) {
-        return lessonService.getLessonIdsByUnit(unitId);
-    }
-
-
+  @GetMapping(pathConstants.GET_LESSON_IDS_BY_UNIT)
+  public List<Integer> getLessonIdsByUnit(@PathVariable Integer unitId) {
+    return lessonService.getLessonIdsByUnit(unitId);
+  }
 }

@@ -20,7 +20,7 @@ public class pathConstants {
   public static final String GET_LESSONS_BY_UNIT = "/{unitId}/{userId}/lessons";
   public static final String GET_SECTIONS_BY_COURSE = "/{courseID}/sections";
 
-  //!! TRANSACTIONAL !!//
+  // !! TRANSACTIONAL !!//
   public static final String GET_EXERCISES_BY_LESSON = "{lessonId}/{userId}/exercises";
 
   // ===== GET DTO LIST FROM IDS =====
@@ -36,6 +36,4 @@ public class pathConstants {
   // ----------------------------- POST REQUESTS AND MUTATIONS -----------------------------
   public static final String SUBMIT_EXERCSIE = "/submit";
   public static final String SUBMIT_COMPLETED_LESSON = "/completedLesson";
-
-
 }

@@ -10,18 +10,19 @@ import org.springframework.data.repository.query.Param;
 
 public interface ExerciseAttemptRepository extends JpaRepository<ExerciseAttempt, Integer> {
 
-    @Query("""
+  @Query(
+"""
   SELECT ea FROM ExerciseAttempt ea
   WHERE ea.userId = :userId
     AND ea.exerciseId IN :exerciseIds
     AND ea.isChecked = false
 """)
-    List<ExerciseAttempt> findAllByExerciseIdInAndUserIdAndUnchecked(
-            @Param("exerciseIds") Collection<Integer> exerciseIds,
-            @Param("userId") Integer userId);
+  List<ExerciseAttempt> findAllByExerciseIdInAndUserIdAndUnchecked(
+      @Param("exerciseIds") Collection<Integer> exerciseIds, @Param("userId") Integer userId);
 
-    @Modifying
-    @Query("""
+  @Modifying
+  @Query(
+      """
     UPDATE ExerciseAttempt ea
        SET ea.isChecked = true
      WHERE ea.userId = :userId
@@ -30,6 +31,6 @@ public interface ExerciseAttemptRepository extends JpaRepository<ExerciseAttempt
             SELECT e.id FROM Exercise e WHERE e.lessonId = :lessonId
        )
   """)
-    int markUncheckedByUserAndLesson(@Param("userId") Integer userId,
-                                     @Param("lessonId") Integer lessonId);
+  int markUncheckedByUserAndLesson(
+      @Param("userId") Integer userId, @Param("lessonId") Integer lessonId);
 }
