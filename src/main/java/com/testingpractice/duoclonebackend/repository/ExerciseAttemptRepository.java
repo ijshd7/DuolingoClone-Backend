@@ -12,10 +12,10 @@ public interface ExerciseAttemptRepository extends JpaRepository<ExerciseAttempt
 
   @Query(
 """
-  SELECT ea FROM ExerciseAttempt ea
-  WHERE ea.userId = :userId
-    AND ea.exerciseId IN :exerciseIds
-    AND ea.isChecked = false
+  SELECT exerciseAttempt FROM ExerciseAttempt exerciseAttempt
+  WHERE exerciseAttempt.userId = :userId
+    AND exerciseAttempt.exerciseId IN :exerciseIds
+    AND exerciseAttempt.isChecked = false
 """)
   List<ExerciseAttempt> findAllByExerciseIdInAndUserIdAndUnchecked(
       @Param("exerciseIds") Collection<Integer> exerciseIds, @Param("userId") Integer userId);
@@ -23,11 +23,11 @@ public interface ExerciseAttemptRepository extends JpaRepository<ExerciseAttempt
   @Modifying
   @Query(
       """
-    UPDATE ExerciseAttempt ea
-       SET ea.isChecked = true
-     WHERE ea.userId = :userId
-       AND ea.isChecked = false
-       AND ea.exerciseId IN (
+    UPDATE ExerciseAttempt exerciseAttempt 
+       SET exerciseAttempt.isChecked = true
+     WHERE exerciseAttempt.userId = :userId
+       AND exerciseAttempt.isChecked = false
+       AND exerciseAttempt.exerciseId IN (
             SELECT e.id FROM Exercise e WHERE e.lessonId = :lessonId
        )
   """)

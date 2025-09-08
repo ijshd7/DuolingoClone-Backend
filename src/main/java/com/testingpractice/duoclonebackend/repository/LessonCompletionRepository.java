@@ -16,7 +16,6 @@ public interface LessonCompletionRepository
 
   boolean existsByIdUserIdAndIdLessonId(Integer userId, Integer lessonId);
 
-  Optional<LessonCompletion> findByIdUserIdAndIdLessonId(Integer userId, Integer lessonId);
 
   @Query(
       """
