@@ -6,6 +6,8 @@ import com.testingpractice.duoclonebackend.dto.SectionDto;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.Section;
 import com.testingpractice.duoclonebackend.entity.Unit;
+import com.testingpractice.duoclonebackend.exception.ApiException;
+import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
 import com.testingpractice.duoclonebackend.mapper.SectionMapper;
 import com.testingpractice.duoclonebackend.mapper.UnitMapper;
@@ -60,7 +62,7 @@ public class SectionServiceImpl implements SectionService {
 
   public SectionTreeNode getBulkSection(Integer sectionId, Integer userId) {
     Section section = sectionRepository.findById(sectionId).orElse(null);
-    if (section == null) return null;
+    if (section == null) throw new ApiException(ErrorCode.SECTION_NOT_FOUND);
 
     SectionDto sectionDto = sectionMapper.toDto(section);
 

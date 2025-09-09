@@ -39,7 +39,6 @@ public class ExerciseServiceImpl implements ExerciseService {
     this.exerciseAttemptMapper = exerciseAttemptMapper;
   }
 
-  // TODO add user id
   @Transactional
   public List<ExerciseDto> getExercisesForLesson(Integer lessonId, Integer userId) {
 
@@ -61,9 +60,6 @@ public class ExerciseServiceImpl implements ExerciseService {
   public ExerciseAttemptResponse submitExerciseAttempt(
       Integer exerciseId, Integer optionId, Integer userId) {
 
-    // Check if user allowed to submit exercise
-
-    // Check if option correct
     Optional<ExerciseOption> option = exerciseOptionRepository.findById(optionId);
 
     // TODO add error

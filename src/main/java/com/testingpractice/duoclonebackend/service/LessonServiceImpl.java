@@ -10,6 +10,8 @@ import com.testingpractice.duoclonebackend.mapper.UserCourseProgressMapper;
 import com.testingpractice.duoclonebackend.repository.*;
 import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
@@ -20,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class LessonServiceImpl implements LessonService {
 
   private final LessonRepository lessonRepository;
@@ -33,28 +36,6 @@ public class LessonServiceImpl implements LessonService {
   private final LessonCompletionRepository lessonCompletionRepository;
   private final UserCourseProgressMapper userCourseProgressMapper;
 
-  public LessonServiceImpl(
-      LessonRepository lessonRepository,
-      LessonMapper lessonMapper,
-      UserCourseProgressRepository userCourseProgressRepository,
-      UserRepository userRepository,
-      ExerciseAttemptRepository exerciseAttemptRepository,
-      UnitRepository unitRepository,
-      SectionRepository sectionRepository,
-      ExerciseRepository exerciseRepository,
-      LessonCompletionRepository lessonCompletionRepository,
-      UserCourseProgressMapper userCourseProgressMapper) {
-    this.lessonRepository = lessonRepository;
-    this.lessonMapper = lessonMapper;
-    this.userCourseProgressRepository = userCourseProgressRepository;
-    this.userRepository = userRepository;
-    this.exerciseAttemptRepository = exerciseAttemptRepository;
-    this.unitRepository = unitRepository;
-    this.sectionRepository = sectionRepository;
-    this.exerciseRepository = exerciseRepository;
-    this.lessonCompletionRepository = lessonCompletionRepository;
-    this.userCourseProgressMapper = userCourseProgressMapper;
-  }
 
   public List<LessonDto> getLessonsByUnit(Integer unitId, Integer userId) {
     List<Lesson> lessons = lessonRepository.findAllByUnitId(unitId);
@@ -79,17 +60,16 @@ public class LessonServiceImpl implements LessonService {
   }
 
   @Transactional
-  public LessonCompleteResponse getCompletedLesson(
-      Integer lessonId, Integer userId, Integer courseId) {
+  public LessonCompleteResponse getCompletedLesson(Integer lessonId, Integer userId, Integer courseId) {
 
     UserCourseProgress userCourseProgress =
         userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
     if (userCourseProgress == null)
-      throw new ApiException(ErrorCode.PROGRESS_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new ApiException(ErrorCode.USER_NOT_FOUND);
 
     Optional<User> optionalUser = userRepository.findById(userId);
     if (optionalUser.isEmpty())
-      throw new ApiException(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new ApiException(ErrorCode.USER_NOT_FOUND);
     User user = optionalUser.get();
 
     // UPDATE POINTS
@@ -98,7 +78,7 @@ public class LessonServiceImpl implements LessonService {
 
     Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
     if (optionalLesson.isEmpty())
-      throw new ApiException(ErrorCode.LESSON_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
     Lesson lesson = optionalLesson.get();
 
     if (userCourseProgress.getCurrentLessonId().equals(lessonId)) {
@@ -106,7 +86,7 @@ public class LessonServiceImpl implements LessonService {
       // UPDATE USERS CURRENT LESSON
       Lesson nextLesson = getNextLesson(lesson, userId, courseId);
       if (nextLesson == null)
-        throw new ApiException(ErrorCode.LESSON_NOT_FOUND, HttpStatus.NOT_FOUND);
+        throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
       userCourseProgress.setCurrentLessonId(nextLesson.getId());
     }
 
@@ -156,6 +136,8 @@ public class LessonServiceImpl implements LessonService {
   @Nullable
   private Lesson getNextLesson(Lesson lesson, Integer userId, Integer courseId) {
 
+
+    //GET NEXT LESSON IN UNIT
     Lesson nextLessonInUnit =
         lessonRepository.findFirstByUnitIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
             lesson.getUnitId(), lesson.getOrderIndex());
@@ -163,7 +145,7 @@ public class LessonServiceImpl implements LessonService {
 
     Optional<Unit> currentUnit = unitRepository.findById(lesson.getUnitId());
     if (currentUnit.isEmpty())
-      throw new ApiException(ErrorCode.UNIT_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new ApiException(ErrorCode.UNIT_NOT_FOUND);
 
     Unit nextUnit =
         unitRepository.findFirstBySectionIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
@@ -174,7 +156,7 @@ public class LessonServiceImpl implements LessonService {
 
     Optional<Section> currentSection = sectionRepository.findById(currentUnit.get().getSectionId());
     if (currentSection.isEmpty())
-      throw new ApiException(ErrorCode.SECTION_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new ApiException(ErrorCode.SECTION_NOT_FOUND);
 
     Section nextSection =
         sectionRepository.findFirstByCourseIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
@@ -184,10 +166,11 @@ public class LessonServiceImpl implements LessonService {
       Unit firstUnitOfSection =
           unitRepository.findFirstBySectionIdOrderByOrderIndexAsc(nextSection.getId());
       if (firstUnitOfSection == null)
-        throw new ApiException(ErrorCode.COURSE_END, HttpStatus.NOT_FOUND);
+        throw new ApiException(ErrorCode.COURSE_END);
       return lessonRepository.findFirstByUnitIdOrderByOrderIndexAsc(firstUnitOfSection.getId());
     }
 
     return null;
   }
+
 }
