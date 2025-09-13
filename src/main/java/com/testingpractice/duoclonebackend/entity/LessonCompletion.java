@@ -40,6 +40,7 @@ public class LessonCompletion {
   }
 
   public void setLessonId(Integer lessonId) {
+
     if (id == null) id = new LessonCompletionId();
     id.setLessonId(lessonId);
   }

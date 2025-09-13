@@ -38,6 +38,8 @@ public class LessonController {
   public LessonCompleteResponse completeLesson(
       @RequestBody LessonCompleteRequest lessonCompleteRequest) {
 
+
+
     return lessonService.getCompletedLesson(
         lessonCompleteRequest.lessonId(),
         lessonCompleteRequest.userId(),

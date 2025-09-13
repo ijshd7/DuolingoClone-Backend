@@ -6,4 +6,6 @@ public record UnitDto(
     String description,
     Integer orderIndex,
     Integer sectionId,
-    String animationPath) {}
+    String animationPath,
+    String color
+    ) {}

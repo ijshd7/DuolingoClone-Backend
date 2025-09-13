@@ -21,6 +21,9 @@ public class Unit {
   @Column(name = "animation_path")
   private String animationPath;
 
+  @Column(name = "color")
+  private String color;
+
   @Column(name = "description")
   private String description;
 
@@ -35,11 +38,12 @@ public class Unit {
 
   @Builder
   public Unit(
-      String title, String description, Integer orderIndex, Integer courseId, Integer sectionId) {
+      String title, String description, Integer orderIndex, Integer courseId, Integer sectionId, String color) {
     this.title = title;
     this.description = description;
     this.orderIndex = orderIndex;
     this.courseId = courseId;
     this.sectionId = sectionId;
+    this.color = color;
   }
 }
