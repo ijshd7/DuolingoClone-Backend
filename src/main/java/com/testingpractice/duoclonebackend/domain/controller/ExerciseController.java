@@ -23,7 +23,7 @@ public class ExerciseController {
       ) {
     return exerciseService.submitExerciseAttempt(
         exerciseAttemptRequest.exerciseId(),
-        exerciseAttemptRequest.optionId(),
+        exerciseAttemptRequest.optionIds(),
         exerciseAttemptRequest.userId());
   }
 }

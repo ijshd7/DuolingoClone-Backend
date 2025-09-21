@@ -34,7 +34,8 @@ public class ExerciseOption {
 
   @Column(name = "is_correct")
   private Boolean isCorrect;
-  
-private boolean hi;
 
+  @Column(name = "answer_order")
+  private Integer answerOrder;
+  
 }

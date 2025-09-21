@@ -1,3 +1,5 @@
 package com.testingpractice.duoclonebackend.dto;
 
-public record ExerciseAttemptResponse(boolean correct, int score, String message) {}
+import java.util.ArrayList;
+
+public record ExerciseAttemptResponse(boolean correct, int score, String message, ArrayList<Integer> correctResponses) {}

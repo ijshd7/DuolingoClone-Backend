@@ -1,3 +1,6 @@
 package com.testingpractice.duoclonebackend.dto;
 
-public record ExerciseAttemptRequest(Integer exerciseId, Integer optionId, Integer userId) {}
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+public record ExerciseAttemptRequest(Integer exerciseId, ArrayList<Integer> optionIds, Integer userId) {}

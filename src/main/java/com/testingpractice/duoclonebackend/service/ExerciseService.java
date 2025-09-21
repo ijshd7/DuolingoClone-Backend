@@ -2,11 +2,13 @@ package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.ExerciseAttemptResponse;
 import com.testingpractice.duoclonebackend.dto.ExerciseDto;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ExerciseService {
   List<ExerciseDto> getExercisesForLesson(Integer lessonId, Integer userId);
 
   ExerciseAttemptResponse submitExerciseAttempt(
-      Integer exerciseId, Integer optionId, Integer userId);
+          Integer exerciseId, ArrayList<Integer> optionIds, Integer userId);
 }
