@@ -15,6 +15,7 @@ import com.testingpractice.duoclonebackend.repository.ExerciseRepository;
 import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -100,6 +101,10 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     ArrayList<Integer> correctResponses = new ArrayList<>();
 
+    String correctAnswer = "";
+    List<ExerciseOption> correctExerciseOptions = exerciseOptionRepository.findAllByIdIn(correctOptions);
+    correctAnswer = parseCorrectAnswer(correctExerciseOptions);
+
     for (int i = 0; i < optionIds.size(); i++) {
       if (i < correctOptions.size() && correctOptions.get(i) != null && correctOptions.get(i).equals(optionIds.get(i))) {
         correctResponses.add(optionIds.get(i));
@@ -109,10 +114,20 @@ public class ExerciseServiceImpl implements ExerciseService {
     exerciseAttemptOptionRepository.saveAll(attemptOptions);
 
     if (areCorrect) {
-      return new ExerciseAttemptResponse(true, attempt.getScore(), "Correct!", correctResponses);
+      return new ExerciseAttemptResponse(true, attempt.getScore(), "Correct!", correctResponses, correctAnswer);
     } else {
-      return new ExerciseAttemptResponse(false, attempt.getScore(), "Incorrect!", correctResponses);
+      return new ExerciseAttemptResponse(false, attempt.getScore(), "Incorrect!", correctResponses, correctAnswer);
     }
 
   }
+
+  private String parseCorrectAnswer (List<ExerciseOption> correctOptions) {
+    return correctOptions.stream()
+            .sorted(Comparator.comparingInt(ExerciseOption::getAnswerOrder))
+            .map(ExerciseOption::getContent)
+            .collect(Collectors.joining(" "));
+  }
+
+
+
 }
