@@ -8,5 +8,5 @@ public record UserDto(
     String firstName,
     String lastName,
     String pfpSrc,
-    Integer pointer,
+    Integer points,
     Timestamp createdAt) {}
