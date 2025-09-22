@@ -6,4 +6,5 @@ public record LessonCompleteResponse(
     Integer lessonId,
     LessonDto updatedLesson,
     UserCourseProgressDto updatedUserCourseProgress,
+    NewStreakCount newStreakCount,
     String message) {}
