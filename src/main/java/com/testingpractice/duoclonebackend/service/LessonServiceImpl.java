@@ -128,10 +128,14 @@ public class LessonServiceImpl implements LessonService {
   }
 
   private Integer getLessonAccuracy(List<ExerciseAttempt> exerciseAttempts) {
-    return (int) (exerciseAttempts.stream()
+    int earned = exerciseAttempts.stream()
             .mapToInt(ExerciseAttempt::getScore)
-            .average()
-            .orElse(0.0) * 100);
+            .sum();
+
+    int max = exerciseAttempts.size() * 5;
+    int accuracyPercent = (max == 0) ? 0 : (int) ((double) earned / max * 100);
+
+    return accuracyPercent;
   }
 
   @Nullable
