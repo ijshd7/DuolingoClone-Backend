@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(target = "streakLength", expression = "java(streakLength)")
-    UserDto toDto(User user, Integer streakLength);
+    UserDto toDto(User user);
 
 }

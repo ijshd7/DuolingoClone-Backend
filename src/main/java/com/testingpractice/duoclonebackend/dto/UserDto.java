@@ -9,4 +9,5 @@ public record UserDto(
     String lastName,
     String pfpSrc,
     Integer points,
+    Integer streakLength,
     Timestamp createdAt) {}

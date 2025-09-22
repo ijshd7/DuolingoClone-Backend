@@ -34,6 +34,12 @@ public class User {
   @Column(name = "created_at")
   private Timestamp createdAt;
 
+  @Column(name = "last_submission")
+  private Timestamp lastSubmission;
+
+  @Column(name = "streak_length")
+  private Integer streakLength;
+
   @Builder
   public User(
       String username,
