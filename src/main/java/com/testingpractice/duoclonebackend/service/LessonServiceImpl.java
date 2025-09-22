@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -72,9 +72,15 @@ public class LessonServiceImpl implements LessonService {
       throw new ApiException(ErrorCode.USER_NOT_FOUND);
     User user = optionalUser.get();
 
-    // UPDATE POINTS
-    Integer scoreForLesson = getScoreForLesson(lessonId, userId);
+    List<Exercise> lessonExercises = exerciseRepository.findAllByLessonId(lessonId);
+    List<Integer> exerciseIds = lessonExercises.stream().map(Exercise::getId).toList();
+    List<ExerciseAttempt> exerciseAttempts =
+            exerciseAttemptRepository.findAllByExerciseIdInAndUserIdAndUnchecked(exerciseIds, user.getId());
+
+    Integer scoreForLesson = getLessonPoints(exerciseAttempts);
     user.setPoints(user.getPoints() + scoreForLesson);
+    Integer lessonAccuracy = getLessonAccuracy(exerciseAttempts);
+    exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
 
     Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
     if (optionalLesson.isEmpty())
@@ -104,6 +110,7 @@ public class LessonServiceImpl implements LessonService {
     LessonCompleteResponse response =
         new LessonCompleteResponse(
             scoreForLesson,
+            lessonAccuracy,
             lessonId,
             lessonMapper.toDto(
                 lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
@@ -113,24 +120,18 @@ public class LessonServiceImpl implements LessonService {
     return response;
   }
 
-  @Transactional
-  public Integer getScoreForLesson(Integer lessonId, Integer userId) {
-    List<Exercise> lessonExercises = exerciseRepository.findAllByLessonId(lessonId);
 
-    if (lessonExercises.isEmpty()) return 0;
+  private Integer getLessonPoints (List<ExerciseAttempt> exerciseAttempts) {
+    return exerciseAttempts.stream()
+            .mapToInt(ExerciseAttempt::getScore)
+            .sum();
+  }
 
-    List<Integer> exerciseIds = lessonExercises.stream().map(Exercise::getId).toList();
-
-    List<ExerciseAttempt> exerciseAttempts =
-        exerciseAttemptRepository.findAllByExerciseIdInAndUserIdAndUnchecked(exerciseIds, userId);
-
-    exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
-
-    if (exerciseAttempts.isEmpty()) {
-      return 0;
-    }
-
-    return exerciseAttempts.stream().mapToInt(ExerciseAttempt::getScore).sum();
+  private Integer getLessonAccuracy(List<ExerciseAttempt> exerciseAttempts) {
+    return (int) (exerciseAttempts.stream()
+            .mapToInt(ExerciseAttempt::getScore)
+            .average()
+            .orElse(0.0) * 100);
   }
 
   @Nullable
