@@ -19,7 +19,7 @@ import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService{
 
   private final UserCourseProgressRepository userCourseProgressRepository;
   private final UserCourseProgressMapper userCourseProgressMapper;

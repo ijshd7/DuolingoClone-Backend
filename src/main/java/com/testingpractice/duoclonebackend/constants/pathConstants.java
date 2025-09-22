@@ -14,6 +14,7 @@ public class pathConstants {
 
   // ----------------------------- GET REQUESTS -----------------------------
   public static final String GET_USER_COURSE_PROGRESS = "/progress/{courseId}/{userId}";
+  public static final String GET_USER_BY_ID = "/{userId}";
 
   // ===== GET DTO LIST BY PARENT =====
   public static final String GET_UNITS_BY_SECTION = "/{sectionId}/units";
