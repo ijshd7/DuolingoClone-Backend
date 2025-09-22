@@ -115,11 +115,24 @@ public class LessonServiceImpl implements LessonService {
             lessonMapper.toDto(
                 lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
             userCourseProgressMapper.toDto(userCourseProgress, completedLessonsInCourse),
-            "Lesson Complete!");
+            lessonAccuracyMessage(lessonAccuracy));
 
     return response;
   }
 
+  private String lessonAccuracyMessage (Integer accuracy) {
+
+    if (accuracy <= 30) {
+      return "OK";
+    } else if (accuracy <= 60) {
+      return "GOOD";
+    } else if (accuracy <= 80) {
+      return "GREAT";
+    } else {
+      return "AMAZING";
+    }
+
+  }
 
   private Integer getLessonPoints (List<ExerciseAttempt> exerciseAttempts) {
     return exerciseAttempts.stream()
@@ -140,7 +153,6 @@ public class LessonServiceImpl implements LessonService {
 
   @Nullable
   private Lesson getNextLesson(Lesson lesson, Integer userId, Integer courseId) {
-
 
     //GET NEXT LESSON IN UNIT
     Lesson nextLessonInUnit =
