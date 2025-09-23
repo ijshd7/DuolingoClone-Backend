@@ -9,15 +9,12 @@ import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
 import com.testingpractice.duoclonebackend.mapper.UserCourseProgressMapper;
 import com.testingpractice.duoclonebackend.repository.*;
-import jakarta.annotation.Nullable;
+import com.testingpractice.duoclonebackend.utils.AccuracyScoreUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Timestamp;
-import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +38,7 @@ public class LessonServiceImpl implements LessonService {
   private final UserCourseProgressMapper userCourseProgressMapper;
   private final StreakService streakService;
   private final CourseProgressService courseProgressService;
+  private final ExerciseAttemptService exerciseAttemptService;
 
   public List<LessonDto> getLessonsByUnit(Integer unitId, Integer userId) {
     List<Lesson> lessons = lessonRepository.findAllByUnitId(unitId);
@@ -67,8 +65,6 @@ public class LessonServiceImpl implements LessonService {
   @Transactional
   public LessonCompleteResponse getCompletedLesson(Integer lessonId, Integer userId, Integer courseId) {
 
-
-
     Optional<User> optionalUser = userRepository.findById(userId);
     if (optionalUser.isEmpty())
       throw new ApiException(ErrorCode.USER_NOT_FOUND);
@@ -76,16 +72,16 @@ public class LessonServiceImpl implements LessonService {
 
     NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
-    List<Exercise> lessonExercises = exerciseRepository.findAllByLessonId(lessonId);
-    List<Integer> exerciseIds = lessonExercises.stream().map(Exercise::getId).toList();
-    List<ExerciseAttempt> exerciseAttempts =
-            exerciseAttemptRepository.findAllByExerciseIdInAndUserIdAndUnchecked(exerciseIds, user.getId());
+    // -- EXERCISE ATTEMPTS -- //
+    List<ExerciseAttempt> exerciseAttempts = exerciseAttemptService.getLessonExerciseAttemptsForUser(lessonId, userId);
+    exerciseAttemptService.markAttemptsAsChecked(userId, lessonId);
 
-    Integer scoreForLesson = getLessonPoints(exerciseAttempts);
+    // -- GET ACCURACY AND POINTS FOR LESSON -- //
+    Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts);
     user.setPoints(user.getPoints() + scoreForLesson);
-    Integer lessonAccuracy = getLessonAccuracy(exerciseAttempts);
+    Integer lessonAccuracy = AccuracyScoreUtils.getLessonAccuracy(exerciseAttempts);
 
-    exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
+
 
     Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
     if (optionalLesson.isEmpty())
@@ -112,40 +108,8 @@ public class LessonServiceImpl implements LessonService {
             lessonMapper.toDto(
                 lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
             userCourseProgressMapper.toDto(updatedUserCourseProgress, completedLessonsInCourse), newStreakCount,
-            lessonAccuracyMessage(lessonAccuracy));
+            AccuracyScoreUtils.getAccuracyMessage(lessonAccuracy));
 
     return response;
   }
-
-  private String lessonAccuracyMessage (Integer accuracy) {
-
-    if (accuracy <= 30) {
-      return "OK";
-    } else if (accuracy <= 60) {
-      return "GOOD";
-    } else if (accuracy <= 80) {
-      return "GREAT";
-    } else {
-      return "AMAZING";
-    }
-
-  }
-
-  private Integer getLessonPoints (List<ExerciseAttempt> exerciseAttempts) {
-    return exerciseAttempts.stream()
-            .mapToInt(ExerciseAttempt::getScore)
-            .sum();
-  }
-
-  private Integer getLessonAccuracy(List<ExerciseAttempt> exerciseAttempts) {
-    int earned = exerciseAttempts.stream()
-            .mapToInt(ExerciseAttempt::getScore)
-            .sum();
-
-    int max = exerciseAttempts.size() * 5;
-    int accuracyPercent = (max == 0) ? 0 : (int) ((double) earned / max * 100);
-
-    return accuracyPercent;
-  }
-
 }
