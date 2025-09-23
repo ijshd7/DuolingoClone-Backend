@@ -81,8 +81,6 @@ public class LessonServiceImpl implements LessonService {
     user.setPoints(user.getPoints() + scoreForLesson);
     Integer lessonAccuracy = AccuracyScoreUtils.getLessonAccuracy(exerciseAttempts);
 
-
-
     Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
     if (optionalLesson.isEmpty())
       throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
@@ -97,7 +95,9 @@ public class LessonServiceImpl implements LessonService {
 
     Integer completedLessonsInCourse =
         lessonCompletionRepository.countByUserAndCourse(userId, courseId);
-    if (completedLessonsInCourse == null) completedLessonsInCourse = 0;
+    if (completedLessonsInCourse == null) {
+      completedLessonsInCourse = 0;
+    }
 
     LessonCompleteResponse response =
         new LessonCompleteResponse(
@@ -112,4 +112,5 @@ public class LessonServiceImpl implements LessonService {
 
     return response;
   }
+
 }
