@@ -29,7 +29,7 @@ public class User {
   private String pfpSrc;
 
   @Column(name = "points")
-  private String points;
+  private Integer points;
 
   @Column(name = "created_at")
   private Timestamp createdAt;
@@ -46,7 +46,7 @@ public class User {
       String firstName,
       String lastName,
       String pfpSrc,
-      String points,
+      Integer points,
       Timestamp createdAt) {
     this.username = username;
     this.firstName = firstName;

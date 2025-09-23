@@ -57,16 +57,19 @@ public class UserServiceImpl implements UserService{
     User user = optionalUser.get();
 
     Timestamp lastSubmission = user.getLastSubmission();
-    ZoneId tz = ZoneId.systemDefault(); // or user-specific
+    if (lastSubmission != null) {
 
-    LocalDate today = LocalDate.now(tz);
-    LocalDate lastDate = lastSubmission.toInstant().atZone(tz).toLocalDate();
+      ZoneId tz = ZoneId.systemDefault(); // or user-specific
 
-    boolean isOlder = lastDate.isBefore(today.minusDays(1));
+      LocalDate today = LocalDate.now(tz);
+      LocalDate lastDate = lastSubmission.toInstant().atZone(tz).toLocalDate();
+      boolean isOlder = lastDate.isBefore(today.minusDays(1));
 
-    if (isOlder) {
-      user.setStreakLength(0);
+      if (isOlder) {
+        user.setStreakLength(0);
+      }
     }
+
 
     return userMapper.toDto(user);
   }

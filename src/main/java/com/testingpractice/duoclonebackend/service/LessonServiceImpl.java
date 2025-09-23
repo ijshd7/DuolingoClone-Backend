@@ -139,6 +139,7 @@ public class LessonServiceImpl implements LessonService {
     LessonCompleteResponse response =
         new LessonCompleteResponse(
             scoreForLesson,
+            user.getPoints(),
             lessonAccuracy,
             lessonId,
             lessonMapper.toDto(
