@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -38,7 +39,8 @@ public class LessonServiceImpl implements LessonService {
   private final ExerciseRepository exerciseRepository;
   private final LessonCompletionRepository lessonCompletionRepository;
   private final UserCourseProgressMapper userCourseProgressMapper;
-
+  private final StreakService streakService;
+  private final CourseProgressService courseProgressService;
 
   public List<LessonDto> getLessonsByUnit(Integer unitId, Integer userId) {
     List<Lesson> lessons = lessonRepository.findAllByUnitId(unitId);
@@ -65,41 +67,14 @@ public class LessonServiceImpl implements LessonService {
   @Transactional
   public LessonCompleteResponse getCompletedLesson(Integer lessonId, Integer userId, Integer courseId) {
 
-    UserCourseProgress userCourseProgress =
-        userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
-    if (userCourseProgress == null)
-      throw new ApiException(ErrorCode.USER_NOT_FOUND);
+
 
     Optional<User> optionalUser = userRepository.findById(userId);
     if (optionalUser.isEmpty())
       throw new ApiException(ErrorCode.USER_NOT_FOUND);
     User user = optionalUser.get();
 
-    Timestamp lastSubmission = user.getLastSubmission();
-    ZoneId tz = ZoneId.systemDefault();
-    LocalDate today = LocalDate.now(tz);
-
-    int prev = user.getStreakLength();
-    int next = prev;
-
-    if (lastSubmission == null) {
-      next = 1;
-    } else {
-      LocalDate lastDate = lastSubmission.toInstant().atZone(tz).toLocalDate();
-      boolean isToday = lastDate.equals(today);
-      boolean isYesterday = lastDate.equals(today.minusDays(1));
-
-      if (isYesterday || prev == 0) {
-        next = prev + 1;
-      } else if (!isToday) {
-        next = 1;
-      }
-    }
-
-    user.setStreakLength(next);
-    user.setLastSubmission(Timestamp.from(Instant.now()));
-
-    NewStreakCount newStreakCount = new NewStreakCount(prev, next);
+    NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
     List<Exercise> lessonExercises = exerciseRepository.findAllByLessonId(lessonId);
     List<Integer> exerciseIds = lessonExercises.stream().map(Exercise::getId).toList();
@@ -109,6 +84,7 @@ public class LessonServiceImpl implements LessonService {
     Integer scoreForLesson = getLessonPoints(exerciseAttempts);
     user.setPoints(user.getPoints() + scoreForLesson);
     Integer lessonAccuracy = getLessonAccuracy(exerciseAttempts);
+
     exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
 
     Optional<Lesson> optionalLesson = lessonRepository.findById(lessonId);
@@ -116,21 +92,12 @@ public class LessonServiceImpl implements LessonService {
       throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
     Lesson lesson = optionalLesson.get();
 
-    if (userCourseProgress.getCurrentLessonId().equals(lessonId)) {
-
-      // UPDATE USERS CURRENT LESSON
-      Lesson nextLesson = getNextLesson(lesson, userId, courseId);
-      if (nextLesson == null)
-        throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
-      userCourseProgress.setCurrentLessonId(nextLesson.getId());
-    }
+    UserCourseProgress updatedUserCourseProgress = courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
 
     lessonCompletionRepository.insertIfAbsent(
         userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
 
     userRepository.save(user);
-
-    userCourseProgressRepository.save(userCourseProgress);
 
     Integer completedLessonsInCourse =
         lessonCompletionRepository.countByUserAndCourse(userId, courseId);
@@ -144,7 +111,7 @@ public class LessonServiceImpl implements LessonService {
             lessonId,
             lessonMapper.toDto(
                 lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
-            userCourseProgressMapper.toDto(userCourseProgress, completedLessonsInCourse), newStreakCount,
+            userCourseProgressMapper.toDto(updatedUserCourseProgress, completedLessonsInCourse), newStreakCount,
             lessonAccuracyMessage(lessonAccuracy));
 
     return response;
@@ -179,45 +146,6 @@ public class LessonServiceImpl implements LessonService {
     int accuracyPercent = (max == 0) ? 0 : (int) ((double) earned / max * 100);
 
     return accuracyPercent;
-  }
-
-  @Nullable
-  private Lesson getNextLesson(Lesson lesson, Integer userId, Integer courseId) {
-
-    //GET NEXT LESSON IN UNIT
-    Lesson nextLessonInUnit =
-        lessonRepository.findFirstByUnitIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
-            lesson.getUnitId(), lesson.getOrderIndex());
-    if (nextLessonInUnit != null) return nextLessonInUnit;
-
-    Optional<Unit> currentUnit = unitRepository.findById(lesson.getUnitId());
-    if (currentUnit.isEmpty())
-      throw new ApiException(ErrorCode.UNIT_NOT_FOUND);
-
-    Unit nextUnit =
-        unitRepository.findFirstBySectionIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
-            currentUnit.get().getSectionId(), currentUnit.get().getOrderIndex());
-    if (nextUnit != null) {
-      return lessonRepository.findFirstByUnitIdOrderByOrderIndexAsc(nextUnit.getId());
-    }
-
-    Optional<Section> currentSection = sectionRepository.findById(currentUnit.get().getSectionId());
-    if (currentSection.isEmpty())
-      throw new ApiException(ErrorCode.SECTION_NOT_FOUND);
-
-    Section nextSection =
-        sectionRepository.findFirstByCourseIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
-            currentSection.get().getCourseId(), currentSection.get().getOrderIndex());
-
-    if (nextSection != null) {
-      Unit firstUnitOfSection =
-          unitRepository.findFirstBySectionIdOrderByOrderIndexAsc(nextSection.getId());
-      if (firstUnitOfSection == null)
-        throw new ApiException(ErrorCode.COURSE_END);
-      return lessonRepository.findFirstByUnitIdOrderByOrderIndexAsc(firstUnitOfSection.getId());
-    }
-
-    return null;
   }
 
 }
