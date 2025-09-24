@@ -13,7 +13,5 @@ public interface LessonService {
 
   List<Integer> getLessonIdsByUnit(Integer unitId);
 
-  LessonCompleteResponse getCompletedLesson(Integer lessonId, Integer userId, Integer courseId);
-
   Set<Integer> completedSetFor(Integer userId, List<Integer> lessonIds);
 }
