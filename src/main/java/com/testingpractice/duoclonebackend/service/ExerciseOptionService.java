@@ -9,8 +9,6 @@ import com.testingpractice.duoclonebackend.mapper.ExerciseMapper;
 import com.testingpractice.duoclonebackend.repository.ExerciseOptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.testingpractice.duoclonebackend.mapper.ExerciseMapper;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;

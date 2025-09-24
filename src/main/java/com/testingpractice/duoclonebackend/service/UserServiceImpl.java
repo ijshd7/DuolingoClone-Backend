@@ -11,6 +11,7 @@ import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.LessonCompletionRepository;
 import com.testingpractice.duoclonebackend.repository.UserCourseProgressRepository;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -19,6 +20,7 @@ import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
   private final UserCourseProgressRepository userCourseProgressRepository;
@@ -26,17 +28,6 @@ public class UserServiceImpl implements UserService{
   private final LessonCompletionRepository lessonCompletionRepository;
   private final UserRepository userRepository;
   private final UserMapper userMapper;
-
-  public UserServiceImpl(
-          UserCourseProgressRepository userCourseProgressRepository,
-          UserCourseProgressMapper userCourseProgressMapper,
-          LessonCompletionRepository lessonCompletionRepository, UserRepository userRepository, UserMapper userMapper) {
-    this.userCourseProgressRepository = userCourseProgressRepository;
-    this.userCourseProgressMapper = userCourseProgressMapper;
-    this.lessonCompletionRepository = lessonCompletionRepository;
-    this.userRepository = userRepository;
-    this.userMapper = userMapper;
-  }
 
   public UserCourseProgressDto getUserCourseProgress(Integer courseId, Integer userId) {
     UserCourseProgress userCourseProgress =

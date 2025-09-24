@@ -18,9 +18,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SectionServiceImpl implements SectionService {
 
   private final SectionRepository sectionRepository;
@@ -30,23 +33,6 @@ public class SectionServiceImpl implements SectionService {
   private final LessonRepository lessonRepository;
   private final LessonMapper lessonMapper;
   private final LessonService lessonService;
-
-  public SectionServiceImpl(
-      SectionRepository sectionRepository,
-      SectionMapper sectionMapper,
-      UnitRepository unitRepository,
-      UnitMapper unitMapper,
-      LessonRepository lessonRepository,
-      LessonMapper lessonMapper,
-      LessonService lessonService) {
-    this.sectionMapper = sectionMapper;
-    this.sectionRepository = sectionRepository;
-    this.unitRepository = unitRepository;
-    this.unitMapper = unitMapper;
-    this.lessonRepository = lessonRepository;
-    this.lessonMapper = lessonMapper;
-    this.lessonService = lessonService;
-  }
 
   @Override
   public List<SectionDto> getSectionsByIds(List<Integer> sectionIds) {

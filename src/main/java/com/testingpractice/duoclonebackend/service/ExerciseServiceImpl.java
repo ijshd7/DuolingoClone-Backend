@@ -14,38 +14,22 @@ import com.testingpractice.duoclonebackend.repository.ExerciseOptionRepository;
 import com.testingpractice.duoclonebackend.repository.ExerciseRepository;
 import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ExerciseServiceImpl implements ExerciseService {
 
   private final ExerciseRepository exerciseRepository;
   private final ExerciseOptionRepository exerciseOptionRepository;
-  private final ExerciseMapper exerciseMapper;
   private final ExerciseAttemptRepository exerciseAttemptRepository;
-  private final ExerciseAttemptMapper exerciseAttemptMapper;
   private final ExerciseAttemptOptionRepository exerciseAttemptOptionRepository;
   private final ExerciseOptionService exerciseOptionService;
-
-  public ExerciseServiceImpl(
-          ExerciseRepository exerciseRepository,
-          ExerciseOptionRepository exerciseOptionRepository,
-          ExerciseMapper exerciseMapper,
-          ExerciseAttemptRepository exerciseAttemptRepository,
-          ExerciseAttemptMapper exerciseAttemptMapper, ExerciseAttemptOptionRepository exerciseAttemptOptionRepository, ExerciseOptionService exerciseOptionService) {
-    this.exerciseRepository = exerciseRepository;
-    this.exerciseOptionRepository = exerciseOptionRepository;
-    this.exerciseMapper = exerciseMapper;
-    this.exerciseAttemptRepository = exerciseAttemptRepository;
-    this.exerciseAttemptMapper = exerciseAttemptMapper;
-    this.exerciseAttemptOptionRepository = exerciseAttemptOptionRepository;
-    this.exerciseOptionService = exerciseOptionService;
-  }
 
   @Transactional
   public List<ExerciseDto> getExercisesForLesson(Integer lessonId, Integer userId) {
@@ -66,6 +50,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     List<ExerciseOption> options = exerciseOptionRepository.findAllByIdIn(optionIds);
     List<Integer> correctOptions = exerciseOptionRepository.findCorrectOptionIds(exerciseId);
+
     boolean areCorrect = correctOptions.equals(optionIds);
 
     ExerciseAttempt attempt = new ExerciseAttempt();
@@ -100,8 +85,9 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     String correctAnswer = "";
     List<ExerciseOption> correctExerciseOptions = exerciseOptionRepository.findAllByIdIn(correctOptions);
-    correctAnswer = parseCorrectAnswer(correctExerciseOptions);
 
+
+    correctAnswer = parseCorrectAnswer(correctExerciseOptions);
     for (int i = 0; i < optionIds.size(); i++) {
       if (i < correctOptions.size() && correctOptions.get(i) != null && correctOptions.get(i).equals(optionIds.get(i))) {
         correctResponses.add(optionIds.get(i));
