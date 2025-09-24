@@ -2,6 +2,8 @@ package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.NewStreakCount;
 import com.testingpractice.duoclonebackend.entity.User;
+import com.testingpractice.duoclonebackend.enums.QuestCode;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -18,8 +20,8 @@ public class StreakService {
         ZoneId tz = ZoneId.systemDefault();
         LocalDate today = LocalDate.now(tz);
 
-        int prev = user.getStreakLength();
-        int next = prev;
+        Integer prev = user.getStreakLength();
+        Integer next = prev;
 
         if (lastSubmission == null) {
             next = 1;

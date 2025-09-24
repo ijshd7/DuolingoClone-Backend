@@ -11,13 +11,17 @@ public class pathConstants {
   public static final String USERS = API_V1 + "/users";
   public static final String LESSONS = API_V1 + "/lessons";
   public static final String SECTIONS = API_V1 + "/sections";
+  public static final String QUESTS = API_V1 + "/quests";
+  public static final String MONTHLY_CHALLENGES = API_V1 + "/monthly-challenges";
 
-  public static final String EXERCISES_ATTEMPTS = API_V1 + EXERCISES + "/attempts";
-  public static final String LESSONS_COMPLETIONS = API_V1 + LESSONS + "/completions";
+  public static final String EXERCISES_ATTEMPTS = EXERCISES + "/attempts";
+  public static final String LESSONS_COMPLETIONS = LESSONS + "/completions";
 
   // ----------------------------- GET REQUESTS -----------------------------
   public static final String GET_USER_COURSE_PROGRESS = "/progress/{courseId}/{userId}";
   public static final String GET_USER_BY_ID = "/{userId}";
+  public static final String GET_QUESTS_BY_USER = "/{userId}";
+  public static final String GET_MONTHLY_CHALLENGE_BY_USER = "/{userId}";
 
   // ===== GET DTO LIST BY PARENT =====
   public static final String GET_UNITS_BY_SECTION = "/{sectionId}/units";

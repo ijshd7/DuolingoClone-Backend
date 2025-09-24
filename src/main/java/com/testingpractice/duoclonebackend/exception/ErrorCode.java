@@ -9,6 +9,8 @@ public enum ErrorCode {
   SECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Section not found"),
   PROGRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "User progress not found"),
   EXERCISES_NOT_FOUND(HttpStatus.NOT_FOUND, "Exercises are null or empty for given lesson"),
+  USER_DAILY_QUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "User daily quest not found"),
+  QUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "Quest was not found"),
   COURSE_END(HttpStatus.BAD_REQUEST, "No next lesson — course complete"),
   OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "No option found for the submitted option");
 
