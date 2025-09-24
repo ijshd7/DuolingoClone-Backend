@@ -4,6 +4,7 @@ public enum QuestCode {
 
     STREAK,
     PERFECT,
-    ACCURACY
+    ACCURACY,
+    COMPLETE_QUESTS
 
 }

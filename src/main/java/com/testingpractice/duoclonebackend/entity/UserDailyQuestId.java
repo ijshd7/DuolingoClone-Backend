@@ -35,4 +35,5 @@ public class UserDailyQuestId implements Serializable {
     public int hashCode() {
         return Objects.hash(userId, questDefId, date);
     }
+
 }
