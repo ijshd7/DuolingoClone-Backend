@@ -1,31 +1,11 @@
 package com.testingpractice.duoclonebackend.service;
 
-import com.testingpractice.duoclonebackend.entity.Exercise;
-import com.testingpractice.duoclonebackend.entity.ExerciseAttempt;
-import com.testingpractice.duoclonebackend.repository.ExerciseAttemptRepository;
-import com.testingpractice.duoclonebackend.repository.ExerciseRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.testingpractice.duoclonebackend.dto.ExerciseAttemptResponse;
 
-import java.util.List;
+import java.util.ArrayList;
 
-@Service
-@RequiredArgsConstructor
-public class ExerciseAttemptService {
+public interface ExerciseAttemptService {
 
-    private final ExerciseAttemptRepository exerciseAttemptRepository;
-    private final ExerciseRepository exerciseRepository;
-
-    public List<ExerciseAttempt> getLessonExerciseAttemptsForUser(Integer lessonId, Integer userId) {
-        List<Exercise> lessonExercises = exerciseRepository.findAllByLessonId(lessonId);
-        List<Integer> exerciseIds = lessonExercises.stream().map(Exercise::getId).toList();
-        return exerciseAttemptRepository.findAllByExerciseIdInAndUserIdAndUnchecked(exerciseIds, userId);
-    }
-
-    @Transactional
-    public void markAttemptsAsChecked (Integer userId, Integer lessonId) {
-        exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
-    }
-
+    ExerciseAttemptResponse submitExerciseAttempt(
+            Integer exerciseId, ArrayList<Integer> optionIds, Integer userId);
 }

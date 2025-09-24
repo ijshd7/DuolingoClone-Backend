@@ -9,6 +9,5 @@ import java.util.List;
 public interface ExerciseService {
   List<ExerciseDto> getExercisesForLesson(Integer lessonId, Integer userId);
 
-  ExerciseAttemptResponse submitExerciseAttempt(
-          Integer exerciseId, ArrayList<Integer> optionIds, Integer userId);
+
 }

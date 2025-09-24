@@ -38,7 +38,7 @@ public class LessonServiceImpl implements LessonService {
   private final UserCourseProgressMapper userCourseProgressMapper;
   private final StreakService streakService;
   private final CourseProgressService courseProgressService;
-  private final ExerciseAttemptService exerciseAttemptService;
+  private final ExerciseAttemptServiceImpl exerciseAttemptServiceImpl;
 
   public List<LessonDto> getLessonsByUnit(Integer unitId, Integer userId) {
     List<Lesson> lessons = lessonRepository.findAllByUnitId(unitId);
@@ -73,8 +73,8 @@ public class LessonServiceImpl implements LessonService {
     NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
     // -- EXERCISE ATTEMPTS -- //
-    List<ExerciseAttempt> exerciseAttempts = exerciseAttemptService.getLessonExerciseAttemptsForUser(lessonId, userId);
-    exerciseAttemptService.markAttemptsAsChecked(userId, lessonId);
+    List<ExerciseAttempt> exerciseAttempts = exerciseAttemptServiceImpl.getLessonExerciseAttemptsForUser(lessonId, userId);
+    exerciseAttemptServiceImpl.markAttemptsAsChecked(userId, lessonId);
 
     // -- GET ACCURACY AND POINTS FOR LESSON -- //
     Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts);

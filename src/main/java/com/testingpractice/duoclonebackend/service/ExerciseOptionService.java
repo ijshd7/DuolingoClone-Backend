@@ -38,4 +38,36 @@ public class ExerciseOptionService {
 
     }
 
+    public ArrayList<Integer> getCorrectExerciseResponses(ArrayList<Integer> optionIds, List<Integer> correctOptions) {
+
+        ArrayList<Integer> correctResponses = new ArrayList<>();
+
+        for (int i = 0; i < optionIds.size(); i++) {
+            if (i < correctOptions.size() && correctOptions.get(i) != null && correctOptions.get(i).equals(optionIds.get(i))) {
+                correctResponses.add(optionIds.get(i));
+            }
+        }
+
+        return correctResponses;
+
+    }
+
+    public String getCorrectExerciseAnswerText (List<Integer> correctOptions) {
+        List<ExerciseOption> correctExerciseOptions = exerciseOptionRepository.findAllByIdIn(correctOptions);
+        return parseCorrectAnswer(correctExerciseOptions);
+    }
+
+    public boolean areOptionsCorrect (ArrayList<Integer> optionIds, List<Integer> correctOptions) {
+        return correctOptions.equals(optionIds);
+    }
+
+
+
+    private String parseCorrectAnswer (List<ExerciseOption> correctOptions) {
+        return correctOptions.stream()
+                .sorted(Comparator.comparingInt(ExerciseOption::getAnswerOrder))
+                .map(ExerciseOption::getContent)
+                .collect(Collectors.joining(" "));
+    }
+
 }
