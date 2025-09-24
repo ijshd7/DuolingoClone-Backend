@@ -6,6 +6,7 @@ import com.testingpractice.duoclonebackend.entity.ExerciseAttempt;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.entity.UserCourseProgress;
+import com.testingpractice.duoclonebackend.enums.QuestCode;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
 import com.testingpractice.duoclonebackend.mapper.UserCourseProgressMapper;
 import com.testingpractice.duoclonebackend.repository.LessonCompletionRepository;
@@ -31,6 +32,7 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
     private final UserRepository userRepository;
     private final LessonMapper lessonMapper;
     private final UserCourseProgressMapper userCourseProgressMapper;
+    private final QuestService questService;
 
     @Transactional
     public LessonCompleteResponse getCompletedLesson (Integer lessonId, Integer userId, Integer courseId) {
@@ -59,6 +61,8 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
 
         Integer completedLessonsInCourse = getCompletedLessonsInCourse(userId, courseId);
 
+        updateQuests(userId, lessonAccuracy, newStreakCount);
+
         return new LessonCompleteResponse(
                 scoreForLesson,
                 user.getPoints(),
@@ -76,6 +80,25 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
 
         if (completedLessonsInCourse == null) return 0;
         else return completedLessonsInCourse;
+
+    }
+
+    private void updateQuests (Integer userId, Integer lessonAccuracy, NewStreakCount newStreakCount) {
+
+        if (lessonAccuracy == 100) {
+            questService.updateQuestProgress(userId, QuestCode.PERFECT);
+        }
+
+        if (lessonAccuracy > 90) {
+            questService.updateQuestProgress(userId, QuestCode.ACCURACY);
+        }
+
+        Integer prev = newStreakCount.oldCount();
+        Integer next = newStreakCount.newCount();
+
+        if (next > prev) {
+            questService.updateQuestProgress(userId, QuestCode.STREAK);
+        }
 
     }
 
