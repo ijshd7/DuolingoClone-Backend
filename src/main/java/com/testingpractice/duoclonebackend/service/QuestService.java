@@ -24,7 +24,9 @@ public class QuestService {
 
     private final QuestDefinitionRepository questDefinitionRepository;
     private final UserDailyQuestRepository userDailyQuestRepository;
+    private final MonthlyChallengeService monthlyChallengeService;
 
+    @Transactional
     public List<QuestResponse> getQuestsForUser (Integer userId) {
 
         ZoneId tz = ZoneId.systemDefault();
@@ -59,6 +61,7 @@ public class QuestService {
 
             if (userDailyQuest.getProgress() < questDefinition.getTarget()) {
                 userDailyQuest.setProgress(userDailyQuest.getProgress() + 1);
+                monthlyChallengeService.addChallengeProgress(userId);
             }
         }
 

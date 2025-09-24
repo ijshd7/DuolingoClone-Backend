@@ -8,6 +8,7 @@ import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.repository.MonthlyChallengeDefinitionRepository;
 import com.testingpractice.duoclonebackend.repository.UserMonthlyChallengeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class MonthlyChallengeService {
     private final MonthlyChallengeDefinitionRepository monthlyChallengeDefinitionRepository;
     private final UserMonthlyChallengeRepository userMonthlyChallengeRepository;
 
+    @Transactional
     public QuestResponse getMonthlyChallengeForUser (Integer userId) {
 
        ZoneId tz = ZoneId.systemDefault();
@@ -35,6 +37,25 @@ public class MonthlyChallengeService {
 
    }
 
+   @Transactional
+   public void addChallengeProgress (Integer userId) {
+
+       ZoneId tz = ZoneId.systemDefault();
+       LocalDate today = LocalDate.now(tz);
+       int year = today.getYear();
+       int month = today.getMonthValue();
+
+       MonthlyChallengeDefinition monthlyChallengeDefinition = monthlyChallengeDefinitionRepository.findByActive(true);
+       UserMonthlyChallenge userMonthlyChallenge = getUserMCOrElseCreateNew(monthlyChallengeDefinition, userId, year, month);
+
+       if (userMonthlyChallenge.getProgress() < monthlyChallengeDefinition.getTarget()) {
+           userMonthlyChallenge.setProgress(userMonthlyChallenge.getProgress() +  1);
+           userMonthlyChallengeRepository.save(userMonthlyChallenge);
+       }
+
+   }
+
+   @Transactional
    public UserMonthlyChallenge getUserMCOrElseCreateNew (MonthlyChallengeDefinition monthlyChallengeDefinition, Integer userId, int year, int month) {
 
        UserMonthlyChallengeId id = new UserMonthlyChallengeId();
