@@ -35,24 +35,24 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
     @Transactional
     public LessonCompleteResponse getCompletedLesson (Integer lessonId, Integer userId, Integer courseId) {
 
-        // -- UPDATE USER STREAK -- //
-        User user = lookupService.userOrThrow(userId);
-        NewStreakCount newStreakCount = streakService.updateUserStreak(user);
-
-        // -- UPDATE USERS NEXT LESSON -- //
-        Lesson lesson = lookupService.lessonOrThrow(lessonId);
-        UserCourseProgress updatedUserCourseProgress = courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
-
         List<ExerciseAttempt> exerciseAttempts = exerciseAttemptService.getLessonExerciseAttemptsForUser(lessonId, userId);
+        User user = lookupService.userOrThrow(userId);
+        Lesson lesson = lookupService.lessonOrThrow(lessonId);
+
+        Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts);
+        Integer lessonAccuracy = AccuracyScoreUtils.getLessonAccuracy(exerciseAttempts);
+
+        // -- UPDATE USERS SCORE -- //
+        user.setPoints(user.getPoints() + scoreForLesson);
 
         // -- MARK ALL ATTEMPTS FROM THE LESSON AS CHECKED (I.E. SOFT DELETE) -- //
         exerciseAttemptService.markAttemptsAsChecked(userId, lessonId);
 
-        // -- UPDATE USERS SCORE -- //
-        Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts);
-        user.setPoints(user.getPoints() + scoreForLesson);
-        Integer lessonAccuracy = AccuracyScoreUtils.getLessonAccuracy(exerciseAttempts);
+        // -- UPDATE USER STREAK -- //
+        NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
+        // -- UPDATE USERS NEXT LESSON -- //
+        UserCourseProgress updatedUserCourseProgress = courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
 
         lessonCompletionRepository.insertIfAbsent(userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
         userRepository.save(user);
@@ -68,7 +68,6 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
                         lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
                 userCourseProgressMapper.toDto(updatedUserCourseProgress, completedLessonsInCourse), newStreakCount,
                 AccuracyScoreUtils.getAccuracyMessage(lessonAccuracy));
-
     }
 
     private Integer getCompletedLessonsInCourse (Integer userId, Integer courseId) {
