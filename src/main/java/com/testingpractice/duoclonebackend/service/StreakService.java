@@ -14,13 +14,6 @@ import java.time.ZoneId;
 @Service
 public class StreakService {
 
-    private final QuestService questService;
-
-    public StreakService(QuestService questService) {
-        this.questService = questService;
-    }
-
-    @Transactional
     public NewStreakCount updateUserStreak (User user) {
 
         Timestamp lastSubmission = user.getLastSubmission();
@@ -46,12 +39,6 @@ public class StreakService {
 
         user.setStreakLength(next);
         user.setLastSubmission(Timestamp.from(Instant.now()));
-
-        if (!(next.equals(prev))) {
-            questService.updateQuestProgress(user.getId(), QuestCode.STREAK);
-        }
-
-
 
         return new NewStreakCount(prev, next);
 
