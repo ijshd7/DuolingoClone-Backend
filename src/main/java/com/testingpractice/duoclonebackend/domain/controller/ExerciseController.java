@@ -16,14 +16,6 @@ public class ExerciseController {
     this.exerciseService = exerciseService;
   }
 
-  @PostMapping(pathConstants.SUBMIT_EXERCSIE)
-  public ExerciseAttemptResponse submitExerciseAttempt(
-      @RequestBody ExerciseAttemptRequest exerciseAttemptRequest
-      // Add Later Authentication Auth
-      ) {
-    return exerciseService.submitExerciseAttempt(
-        exerciseAttemptRequest.exerciseId(),
-        exerciseAttemptRequest.optionIds(),
-        exerciseAttemptRequest.userId());
-  }
+
+
 }
