@@ -14,10 +14,8 @@ import com.testingpractice.duoclonebackend.repository.ExerciseOptionRepository;
 import com.testingpractice.duoclonebackend.repository.ExerciseRepository;
 import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,19 +30,21 @@ public class ExerciseServiceImpl implements ExerciseService {
   private final ExerciseAttemptRepository exerciseAttemptRepository;
   private final ExerciseAttemptMapper exerciseAttemptMapper;
   private final ExerciseAttemptOptionRepository exerciseAttemptOptionRepository;
+  private final ExerciseOptionService exerciseOptionService;
 
   public ExerciseServiceImpl(
           ExerciseRepository exerciseRepository,
           ExerciseOptionRepository exerciseOptionRepository,
           ExerciseMapper exerciseMapper,
           ExerciseAttemptRepository exerciseAttemptRepository,
-          ExerciseAttemptMapper exerciseAttemptMapper, ExerciseAttemptOptionRepository exerciseAttemptOptionRepository) {
+          ExerciseAttemptMapper exerciseAttemptMapper, ExerciseAttemptOptionRepository exerciseAttemptOptionRepository, ExerciseOptionService exerciseOptionService) {
     this.exerciseRepository = exerciseRepository;
     this.exerciseOptionRepository = exerciseOptionRepository;
     this.exerciseMapper = exerciseMapper;
     this.exerciseAttemptRepository = exerciseAttemptRepository;
     this.exerciseAttemptMapper = exerciseAttemptMapper;
     this.exerciseAttemptOptionRepository = exerciseAttemptOptionRepository;
+    this.exerciseOptionService = exerciseOptionService;
   }
 
   @Transactional
@@ -52,15 +52,12 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
 
-    List<Exercise> exercises = exerciseRepository.findAllByLessonId(lessonId);
-    return exercises.stream()
-        .map(
-            exercise -> {
-              List<ExerciseOption> exerciseOptions =
-                  exerciseOptionRepository.findAllByExerciseId(exercise.getId());
-              return exerciseMapper.toDto(exercise, exerciseOptions);
-            })
-        .collect(Collectors.toList());
+    List<Exercise> exercises = new ArrayList<>(exerciseRepository.findAllByLessonId(lessonId));
+    exercises.sort(Comparator.comparingInt(Exercise::getOrderIndex));
+
+    List<ExerciseDto> exerciseDtosWithRandomizedOptionOrder = exerciseOptionService.getRandomizedExercisesForLesson(exercises, userId);
+    return exerciseDtosWithRandomizedOptionOrder;
+
   }
 
   @Override
