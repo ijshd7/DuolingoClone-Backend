@@ -10,12 +10,4 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(pathConstants.EXERCISES)
 public class ExerciseController {
 
-  private final ExerciseService exerciseService;
-
-  public ExerciseController(ExerciseService exerciseService) {
-    this.exerciseService = exerciseService;
-  }
-
-
-
 }

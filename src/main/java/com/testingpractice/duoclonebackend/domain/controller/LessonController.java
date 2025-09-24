@@ -8,19 +8,18 @@ import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.service.ExerciseService;
 import com.testingpractice.duoclonebackend.service.LessonService;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(pathConstants.LESSONS)
 public class LessonController {
 
   private final LessonService lessonService;
   private final ExerciseService exerciseService;
 
-  public LessonController(LessonService lessonService, ExerciseService exerciseService) {
-    this.lessonService = lessonService;
-    this.exerciseService = exerciseService;
-  }
 
   @GetMapping(pathConstants.GET_LESSONS_FROM_IDS)
   public List<LessonDto> getLessonsByIds(

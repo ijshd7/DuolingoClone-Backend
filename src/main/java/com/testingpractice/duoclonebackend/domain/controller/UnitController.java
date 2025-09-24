@@ -6,19 +6,17 @@ import com.testingpractice.duoclonebackend.dto.UnitDto;
 import com.testingpractice.duoclonebackend.service.LessonService;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(pathConstants.UNITS)
 public class UnitController {
 
   private final LessonService lessonService;
   private final UnitService unitService;
-
-  public UnitController(LessonService lessonService, UnitService unitService) {
-    this.lessonService = lessonService;
-    this.unitService = unitService;
-  }
 
   @GetMapping(pathConstants.GET_LESSONS_BY_UNIT)
   public List<LessonDto> getLessonsByUnit(
