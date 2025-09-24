@@ -13,6 +13,7 @@ public class pathConstants {
   public static final String SECTIONS = API_V1 + "/sections";
 
   public static final String EXERCISES_ATTEMPTS = API_V1 + EXERCISES + "/attempts";
+  public static final String LESSONS_COMPLETIONS = API_V1 + LESSONS + "/completions";
 
   // ----------------------------- GET REQUESTS -----------------------------
   public static final String GET_USER_COURSE_PROGRESS = "/progress/{courseId}/{userId}";
@@ -38,5 +39,5 @@ public class pathConstants {
 
   // ----------------------------- POST REQUESTS AND MUTATIONS -----------------------------
   public static final String SUBMIT_EXERCISE = "/submit";
-  public static final String SUBMIT_COMPLETED_LESSON = "/completedLesson";
+  public static final String SUBMIT_COMPLETED_LESSON = "/submit";
 }
