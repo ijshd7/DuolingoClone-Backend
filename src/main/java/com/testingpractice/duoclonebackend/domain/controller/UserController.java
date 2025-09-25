@@ -5,10 +5,9 @@ import com.testingpractice.duoclonebackend.dto.UserCourseProgressDto;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +28,12 @@ public class UserController {
   ) {
     return userServiceImpl.getUser(userId);
   }
+
+  @GetMapping(pathConstants.GET_USERS_FROM_IDS)
+  public List<UserDto> getUsersByIds (@RequestParam List<Integer> userIds) {
+    return userServiceImpl.getUsersFromIds(userIds);
+  }
+
+
 
 }

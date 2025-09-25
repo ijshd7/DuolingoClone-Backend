@@ -11,12 +11,14 @@ import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.LessonCompletionRepository;
 import com.testingpractice.duoclonebackend.repository.UserCourseProgressRepository;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService{
     return userCourseProgressMapper.toDto(userCourseProgress, totalLessonCount);
   }
 
+  @Transactional
   public UserDto getUser(Integer userId) {
     Optional<User> optionalUser = userRepository.findById(userId);
     if (optionalUser.isEmpty()) {
@@ -46,7 +49,27 @@ public class UserServiceImpl implements UserService{
     }
 
     User user = optionalUser.get();
+    potentiallyResetStreak(user);
 
+
+
+    return userMapper.toDto(user);
+  }
+
+  @Transactional
+  public List<UserDto> getUsersFromIds(List<Integer> userIds) {
+    if (userIds == null || userIds.isEmpty()) {
+      return List.of();
+    }
+
+    return userRepository.findAllById(userIds).stream()
+            .peek(this::potentiallyResetStreak)
+            .map(userMapper::toDto)
+            .toList();
+  }
+
+  @Transactional
+  public void potentiallyResetStreak (User user) {
     Timestamp lastSubmission = user.getLastSubmission();
     if (lastSubmission != null) {
 
@@ -58,11 +81,9 @@ public class UserServiceImpl implements UserService{
 
       if (isOlder) {
         user.setStreakLength(0);
+        userRepository.save(user);
       }
     }
-
-
-    return userMapper.toDto(user);
   }
 
 }

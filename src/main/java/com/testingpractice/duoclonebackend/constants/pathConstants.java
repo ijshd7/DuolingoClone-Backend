@@ -37,6 +37,7 @@ public class pathConstants {
   public static final String GET_UNITS_FROM_IDS = "/ids";
   public static final String GET_LESSONS_FROM_IDS = "/ids";
   public static final String GET_SECTIONS_FROM_IDS = "/ids";
+  public static final String GET_USERS_FROM_IDS = "/ids";
 
   // ===== GET IDS LIST BY PARENT =====
   public static final String GET_LESSON_IDS_BY_UNIT = GET_LESSONS_BY_UNIT + "/ids";
@@ -48,7 +49,7 @@ public class pathConstants {
   public static final String SUBMIT_COMPLETED_LESSON = "/submit";
 
   public static final String FOLLOW_USER = "/follow";
-  public static final String UNFOLLOW_USER = "/follow";
+  public static final String UNFOLLOW_USER = "/unfollow";
 
 
 }
