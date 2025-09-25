@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -36,6 +38,7 @@ public class FollowService {
         Follow newFollow = new Follow();
         newFollow.setFollowerId(followerId);
         newFollow.setFollowedId(followedId);
+        newFollow.setCreatedAt(Timestamp.from(Instant.now()));
 
         followRepository.save(newFollow);
 
