@@ -46,4 +46,9 @@ public class pathConstants {
   // ----------------------------- POST REQUESTS AND MUTATIONS -----------------------------
   public static final String SUBMIT_EXERCISE = "/submit";
   public static final String SUBMIT_COMPLETED_LESSON = "/submit";
+
+  public static final String FOLLOW_USER = "/follow";
+  public static final String UNFOLLOW_USER = "/follow";
+
+
 }
