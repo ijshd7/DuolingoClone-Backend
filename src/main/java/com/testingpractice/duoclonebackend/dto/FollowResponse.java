@@ -1,3 +1,5 @@
 package com.testingpractice.duoclonebackend.dto;
 
-public record FollowResponse(Integer followerNewFollowingCount, Integer followedNewFollowingCount) {}
+public record FollowResponse(FollowFollowingListResponse followersNewStats, FollowFollowingListResponse followedNewStats) {
+
+}
