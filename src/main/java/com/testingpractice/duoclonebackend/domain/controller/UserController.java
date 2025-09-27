@@ -34,8 +34,7 @@ public class UserController {
     return userServiceImpl.getUsersFromIds(userIds);
   }
 
-  @GetMapping(pathConstants.GET_PAGINATED_FOLLOWERS_AND_FOLLOWING)
-  public
+
 
 
 
