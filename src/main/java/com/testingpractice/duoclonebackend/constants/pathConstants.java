@@ -60,6 +60,8 @@ public class pathConstants {
   public static final String FOLLOW_USER = "/follow";
   public static final String UNFOLLOW_USER = "/unfollow";
 
+  public static final String CHANGE_COURSE = "/change";
+
 
 
 }

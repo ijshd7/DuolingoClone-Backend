@@ -1,6 +1,8 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
+import com.testingpractice.duoclonebackend.dto.NewCourseRequest;
+import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.Course;
 import com.testingpractice.duoclonebackend.service.CourseService;
 import com.testingpractice.duoclonebackend.service.SectionService;
@@ -8,10 +10,7 @@ import com.testingpractice.duoclonebackend.service.UnitService;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,5 +30,13 @@ public class CourseController {
   public List<Course> getCourses() {
     return courseService.getAllCourses();
   }
+
+  @PostMapping(pathConstants.CHANGE_COURSE)
+  public UserDto changeUserCourse(
+          @RequestBody NewCourseRequest newCourseRequest
+          ) {
+    return courseService.changeUserCourse(newCourseRequest.userId(), newCourseRequest.newCourse());
+  }
+
 
 }

@@ -56,8 +56,6 @@ public class UserServiceImpl implements UserService{
     User user = optionalUser.get();
     potentiallyResetStreak(user);
 
-
-
     return userMapper.toDto(user);
   }
 
