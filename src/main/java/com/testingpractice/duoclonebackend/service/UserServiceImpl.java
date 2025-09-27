@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService{
         newProgress.setUserId(userId);
         newProgress.setCourseId(courseId);
         newProgress.setCurrentLessonId(courseService.getFirstLessonIdOfCourse(courseId));
+        newProgress.setUpdatedAt(Timestamp.from(Instant.now()));
         userCourseProgressRepository.save(newProgress);
         userCourseProgress = newProgress;
     }
