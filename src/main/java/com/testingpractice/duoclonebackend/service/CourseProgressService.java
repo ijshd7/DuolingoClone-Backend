@@ -20,6 +20,7 @@ public class CourseProgressService {
     public UserCourseProgress updateUsersNextLesson (Integer userId, Integer courseId, Lesson currentLesson) {
        UserCourseProgress userCourseProgress =
                userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
+
        if (userCourseProgress == null)
            throw new ApiException(ErrorCode.USER_NOT_FOUND);
 

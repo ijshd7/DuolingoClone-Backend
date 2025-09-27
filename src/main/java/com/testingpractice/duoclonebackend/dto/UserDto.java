@@ -7,6 +7,7 @@ public record UserDto(
     String username,
     String firstName,
     String lastName,
+    Integer currentCourseId,
     String pfpSrc,
     Integer points,
     Integer streakLength,
