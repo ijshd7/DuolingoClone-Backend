@@ -30,15 +30,20 @@ public class UserServiceImpl implements UserService{
   private final LessonCompletionRepository lessonCompletionRepository;
   private final UserRepository userRepository;
   private final UserMapper userMapper;
+  private final CourseProgressService courseProgressService;
 
   public UserCourseProgressDto getUserCourseProgress(Integer courseId, Integer userId) {
+
     UserCourseProgress userCourseProgress =
         userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
 
     Integer totalLessonCount = lessonCompletionRepository.countByUserAndCourse(userId, courseId);
     if (totalLessonCount == null) totalLessonCount = 0;
 
-    return userCourseProgressMapper.toDto(userCourseProgress, totalLessonCount);
+    Integer lessonSectionId = courseProgressService.getLessonSectionId(userCourseProgress.getCurrentLessonId());
+
+    return userCourseProgressMapper.toDto(userCourseProgress, totalLessonCount, lessonSectionId);
+
   }
 
   @Transactional
