@@ -31,11 +31,22 @@ public class UserServiceImpl implements UserService{
   private final UserRepository userRepository;
   private final UserMapper userMapper;
   private final CourseProgressService courseProgressService;
+  private final CourseService courseService;
 
+  @Transactional
   public UserCourseProgressDto getUserCourseProgress(Integer courseId, Integer userId) {
 
     UserCourseProgress userCourseProgress =
         userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
+
+    if (userCourseProgress == null) {
+      UserCourseProgress newProgress = new UserCourseProgress();
+        newProgress.setUserId(userId);
+        newProgress.setCourseId(courseId);
+        newProgress.setCurrentLessonId(courseService.getFirstLessonIdOfCourse(courseId));
+        userCourseProgressRepository.save(newProgress);
+        userCourseProgress = newProgress;
+    }
 
     Integer totalLessonCount = lessonCompletionRepository.countByUserAndCourse(userId, courseId);
     if (totalLessonCount == null) totalLessonCount = 0;
