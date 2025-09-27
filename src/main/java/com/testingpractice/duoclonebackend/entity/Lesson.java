@@ -29,4 +29,5 @@ public class Lesson {
 
   @Column(name = "order_index")
   private Integer orderIndex;
+
 }

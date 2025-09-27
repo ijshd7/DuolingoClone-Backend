@@ -14,6 +14,7 @@ public class pathConstants {
   public static final String QUESTS = API_V1 + "/quests";
   public static final String FOLLOWS = API_V1 + "/follows";
   public static final String MONTHLY_CHALLENGES = API_V1 + "/monthly-challenges";
+  public static final String LEADERBOARD = API_V1 + "/leaderboard";
 
   public static final String EXERCISES_ATTEMPTS = EXERCISES + "/attempts";
   public static final String LESSONS_COMPLETIONS = LESSONS + "/completions";
@@ -24,6 +25,8 @@ public class pathConstants {
   public static final String GET_QUESTS_BY_USER = "/{userId}";
   public static final String GET_MONTHLY_CHALLENGE_BY_USER = "/{userId}";
   public static final String GET_FOLLOWS_BY_USER = "/{userId}";
+  public static final String GET_TOP_LEADERBOARD = "/top";
+
 
   // ===== GET DTO LIST BY PARENT =====
   public static final String GET_UNITS_BY_SECTION = "/{sectionId}/units";
@@ -44,12 +47,18 @@ public class pathConstants {
   public static final String GET_UNIT_IDS_BY_SECTION = GET_UNITS_BY_SECTION + "/ids";
   public static final String GET_SECTION_IDS_BY_COURSE = GET_SECTIONS_BY_COURSE + "/ids";
 
+  // ===== GET PAGINATED ===== //
+  public static final String GET_PAGINATED_LEADERBOARD = "/paginated";
+  public static final String GET_PAGINATED_FOLLOWERS_AND_FOLLOWING = "/paginated";
+
+
   // ----------------------------- POST REQUESTS AND MUTATIONS -----------------------------
   public static final String SUBMIT_EXERCISE = "/submit";
   public static final String SUBMIT_COMPLETED_LESSON = "/submit";
 
   public static final String FOLLOW_USER = "/follow";
   public static final String UNFOLLOW_USER = "/unfollow";
+
 
 
 }
