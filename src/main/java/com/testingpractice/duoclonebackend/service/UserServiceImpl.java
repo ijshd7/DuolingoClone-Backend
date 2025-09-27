@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -30,15 +31,32 @@ public class UserServiceImpl implements UserService{
   private final LessonCompletionRepository lessonCompletionRepository;
   private final UserRepository userRepository;
   private final UserMapper userMapper;
+  private final CourseProgressService courseProgressService;
+  private final CourseService courseService;
 
+  @Transactional
   public UserCourseProgressDto getUserCourseProgress(Integer courseId, Integer userId) {
+
     UserCourseProgress userCourseProgress =
         userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
+
+    if (userCourseProgress == null) {
+      UserCourseProgress newProgress = new UserCourseProgress();
+        newProgress.setUserId(userId);
+        newProgress.setCourseId(courseId);
+        newProgress.setCurrentLessonId(courseService.getFirstLessonIdOfCourse(courseId));
+        newProgress.setUpdatedAt(Timestamp.from(Instant.now()));
+        userCourseProgressRepository.save(newProgress);
+        userCourseProgress = newProgress;
+    }
 
     Integer totalLessonCount = lessonCompletionRepository.countByUserAndCourse(userId, courseId);
     if (totalLessonCount == null) totalLessonCount = 0;
 
-    return userCourseProgressMapper.toDto(userCourseProgress, totalLessonCount);
+    Integer lessonSectionId = courseProgressService.getLessonSectionId(userCourseProgress.getCurrentLessonId());
+
+    return userCourseProgressMapper.toDto(userCourseProgress, totalLessonCount, lessonSectionId);
+
   }
 
   @Transactional
@@ -50,8 +68,6 @@ public class UserServiceImpl implements UserService{
 
     User user = optionalUser.get();
     potentiallyResetStreak(user);
-
-
 
     return userMapper.toDto(user);
   }

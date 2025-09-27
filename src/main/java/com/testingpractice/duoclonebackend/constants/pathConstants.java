@@ -26,6 +26,7 @@ public class pathConstants {
   public static final String GET_MONTHLY_CHALLENGE_BY_USER = "/{userId}";
   public static final String GET_FOLLOWS_BY_USER = "/{userId}";
   public static final String GET_TOP_LEADERBOARD = "/top";
+  public static final String GET_ALL_COURSES = "/all";
 
 
   // ===== GET DTO LIST BY PARENT =====
@@ -58,6 +59,8 @@ public class pathConstants {
 
   public static final String FOLLOW_USER = "/follow";
   public static final String UNFOLLOW_USER = "/unfollow";
+
+  public static final String CHANGE_COURSE = "/change";
 
 
 

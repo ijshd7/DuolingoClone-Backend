@@ -9,5 +9,6 @@ import org.mapstruct.Mapping;
 public interface UserCourseProgressMapper {
 
   @Mapping(target = "completedLessons", expression = "java(completedLessons)")
-  UserCourseProgressDto toDto(UserCourseProgress entity, Integer completedLessons);
+  @Mapping(target = "sectionId", expression = "java(sectionId)")
+  UserCourseProgressDto toDto(UserCourseProgress entity, Integer completedLessons, Integer sectionId);
 }

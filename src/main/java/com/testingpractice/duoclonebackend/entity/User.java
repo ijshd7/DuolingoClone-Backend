@@ -16,6 +16,9 @@ public class User {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
+  @Column(name = "current_course_id")
+    private Integer currentCourseId;
+
   @Column(name = "username")
   private String username;
 

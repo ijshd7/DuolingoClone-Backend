@@ -2,6 +2,7 @@ package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
 import com.testingpractice.duoclonebackend.dto.NewStreakCount;
+import com.testingpractice.duoclonebackend.dto.UserCourseProgressDto;
 import com.testingpractice.duoclonebackend.entity.ExerciseAttempt;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.User;
@@ -33,6 +34,7 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
     private final LessonMapper lessonMapper;
     private final UserCourseProgressMapper userCourseProgressMapper;
     private final QuestService questService;
+    private final UserServiceImpl userServiceImpl;
 
     @Transactional
     public LessonCompleteResponse getCompletedLesson (Integer lessonId, Integer userId, Integer courseId) {
@@ -54,12 +56,11 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
         NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
         // -- UPDATE USERS NEXT LESSON -- //
-        UserCourseProgress updatedUserCourseProgress = courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
+        courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
+        UserCourseProgressDto userCourseProgressDto = userServiceImpl.getUserCourseProgress(courseId, userId);
 
         lessonCompletionRepository.insertIfAbsent(userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
         userRepository.save(user);
-
-        Integer completedLessonsInCourse = getCompletedLessonsInCourse(userId, courseId);
 
         updateQuests(userId, lessonAccuracy, newStreakCount);
 
@@ -70,7 +71,7 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
                 lessonId,
                 lessonMapper.toDto(
                         lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
-                userCourseProgressMapper.toDto(updatedUserCourseProgress, completedLessonsInCourse), newStreakCount,
+                userCourseProgressDto, newStreakCount,
                 AccuracyScoreUtils.getAccuracyMessage(lessonAccuracy));
     }
 
