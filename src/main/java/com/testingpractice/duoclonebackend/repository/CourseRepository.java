@@ -1,6 +1,11 @@
 package com.testingpractice.duoclonebackend.repository;
 
 import com.testingpractice.duoclonebackend.entity.Course;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.Repository;
 
-interface CourseRepository extends Repository<Course, Integer> {}
+public interface CourseRepository extends JpaRepository<Course, Integer> {
+
+
+
+}
