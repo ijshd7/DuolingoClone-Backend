@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public static class GoogleUserInfo {
+public class GoogleUserInfo {
     private String email;
     private String name;
 
