@@ -17,6 +17,8 @@ import java.time.Instant;
 public class UserCreationService {
 
     private final UserRepository userRepository;
+    private final QuestService questService;
+    private final MonthlyChallengeService monthlyChallengeService;
 
     @Transactional
     public User createUser(GoogleUserInfo googleUser) {
@@ -30,10 +32,18 @@ public class UserCreationService {
         newUser.setPoints(0);
         newUser.setStreakLength(0);
         newUser.setCreatedAt(Timestamp.from(Instant.now()));
-        return userRepository.save(newUser);
+        userRepository.save(newUser);
+
+        //This generates daily quests and monthly challenge for the new user
+        questService.getQuestsForUser(newUser.getId());
+        monthlyChallengeService.getMonthlyChallengeForUser(newUser.getId());
+
+        return newUser;
 
 
     }
+
+
 
 
 }
