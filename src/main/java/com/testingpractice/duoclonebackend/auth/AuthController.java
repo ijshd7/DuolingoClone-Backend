@@ -1,5 +1,6 @@
 package com.testingpractice.duoclonebackend.auth;
 
+import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping(pathConstants.AUTH)
 public class AuthController {
 
     private final GoogleService googleService;
 
-    @PostMapping("/google-login")
+    @PostMapping(pathConstants.GOOGLE_LOGIN)
     public ResponseEntity<UserDto> loginWithGoogle(@RequestBody TokenDto dto, HttpServletResponse response) {
         UserDto userDto = googleService.loginOrRegister(dto.getAccessToken(), response);
         return ResponseEntity.ok(userDto);
