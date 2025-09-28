@@ -1,9 +1,11 @@
 package com.testingpractice.duoclonebackend.auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
+import com.testingpractice.duoclonebackend.utils.UserCreationUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -42,12 +44,11 @@ public class GoogleService {
     public UserDto loginOrRegisterWithCode(String code, HttpServletResponse response) {
         RestTemplate rest = new RestTemplate();
 
-        // Step 1: Exchange auth code for access token
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("code", code);
         params.add("client_id", clientId);
         params.add("client_secret", clientSecret);
-        params.add("redirect_uri", "postmessage"); // use "postmessage" for Google JS auth
+        params.add("redirect_uri", "postmessage");
         params.add("grant_type", "authorization_code");
 
         HttpHeaders headers = new HttpHeaders();
@@ -62,25 +63,23 @@ public class GoogleService {
 
         String accessToken = (String) tokenResponse.get("access_token");
 
-        // Step 2: Fetch user info
         String url = "https://www.googleapis.com/oauth2/v3/userinfo?access_token=" + accessToken;
         GoogleUserInfo googleUser = rest.getForObject(url, GoogleUserInfo.class);
 
-        // Step 3: Register or fetch user
         User user = (User) userRepository.findByEmail(googleUser.getEmail())
                 .orElseGet(() -> {
                     User newUser = new User();
                     newUser.setEmail(googleUser.getEmail());
                     newUser.setFirstName(googleUser.getGivenName());
                     newUser.setLastName(googleUser.getFamilyName());
-                    newUser.setUsername(googleUser.getName().toLowerCase(Locale.ROOT));
+                    newUser.setUsername(UserCreationUtils.generateUsername(googleUser.getName()));
+                    newUser.setPfpSrc(UserCreationUtils.getRandomProfilePic());
                     newUser.setPoints(0);
                     newUser.setStreakLength(0);
                     newUser.setCreatedAt(Timestamp.from(Instant.now()));
                     return userRepository.save(newUser);
                 });
 
-        // Step 4: Create JWT cookie
         String jwt = jwtService.createToken(user.getId());
         Cookie cookie = new Cookie("jwt", jwt);
         cookie.setHttpOnly(true);
@@ -91,11 +90,16 @@ public class GoogleService {
         return userMapper.toDto(user);
     }
 
+
     @Data
     public static class GoogleUserInfo {
         private String email;
         private String name;
+
+        @JsonProperty("given_name")
         private String givenName;
+
+        @JsonProperty("family_name")
         private String familyName;
     }
 }
