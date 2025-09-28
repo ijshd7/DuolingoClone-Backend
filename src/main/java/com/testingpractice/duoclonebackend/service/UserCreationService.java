@@ -3,6 +3,7 @@ package com.testingpractice.duoclonebackend.service;
 import com.testingpractice.duoclonebackend.dto.GoogleUserInfo;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
+import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
 import com.testingpractice.duoclonebackend.utils.UserCreationUtils;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,8 @@ public class UserCreationService {
     private final UserRepository userRepository;
     private final QuestService questService;
     private final MonthlyChallengeService monthlyChallengeService;
+    private final LookupService lookupService;
+    private final UserMapper userMapper;
 
     @Transactional
     public User createUser(GoogleUserInfo googleUser) {
@@ -42,6 +45,14 @@ public class UserCreationService {
         return newUser;
 
 
+    }
+
+    @Transactional
+    public UserDto updateAvatar (Integer userId, String newAvatarSrc) {
+        User user = lookupService.userOrThrow(userId);
+        user.setPfpSrc(newAvatarSrc);
+        userRepository.save(user);
+        return userMapper.toDto(user);
     }
 
     public List<String> getDefaultProfilePics() {

@@ -1,6 +1,7 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
+import com.testingpractice.duoclonebackend.dto.UpdateAvatarRequest;
 import com.testingpractice.duoclonebackend.dto.UserCourseProgressDto;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.service.UserCreationService;
@@ -39,8 +40,14 @@ public class UserController {
   @GetMapping(pathConstants.GET_AVATARS)
     public List<String> getAvatars() {
         return userCreationService.getDefaultProfilePics();
-    }
+  }
 
+  @PostMapping(pathConstants.UPDATE_AVATAR)
+  public UserDto updateAvatar (
+          @RequestBody UpdateAvatarRequest updateAvatarRequest
+          ) {
+    return userCreationService.updateAvatar(updateAvatarRequest.userId(), updateAvatarRequest.selectedAvatar());
+  }
 
 
 
