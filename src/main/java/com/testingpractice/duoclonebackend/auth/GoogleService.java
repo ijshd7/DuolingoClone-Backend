@@ -6,6 +6,7 @@ import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
+import com.testingpractice.duoclonebackend.service.UserCreationService;
 import com.testingpractice.duoclonebackend.utils.UserCreationUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +35,7 @@ public class GoogleService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final JwtService jwtService;
+    private final UserCreationService userCreationService;
 
     @Value("${google.client-id}")
     private String clientId;
@@ -68,18 +70,7 @@ public class GoogleService {
         GoogleUserInfo googleUser = rest.getForObject(url, GoogleUserInfo.class);
 
         User user = (User) userRepository.findByEmail(googleUser.getEmail())
-                .orElseGet(() -> {
-                    User newUser = new User();
-                    newUser.setEmail(googleUser.getEmail());
-                    newUser.setFirstName(googleUser.getGivenName());
-                    newUser.setLastName(googleUser.getFamilyName());
-                    newUser.setUsername(UserCreationUtils.generateUsername(googleUser.getName()));
-                    newUser.setPfpSrc(UserCreationUtils.getRandomProfilePic());
-                    newUser.setPoints(0);
-                    newUser.setStreakLength(0);
-                    newUser.setCreatedAt(Timestamp.from(Instant.now()));
-                    return userRepository.save(newUser);
-                });
+                .orElseGet(() -> userCreationService.createUser(googleUser));
 
         String jwt = jwtService.createToken(user.getId());
         Cookie cookie = new Cookie("jwt", jwt);
