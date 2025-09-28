@@ -41,7 +41,6 @@ public class QuestService {
 
         return parseToQuestionResponseList(questDefinitions, userDailyQuests);
 
-
     }
 
     @Transactional

@@ -30,4 +30,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
   List<User> findAfterCursor(@Param("points") int points,
                              @Param("id") int id,
                              Pageable pageable);
+
+  Optional<Object> findByEmail(String email);
 }

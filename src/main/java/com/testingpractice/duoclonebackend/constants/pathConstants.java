@@ -15,7 +15,7 @@ public class pathConstants {
   public static final String FOLLOWS = API_V1 + "/follows";
   public static final String MONTHLY_CHALLENGES = API_V1 + "/monthly-challenges";
   public static final String LEADERBOARD = API_V1 + "/leaderboard";
-
+  public static final String AUTH = API_V1 + "/auth";
   public static final String EXERCISES_ATTEMPTS = EXERCISES + "/attempts";
   public static final String LESSONS_COMPLETIONS = LESSONS + "/completions";
 
@@ -27,6 +27,7 @@ public class pathConstants {
   public static final String GET_FOLLOWS_BY_USER = "/{userId}";
   public static final String GET_TOP_LEADERBOARD = "/top";
   public static final String GET_ALL_COURSES = "/all";
+    public static final String GET_AVATARS = "/avatars";
 
 
   // ===== GET DTO LIST BY PARENT =====
@@ -61,6 +62,9 @@ public class pathConstants {
   public static final String UNFOLLOW_USER = "/unfollow";
 
   public static final String CHANGE_COURSE = "/change";
+
+  public static final String GOOGLE_LOGIN = "/google-login";
+  public static final String UPDATE_AVATAR = "/update-avatar";
 
 
 
