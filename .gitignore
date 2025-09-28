@@ -20,7 +20,7 @@ target/
 *.ipr
 *.env
 
-application.properties
+*.application.properties
 application.yml
 
 ### NetBeans ###
