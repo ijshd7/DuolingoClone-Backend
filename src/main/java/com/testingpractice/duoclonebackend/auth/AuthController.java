@@ -1,5 +1,7 @@
 package com.testingpractice.duoclonebackend.auth;
 
+import com.testingpractice.duoclonebackend.dto.UserDto;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,19 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
+    private final GoogleService googleService;
+
     @PostMapping("/google-login")
-    public ResponseEntity<?> loginWithGoogle(@RequestBody TokenDto dto, HttpServletResponse response) {
-        User user = googleService.loginOrRegister(dto.getToken());
-        String jwt = jwtService.createToken(user.getId());
-
-        Cookie cookie = new Cookie("jwt", jwt);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(24 * 60 * 60); // 1 day
-        // cookie.setSecure(true); // enable in prod with HTTPS
-        response.addCookie(cookie);
-
-        return ResponseEntity.ok(Map.of("user", user));
+    public ResponseEntity<UserDto> loginWithGoogle(@RequestBody TokenDto dto, HttpServletResponse response) {
+        UserDto userDto = googleService.loginOrRegister(dto.getAccessToken(), response);
+        return ResponseEntity.ok(userDto);
     }
 
 
