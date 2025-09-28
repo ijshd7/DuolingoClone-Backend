@@ -1,6 +1,7 @@
 package com.testingpractice.duoclonebackend.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.testingpractice.duoclonebackend.dto.GoogleUserInfo;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.mapper.UserMapper;
@@ -91,15 +92,5 @@ public class GoogleService {
     }
 
 
-    @Data
-    public static class GoogleUserInfo {
-        private String email;
-        private String name;
 
-        @JsonProperty("given_name")
-        private String givenName;
-
-        @JsonProperty("family_name")
-        private String familyName;
-    }
 }
