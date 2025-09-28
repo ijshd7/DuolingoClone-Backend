@@ -1,5 +1,7 @@
 package com.testingpractice.duoclonebackend.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class UserCreationUtils {
@@ -16,6 +18,14 @@ public class UserCreationUtils {
         String base = name.replaceAll("\\s+", "").toLowerCase();
         int rand = ThreadLocalRandom.current().nextInt(100, 1000);
         return base + rand;
+    }
+
+    public static List<String> getAllProfilePics() {
+        List<String> pics = new ArrayList<>();
+        for (int i = 2; i <= 13; i++) {
+            pics.add(BASE_URL + i + ".png");
+        }
+        return pics;
     }
 
 }

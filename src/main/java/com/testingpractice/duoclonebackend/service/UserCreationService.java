@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +42,10 @@ public class UserCreationService {
         return newUser;
 
 
+    }
+
+    public List<String> getDefaultProfilePics() {
+        return UserCreationUtils.getAllProfilePics();
     }
 
 
