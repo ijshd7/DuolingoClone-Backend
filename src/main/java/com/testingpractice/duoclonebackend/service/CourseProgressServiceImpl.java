@@ -34,7 +34,7 @@ public class CourseProgressServiceImpl implements CourseProgressService {
   @Override
   @Transactional
   public List<LessonDto> updateUsersNextLesson(
-      Integer userId, Integer courseId,  Lesson currentLesson, boolean isCompleted) {
+      Integer userId, Integer courseId,  Lesson currentLesson, boolean isCompleted, Integer scoreForLesson) {
     UserCourseProgress userCourseProgress =
         userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
 
@@ -56,8 +56,8 @@ public class CourseProgressServiceImpl implements CourseProgressService {
       List<Lesson> skippedLessons = curriculumNavigator.getLessonsBetweenInclusive(courseId, currentCourseProgressLesson, currentLesson, userId);
       Timestamp now = Timestamp.from((Instant.now()));
       for (Lesson skippedLesson : skippedLessons) {
-        lessonCompletionRepository.insertIfAbsent(userId, skippedLesson.getId(), courseId, 15, now);
         if (!skippedLesson.getId().equals(currentLesson.getId())) {
+            lessonCompletionRepository.insertIfAbsent(userId, skippedLesson.getId(), courseId, 0, now);
             lessonsPassed.add(lessonMapper.toDto(skippedLesson, true));
         }
       }

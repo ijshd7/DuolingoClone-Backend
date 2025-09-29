@@ -45,8 +45,11 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
     User user = lookupService.userOrThrow(userId);
     Lesson lesson = lookupService.lessonOrThrow(lessonId);
 
-    Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts);
+    boolean isCompleted = isLessonComplete(userId, lessonId);
+
     Integer lessonAccuracy = AccuracyScoreUtils.getLessonAccuracy(exerciseAttempts);
+
+    Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts, !isCompleted, lessonAccuracy);
 
     // -- UPDATE USERS SCORE -- //
     user.setPoints(user.getPoints() + scoreForLesson);
@@ -59,13 +62,12 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
 
 
     // -- UPDATE USERS NEXT LESSON -- //
-    boolean isCompleted = isLessonComplete(userId, lessonId);
-    List<LessonDto> passedLessons = courseProgressService.updateUsersNextLesson(userId, courseId, lesson, isCompleted);
+    List<LessonDto> passedLessons = courseProgressService.updateUsersNextLesson(userId, courseId, lesson, isCompleted, scoreForLesson);
     UserCourseProgressDto userCourseProgressDto =
         userService.getUserCourseProgress(courseId, userId);
 
     lessonCompletionRepository.insertIfAbsent(
-        userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
+        userId, lessonId, courseId, scoreForLesson, Timestamp.from((Instant.now())));
     userRepository.save(user);
 
     updateQuests(userId, lessonAccuracy, newStreakCount);

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CourseProgressService {
 
-  List<LessonDto> updateUsersNextLesson(Integer userId, Integer courseId, Lesson currentLesson, boolean isCompleted);
+  List<LessonDto> updateUsersNextLesson(Integer userId, Integer courseId, Lesson currentLesson, boolean isCompleted, Integer scoreForLesson);
 
   Integer getLessonSectionId(Integer lessonId);
 }

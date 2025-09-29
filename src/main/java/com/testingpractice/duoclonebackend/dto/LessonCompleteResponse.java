@@ -9,7 +9,7 @@ public record LessonCompleteResponse(
     Integer accuracy,
     Integer lessonId,
     LessonDto updatedLesson,
-    List<LessonDto> lessonsToInvalidate,
+    List<LessonDto> lessonsToUpdate,
     UserCourseProgressDto updatedUserCourseProgress,
     NewStreakCount newStreakCount,
     String message) {}

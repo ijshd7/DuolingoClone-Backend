@@ -26,7 +26,23 @@ public class AccuracyScoreUtils {
     return accuracyPercent;
   }
 
-  public static Integer getLessonPoints(List<ExerciseAttempt> exerciseAttempts) {
-    return exerciseAttempts.stream().mapToInt(ExerciseAttempt::getScore).sum();
+  public static Integer getLessonPoints(List<ExerciseAttempt> exerciseAttempts, boolean isFirstAttempt, Integer accuracy) {
+
+    boolean isPerfect = accuracy >= 100;
+
+    int basePoints = 0;
+
+    if (isPerfect) {
+      basePoints += 5;
+    }
+
+    if (isFirstAttempt) {
+      basePoints += exerciseAttempts.stream().mapToInt(ExerciseAttempt::getScore).sum();
+    } else {
+      basePoints += 5;
+    }
+
+    return basePoints;
+
   }
 }
