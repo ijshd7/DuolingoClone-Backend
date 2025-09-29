@@ -24,8 +24,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ProblemDetail> handleAny(Exception ex, HttpServletRequest req) {
     ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-    log.error(
-        "Unhandled {} {} ", req.getMethod(), req.getRequestURI(), ex);
+    log.error("Unhandled {} {} ", req.getMethod(), req.getRequestURI(), ex);
 
     pd.setTitle("INTERNAL_ERROR");
     pd.setDetail("Unexpected error");

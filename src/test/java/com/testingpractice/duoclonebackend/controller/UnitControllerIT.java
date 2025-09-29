@@ -19,35 +19,30 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public class UnitControllerIT extends AbstractIntegrationTest {
 
-    @Autowired
-    LessonRepository lessonRepo;
+  @Autowired LessonRepository lessonRepo;
 
-    @BeforeEach
-    void seed () {
-        lessonRepo.deleteAll();
+  @BeforeEach
+  void seed() {
+    lessonRepo.deleteAll();
 
-        lessonRepo.saveAll(List.of(
-                makeLesson(LESSON_1_TITLE, 2, 1),
-                makeLesson(LESSON_2_TITLE, 2, 2),
-                makeLesson(LESSON_3_TITLE, 2, 3),
-                makeLesson(LESSON_4_TITLE, 1, 3)
-        ));
+    lessonRepo.saveAll(
+        List.of(
+            makeLesson(LESSON_1_TITLE, 2, 1),
+            makeLesson(LESSON_2_TITLE, 2, 2),
+            makeLesson(LESSON_3_TITLE, 2, 3),
+            makeLesson(LESSON_4_TITLE, 1, 3)));
+  }
 
-    }
-
-    @Test
-    void getLessonsByUnit_returnsLessonsForThatUnit () {
-        given()
-                .when().get(pathConstants.UNITS + pathConstants.GET_LESSONS_BY_UNIT, 2)
-                .then()
-                .statusCode(200)
-                .body("$", hasSize(3))
-                .body("title", containsInAnyOrder(LESSON_1_TITLE, LESSON_2_TITLE, LESSON_3_TITLE))
-                .body("[0].id", notNullValue())
-                .body("[1].unitId", notNullValue());
-
-    }
-
-
-
+  @Test
+  void getLessonsByUnit_returnsLessonsForThatUnit() {
+    given()
+        .when()
+        .get(pathConstants.UNITS + pathConstants.GET_LESSONS_BY_UNIT, 2)
+        .then()
+        .statusCode(200)
+        .body("$", hasSize(3))
+        .body("title", containsInAnyOrder(LESSON_1_TITLE, LESSON_2_TITLE, LESSON_3_TITLE))
+        .body("[0].id", notNullValue())
+        .body("[1].unitId", notNullValue());
+  }
 }

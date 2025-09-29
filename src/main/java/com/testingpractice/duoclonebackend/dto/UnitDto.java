@@ -7,5 +7,4 @@ public record UnitDto(
     Integer orderIndex,
     Integer sectionId,
     String animationPath,
-    String color
-    ) {}
+    String color) {}

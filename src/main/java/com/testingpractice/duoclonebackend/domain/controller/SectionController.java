@@ -7,7 +7,6 @@ import com.testingpractice.duoclonebackend.dto.UnitDto;
 import com.testingpractice.duoclonebackend.service.SectionService;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,6 @@ public class SectionController {
 
   private final SectionService sectionService;
   private final UnitService unitService;
-
 
   @GetMapping(pathConstants.GET_SECTIONS_FROM_IDS)
   public List<SectionDto> getSectionsByIds(@RequestParam List<Integer> sectionIds) {
@@ -35,7 +33,7 @@ public class SectionController {
     return unitService.getUnitIdsBySection(sectionId);
   }
 
-  @GetMapping("/getBulk/{sectionId}/{userId}")
+  @GetMapping(pathConstants.GET_BULK_SECTIONS)
   public SectionTreeNode getBulkSection(
       @PathVariable("sectionId") Integer sectionId, @PathVariable("userId") Integer userId) {
     return sectionService.getBulkSection(sectionId, userId); // will throw if not found

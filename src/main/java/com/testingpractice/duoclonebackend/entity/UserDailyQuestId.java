@@ -2,11 +2,10 @@ package com.testingpractice.duoclonebackend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import lombok.Data;
 
 @Embeddable
 @Data
@@ -24,8 +23,7 @@ public class UserDailyQuestId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserDailyQuestId)) return false;
-        UserDailyQuestId that = (UserDailyQuestId) o;
+        if (!(o instanceof UserDailyQuestId that)) return false;
         return Objects.equals(userId, that.userId) &&
                 Objects.equals(questDefId, that.questDefId) &&
                 Objects.equals(date, that.date);

@@ -1,15 +1,12 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
-import com.testingpractice.duoclonebackend.auth.JwtService;
+import com.testingpractice.duoclonebackend.service.JwtServiceImpl;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.ExerciseDto;
-import com.testingpractice.duoclonebackend.dto.LessonCompleteRequest;
-import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.service.ExerciseService;
 import com.testingpractice.duoclonebackend.service.LessonService;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +19,7 @@ public class LessonController {
 
   private final LessonService lessonService;
   private final ExerciseService exerciseService;
-  private final JwtService jwtService;
+  private final JwtServiceImpl jwtService;
 
 
   @GetMapping(pathConstants.GET_LESSONS_FROM_IDS)

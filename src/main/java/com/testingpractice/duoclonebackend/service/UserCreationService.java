@@ -7,12 +7,11 @@ import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
 import com.testingpractice.duoclonebackend.utils.UserCreationUtils;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

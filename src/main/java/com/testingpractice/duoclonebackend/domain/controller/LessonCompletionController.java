@@ -16,15 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(pathConstants.LESSONS_COMPLETIONS)
 public class LessonCompletionController {
 
-    private final LessonCompletionService lessonCompletionService;
+  private final LessonCompletionService lessonCompletionService;
 
-    @PostMapping(pathConstants.SUBMIT_COMPLETED_LESSON)
-    public LessonCompleteResponse completeLesson(
-            @RequestBody LessonCompleteRequest lessonCompleteRequest) {
-        return lessonCompletionService.getCompletedLesson(
-                lessonCompleteRequest.lessonId(),
-                lessonCompleteRequest.userId(),
-                lessonCompleteRequest.courseId());
-    }
-
+  @PostMapping(pathConstants.SUBMIT_COMPLETED_LESSON)
+  public LessonCompleteResponse completeLesson(
+      @RequestBody LessonCompleteRequest lessonCompleteRequest) {
+    return lessonCompletionService.getCompletedLesson(
+        lessonCompleteRequest.lessonId(),
+        lessonCompleteRequest.userId(),
+        lessonCompleteRequest.courseId());
+  }
 }

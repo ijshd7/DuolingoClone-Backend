@@ -17,7 +17,6 @@ public enum ErrorCode {
   ALREADY_FOLLOWS(HttpStatus.BAD_REQUEST, "You already follow this user"),
   DOES_NOT_FOLLOW(HttpStatus.BAD_REQUEST, "You don't follow this user");
 
-
   private final HttpStatus status;
   private final String defaultMessage;
 

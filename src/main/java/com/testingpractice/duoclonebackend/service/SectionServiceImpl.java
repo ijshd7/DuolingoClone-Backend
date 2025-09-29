@@ -18,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +45,7 @@ public class SectionServiceImpl implements SectionService {
     return sectionIds;
   }
 
+  @Override
   public SectionTreeNode getBulkSection(Integer sectionId, Integer userId) {
     Section section = sectionRepository.findById(sectionId).orElse(null);
     if (section == null) throw new ApiException(ErrorCode.SECTION_NOT_FOUND);

@@ -38,7 +38,12 @@ public class Unit {
 
   @Builder
   public Unit(
-      String title, String description, Integer orderIndex, Integer courseId, Integer sectionId, String color) {
+      String title,
+      String description,
+      Integer orderIndex,
+      Integer courseId,
+      Integer sectionId,
+      String color) {
     this.title = title;
     this.description = description;
     this.orderIndex = orderIndex;

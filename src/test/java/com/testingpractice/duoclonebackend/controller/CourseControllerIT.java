@@ -18,33 +18,29 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 class CourseControllerIT extends AbstractIntegrationTest {
 
-    @Autowired
-    UnitRepository unitRepo;
+  @Autowired UnitRepository unitRepo;
 
-    @BeforeEach
-    void seed() {
-        unitRepo.deleteAll();
+  @BeforeEach
+  void seed() {
+    unitRepo.deleteAll();
 
-        unitRepo.saveAll(List.of(
-                makeUnit(UNIT_1_TITLE, 10, 1, 1),
-                makeUnit(UNIT_2_TITLE, 10, 2, 5),
-                makeUnit(UNIT_3_TITLE, 20, 1, 2)
-        ));
+    unitRepo.saveAll(
+        List.of(
+            makeUnit(UNIT_1_TITLE, 10, 1, 1),
+            makeUnit(UNIT_2_TITLE, 10, 2, 5),
+            makeUnit(UNIT_3_TITLE, 20, 1, 2)));
+  }
 
-    }
-
-    @Test
-    void getUnitsByCourse_returnsUnitsForThatCourse() {
-        given()
-                .when().get(pathConstants.COURSES + pathConstants.GET_UNITS_BY_SECTION, 10)
-                .then()
-                .statusCode(200)
-                .body("$", hasSize(2))
-                .body("title", containsInAnyOrder(UNIT_1_TITLE, UNIT_2_TITLE))
-                .body("[0].id", notNullValue())
-                .body("[1].section", notNullValue());
-    }
-
-
-
+  @Test
+  void getUnitsByCourse_returnsUnitsForThatCourse() {
+    given()
+        .when()
+        .get(pathConstants.COURSES + pathConstants.GET_UNITS_BY_SECTION, 10)
+        .then()
+        .statusCode(200)
+        .body("$", hasSize(2))
+        .body("title", containsInAnyOrder(UNIT_1_TITLE, UNIT_2_TITLE))
+        .body("[0].id", notNullValue())
+        .body("[1].section", notNullValue());
+  }
 }

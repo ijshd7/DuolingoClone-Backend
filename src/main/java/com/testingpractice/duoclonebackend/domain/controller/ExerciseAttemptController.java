@@ -15,17 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(pathConstants.EXERCISES_ATTEMPTS)
 public class ExerciseAttemptController {
 
-    private final ExerciseAttemptService exerciseAttemptService;
+  private final ExerciseAttemptService exerciseAttemptService;
 
-    @PostMapping(pathConstants.SUBMIT_EXERCISE)
-    public ExerciseAttemptResponse submitExerciseAttempt(
-            @RequestBody ExerciseAttemptRequest exerciseAttemptRequest
-            // Add Later Authentication Auth
-    ) {
-        return exerciseAttemptService.submitExerciseAttempt(
-                exerciseAttemptRequest.exerciseId(),
-                exerciseAttemptRequest.optionIds(),
-                exerciseAttemptRequest.userId());
-    }
-
+  @PostMapping(pathConstants.SUBMIT_EXERCISE)
+  public ExerciseAttemptResponse submitExerciseAttempt(
+      @RequestBody ExerciseAttemptRequest exerciseAttemptRequest
+      // Add Later Authentication Auth
+      ) {
+    return exerciseAttemptService.submitExerciseAttempt(
+        exerciseAttemptRequest.exerciseId(),
+        exerciseAttemptRequest.optionIds(),
+        exerciseAttemptRequest.userId());
+  }
 }

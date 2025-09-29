@@ -37,5 +37,4 @@ public class ExerciseOption {
 
   @Column(name = "answer_order")
   private Integer answerOrder;
-  
 }

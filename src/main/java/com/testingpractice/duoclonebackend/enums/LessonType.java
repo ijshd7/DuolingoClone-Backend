@@ -1,8 +1,3 @@
 package com.testingpractice.duoclonebackend.enums;
 
-public enum LessonType {
-
-
-
-}
-
+public enum LessonType {}

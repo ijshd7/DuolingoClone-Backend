@@ -1,6 +1,5 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
-
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.QuestResponse;
 import com.testingpractice.duoclonebackend.service.MonthlyChallengeService;
@@ -15,12 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(pathConstants.MONTHLY_CHALLENGES)
 public class MonthlyChallengeController {
 
-    private final MonthlyChallengeService monthlyChallengeService;
+  private final MonthlyChallengeService monthlyChallengeService;
 
-    @GetMapping(pathConstants.GET_MONTHLY_CHALLENGE_BY_USER)
-    public QuestResponse getMonthlyChallenge (@PathVariable Integer userId) {
-        return monthlyChallengeService.getMonthlyChallengeForUser(userId);
-    }
-
-
+  @GetMapping(pathConstants.GET_MONTHLY_CHALLENGE_BY_USER)
+  public QuestResponse getMonthlyChallenge(@PathVariable Integer userId) {
+    return monthlyChallengeService.getMonthlyChallengeForUser(userId);
+  }
 }

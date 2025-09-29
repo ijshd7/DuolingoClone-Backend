@@ -27,13 +27,14 @@ public class pathConstants {
   public static final String GET_FOLLOWS_BY_USER = "/{userId}";
   public static final String GET_TOP_LEADERBOARD = "/top";
   public static final String GET_ALL_COURSES = "/all";
-    public static final String GET_AVATARS = "/avatars";
-
+  public static final String GET_AVATARS = "/avatars";
 
   // ===== GET DTO LIST BY PARENT =====
   public static final String GET_UNITS_BY_SECTION = "/{sectionId}/units";
   public static final String GET_LESSONS_BY_UNIT = "/{unitId}/{userId}/lessons";
   public static final String GET_SECTIONS_BY_COURSE = "/{courseID}/sections";
+
+  public static final String GET_BULK_SECTIONS = "/getBulk/{sectionId}/{userId}";
 
   // !! TRANSACTIONAL !!//
   public static final String GET_EXERCISES_BY_LESSON = "{lessonId}/{userId}/exercises";
@@ -53,7 +54,6 @@ public class pathConstants {
   public static final String GET_PAGINATED_LEADERBOARD = "/paginated";
   public static final String GET_PAGINATED_FOLLOWERS_AND_FOLLOWING = "/paginated";
 
-
   // ----------------------------- POST REQUESTS AND MUTATIONS -----------------------------
   public static final String SUBMIT_EXERCISE = "/submit";
   public static final String SUBMIT_COMPLETED_LESSON = "/submit";
@@ -65,7 +65,4 @@ public class pathConstants {
 
   public static final String GOOGLE_LOGIN = "/google-login";
   public static final String UPDATE_AVATAR = "/update-avatar";
-
-
-
 }

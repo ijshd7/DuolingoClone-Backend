@@ -8,7 +8,6 @@ import com.testingpractice.duoclonebackend.service.CourseService;
 import com.testingpractice.duoclonebackend.service.SectionService;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
