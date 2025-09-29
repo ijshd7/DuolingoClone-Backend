@@ -83,7 +83,8 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
 
     }
 
-    private void updateQuests (Integer userId, Integer lessonAccuracy, NewStreakCount newStreakCount) {
+    @Transactional
+    protected void updateQuests (Integer userId, Integer lessonAccuracy, NewStreakCount newStreakCount) {
 
         if (lessonAccuracy == 100) {
             questService.updateQuestProgress(userId, QuestCode.PERFECT);
