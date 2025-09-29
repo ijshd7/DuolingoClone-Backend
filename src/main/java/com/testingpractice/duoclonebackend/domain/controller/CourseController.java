@@ -2,8 +2,8 @@ package com.testingpractice.duoclonebackend.domain.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.ChangeCourseDto;
+import com.testingpractice.duoclonebackend.dto.CourseDTO;
 import com.testingpractice.duoclonebackend.dto.NewCourseRequest;
-import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.Course;
 import com.testingpractice.duoclonebackend.service.*;
 
@@ -39,9 +39,10 @@ public class CourseController {
     return courseService.changeUserCourse(userId, req.newCourse());
   }
 
-  @GetMapping(pathConstants.GET_USER_COURSE_IDS)
-  public List<Integer> getUserCourseIds(@PathVariable Integer userId) {
-    return courseProgressService.getUserCourseIds(userId);
+  //Todo add mappers and dtos for courses
+  @GetMapping(pathConstants.GET_USER_COURSES)
+  public List<Course> getUserCourses(@PathVariable Integer userId) {
+    return courseProgressService.getUserCourses(userId);
   }
 
 }

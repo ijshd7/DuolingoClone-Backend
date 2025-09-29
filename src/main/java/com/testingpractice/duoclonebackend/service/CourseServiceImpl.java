@@ -1,7 +1,6 @@
 package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.ChangeCourseDto;
-import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.*;
 import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
@@ -48,9 +47,9 @@ public class CourseServiceImpl implements CourseService {
     }
     user.setCurrentCourseId(newCourseId);
 
-    List<Integer> updatedUserCourseIds = courseProgressService.getUserCourseIds(userId);
+    List<Course> updatedUserCourses = courseProgressService.getUserCourses(userId);
 
-    return new ChangeCourseDto(userMapper.toDto(user), updatedUserCourseIds);
+    return new ChangeCourseDto(userMapper.toDto(user), updatedUserCourses );
   }
 
   @Override

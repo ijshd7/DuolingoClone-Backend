@@ -1,13 +1,16 @@
 package com.testingpractice.duoclonebackend.service;
 
+import com.testingpractice.duoclonebackend.dto.CourseDTO;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.dto.NextLessonDto;
+import com.testingpractice.duoclonebackend.entity.Course;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.Unit;
 import com.testingpractice.duoclonebackend.entity.UserCourseProgress;
 import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
+import com.testingpractice.duoclonebackend.repository.CourseRepository;
 import com.testingpractice.duoclonebackend.repository.LessonCompletionRepository;
 import com.testingpractice.duoclonebackend.repository.UserCourseProgressRepository;
 import jakarta.transaction.Transactional;
@@ -27,6 +30,7 @@ public class CourseProgressServiceImpl implements CourseProgressService {
   private final LookupService lookupService;
   private final LessonCompletionRepository lessonCompletionRepository;
   private final LessonMapper lessonMapper;
+  private final CourseRepository courseRepository;
 
   @Override
   @Transactional
@@ -81,13 +85,14 @@ public class CourseProgressServiceImpl implements CourseProgressService {
   }
 
   @Override
-    public List<Integer> getUserCourseIds(Integer userId) {
+    public List<Course> getUserCourses(Integer userId) {
         List<UserCourseProgress> allUserCourseProgresses = userCourseProgressRepository.findAllByUserId(userId);
         List<Integer> courseIds = new ArrayList<>();
         for (UserCourseProgress progress : allUserCourseProgresses) {
             courseIds.add(progress.getCourseId());
         }
-        return courseIds;
+        List<Course> usersCourses= courseRepository.findAllById(courseIds);
+        return usersCourses;
     }
 
 

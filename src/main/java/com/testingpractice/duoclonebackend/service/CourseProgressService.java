@@ -1,6 +1,8 @@
 package com.testingpractice.duoclonebackend.service;
 
+import com.testingpractice.duoclonebackend.dto.CourseDTO;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
+import com.testingpractice.duoclonebackend.entity.Course;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import java.util.List;
 
@@ -10,6 +12,6 @@ public interface CourseProgressService {
 
   Integer getLessonSectionId(Integer lessonId);
 
-  List<Integer> getUserCourseIds(Integer userId);
+  List<Course> getUserCourses(Integer userId);
 
 }

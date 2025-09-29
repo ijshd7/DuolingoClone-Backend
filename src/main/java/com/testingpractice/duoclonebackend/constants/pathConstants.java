@@ -27,7 +27,7 @@ public class pathConstants {
   public static final String GET_TOP_LEADERBOARD = "/top";
   public static final String GET_ALL_COURSES = "/all";
   public static final String GET_AVATARS = "/avatars";
-  public static final String GET_USER_COURSE_IDS = "/get/${userId}";
+  public static final String GET_USER_COURSES = "/get/{userId}";
 
   // ===== GET DTO LIST BY PARENT =====
   public static final String GET_UNITS_BY_SECTION = "/{sectionId}/units";
