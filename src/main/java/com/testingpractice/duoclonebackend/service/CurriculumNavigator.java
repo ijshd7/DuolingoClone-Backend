@@ -9,6 +9,9 @@ import com.testingpractice.duoclonebackend.repository.LessonRepository;
 import com.testingpractice.duoclonebackend.repository.SectionRepository;
 import com.testingpractice.duoclonebackend.repository.UnitRepository;
 import jakarta.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -58,6 +61,21 @@ public class CurriculumNavigator {
         }
 
         return null;
+    }
+
+    public List<Lesson> getLessonsBetweenInclusive(Integer courseId, Lesson from, Lesson to, Integer userId) {
+        List<Lesson> out = new ArrayList<>();
+        Lesson cur = from;
+        out.add(cur);
+
+        int guard = 0;
+        while (!cur.getId().equals(to.getId())) {
+            cur = getNextLesson(cur, userId, courseId);
+            if (cur == null) throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
+            out.add(cur);
+            if (++guard > 10_000) throw new IllegalStateException("Guard tripped while traversing lessons");
+        }
+        return out;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
+import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.dto.NewStreakCount;
 import com.testingpractice.duoclonebackend.dto.UserCourseProgressDto;
 import com.testingpractice.duoclonebackend.entity.ExerciseAttempt;
@@ -15,6 +16,8 @@ import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +45,11 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
     User user = lookupService.userOrThrow(userId);
     Lesson lesson = lookupService.lessonOrThrow(lessonId);
 
-    Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts);
+    boolean isCompleted = isLessonComplete(userId, lessonId);
+
     Integer lessonAccuracy = AccuracyScoreUtils.getLessonAccuracy(exerciseAttempts);
+
+    Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts, !isCompleted, lessonAccuracy);
 
     // -- UPDATE USERS SCORE -- //
     user.setPoints(user.getPoints() + scoreForLesson);
@@ -54,13 +60,14 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
     // -- UPDATE USER STREAK -- //
     NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
+
     // -- UPDATE USERS NEXT LESSON -- //
-    courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
+    List<LessonDto> passedLessons = courseProgressService.updateUsersNextLesson(userId, courseId, lesson, isCompleted, scoreForLesson);
     UserCourseProgressDto userCourseProgressDto =
         userService.getUserCourseProgress(courseId, userId);
 
     lessonCompletionRepository.insertIfAbsent(
-        userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
+        userId, lessonId, courseId, scoreForLesson, Timestamp.from((Instant.now())));
     userRepository.save(user);
 
     updateQuests(userId, lessonAccuracy, newStreakCount);
@@ -73,6 +80,7 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
         lessonId,
         lessonMapper.toDto(
             lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
+        passedLessons,
         userCourseProgressDto,
         newStreakCount,
         AccuracyScoreUtils.getAccuracyMessage(lessonAccuracy));
@@ -84,6 +92,10 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
 
     if (completedLessonsInCourse == null) return 0;
     else return completedLessonsInCourse;
+  }
+
+  private boolean isLessonComplete(Integer userId, Integer lessonId) {
+    return lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId);
   }
 
   @Transactional
