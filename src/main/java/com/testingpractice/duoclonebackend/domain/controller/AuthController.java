@@ -9,6 +9,7 @@ import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
+import com.testingpractice.duoclonebackend.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,9 +26,8 @@ public class AuthController {
 
   private final GoogleService googleService;
   private final JwtServiceImpl jwtService;
-  private final UserRepository userRepository;
-  private final UserMapper userMapper;
   private final AuthCookieService authCookieService;
+  private final UserService userService;
 
   @PostMapping(pathConstants.GOOGLE_LOGIN)
   public ResponseEntity<UserDto> loginWithGoogle(@RequestBody TokenDto dto,
@@ -38,8 +38,8 @@ public class AuthController {
 
   @GetMapping("/me")
   public ResponseEntity<UserDto> getCurrentUser(@CookieValue(name = "jwt", required = false) String token) {
-    if (token == null || !jwtService.isTokenValid(token)) return ResponseEntity.status(401).build();
-    return ResponseEntity.ok(googleService.getCurrentUser(token));
+    int userId = jwtService.requireUserId(token);
+    return ResponseEntity.ok(userService.getUser(userId));
   }
 
   @PostMapping("/logout")

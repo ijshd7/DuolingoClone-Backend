@@ -60,11 +60,4 @@
             return userMapper.toDto(user);
         }
 
-        public UserDto getCurrentUser(String token) {
-            Integer userId = jwtService.extractUserId(token);
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
-            return userMapper.toDto(user);
-        }
-
     }
