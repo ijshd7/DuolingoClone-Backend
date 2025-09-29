@@ -1,6 +1,7 @@
 package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
+import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.dto.NewStreakCount;
 import com.testingpractice.duoclonebackend.dto.UserCourseProgressDto;
 import com.testingpractice.duoclonebackend.entity.ExerciseAttempt;
@@ -59,7 +60,7 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
 
     // -- UPDATE USERS NEXT LESSON -- //
     boolean isCompleted = isLessonComplete(userId, lessonId);
-    courseProgressService.updateUsersNextLesson(userId, courseId, lesson, isCompleted);
+    List<LessonDto> passedLessons = courseProgressService.updateUsersNextLesson(userId, courseId, lesson, isCompleted);
     UserCourseProgressDto userCourseProgressDto =
         userService.getUserCourseProgress(courseId, userId);
 
@@ -77,6 +78,7 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
         lessonId,
         lessonMapper.toDto(
             lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
+        passedLessons,
         userCourseProgressDto,
         newStreakCount,
         AccuracyScoreUtils.getAccuracyMessage(lessonAccuracy));
