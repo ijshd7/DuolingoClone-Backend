@@ -1,5 +1,6 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
+import com.testingpractice.duoclonebackend.auth.AuthCookieService;
 import com.testingpractice.duoclonebackend.service.GoogleService;
 import com.testingpractice.duoclonebackend.service.JwtServiceImpl;
 import com.testingpractice.duoclonebackend.dto.TokenDto;
@@ -9,6 +10,7 @@ import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,38 +27,24 @@ public class AuthController {
   private final JwtServiceImpl jwtService;
   private final UserRepository userRepository;
   private final UserMapper userMapper;
+  private final AuthCookieService authCookieService;
 
   @PostMapping(pathConstants.GOOGLE_LOGIN)
-  public ResponseEntity<UserDto> loginWithGoogle(
-          @RequestBody TokenDto dto, HttpServletResponse response) {
+  public ResponseEntity<UserDto> loginWithGoogle(@RequestBody TokenDto dto,
+                                                 HttpServletResponse response) {
     UserDto userDto = googleService.loginOrRegisterWithCode(dto.getCode(), response);
     return ResponseEntity.ok(userDto);
   }
 
   @GetMapping("/me")
-  public ResponseEntity<UserDto> getCurrentUser(
-      @CookieValue(name = "jwt", required = false) String token) {
-    if (token == null || !jwtService.isTokenValid(token)) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    Integer userId = jwtService.extractUserId(token);
-
-    User user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-    return ResponseEntity.ok(userMapper.toDto(user));
+  public ResponseEntity<UserDto> getCurrentUser(@CookieValue(name = "jwt", required = false) String token) {
+    if (token == null || !jwtService.isTokenValid(token)) return ResponseEntity.status(401).build();
+    return ResponseEntity.ok(googleService.getCurrentUser(token));
   }
 
   @PostMapping("/logout")
   public ResponseEntity<Void> logout(HttpServletResponse response) {
-    Cookie cookie = new Cookie("jwt", null);
-    cookie.setHttpOnly(true);
-    cookie.setPath("/");
-    cookie.setMaxAge(0);
-    response.addCookie(cookie);
+    authCookieService.clearJwt(response);
     return ResponseEntity.ok().build();
   }
 }
