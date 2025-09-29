@@ -1,5 +1,6 @@
 package com.testingpractice.duoclonebackend.service;
 
+import com.testingpractice.duoclonebackend.dto.NextLessonDto;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.Section;
 import com.testingpractice.duoclonebackend.entity.Unit;
@@ -25,13 +26,11 @@ public class CurriculumNavigator {
     private final SectionRepository sectionRepository;
 
     @Nullable
-    public Lesson getNextLesson(Lesson lesson, Integer userId, Integer courseId) {
-
-        //GET NEXT LESSON IN UNIT
+    public NextLessonDto getNextLesson(Lesson lesson, Integer userId, Integer courseId) {
         Lesson nextLessonInUnit =
                 lessonRepository.findFirstByUnitIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
                         lesson.getUnitId(), lesson.getOrderIndex());
-        if (nextLessonInUnit != null) return nextLessonInUnit;
+        if (nextLessonInUnit != null) return new NextLessonDto(nextLessonInUnit, false);
 
         Optional<Unit> currentUnit = unitRepository.findById(lesson.getUnitId());
         if (currentUnit.isEmpty())
@@ -41,26 +40,12 @@ public class CurriculumNavigator {
                 unitRepository.findFirstBySectionIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
                         currentUnit.get().getSectionId(), currentUnit.get().getOrderIndex());
         if (nextUnit != null) {
-            return lessonRepository.findFirstByUnitIdOrderByOrderIndexAsc(nextUnit.getId());
+            Lesson nextLesson = lessonRepository.findFirstByUnitIdOrderByOrderIndexAsc(nextUnit.getId());
+            if (nextLesson == null) throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
+            return new NextLessonDto(nextLesson, false);
+        } else {
+            return new NextLessonDto(null, true);
         }
-
-        Optional<Section> currentSection = sectionRepository.findById(currentUnit.get().getSectionId());
-        if (currentSection.isEmpty())
-            throw new ApiException(ErrorCode.SECTION_NOT_FOUND);
-
-        Section nextSection =
-                sectionRepository.findFirstByCourseIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(
-                        currentSection.get().getCourseId(), currentSection.get().getOrderIndex());
-
-        if (nextSection != null) {
-            Unit firstUnitOfSection =
-                    unitRepository.findFirstBySectionIdOrderByOrderIndexAsc(nextSection.getId());
-            if (firstUnitOfSection == null)
-                throw new ApiException(ErrorCode.COURSE_END);
-            return lessonRepository.findFirstByUnitIdOrderByOrderIndexAsc(firstUnitOfSection.getId());
-        }
-
-        return null;
     }
 
     public List<Lesson> getLessonsBetweenInclusive(Integer courseId, Lesson from, Lesson to, Integer userId) {
@@ -70,7 +55,8 @@ public class CurriculumNavigator {
 
         int guard = 0;
         while (!cur.getId().equals(to.getId())) {
-            cur = getNextLesson(cur, userId, courseId);
+            cur = getNextLesson(cur, userId, courseId).nextLesson();
+            //Ok so course will never be completed here because its only for jump to
             if (cur == null) throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
             out.add(cur);
             if (++guard > 10_000) throw new IllegalStateException("Guard tripped while traversing lessons");

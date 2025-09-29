@@ -5,5 +5,6 @@ public record UserCourseProgressDto(
     Integer userId,
     Integer courseId,
     Integer sectionId,
+    Boolean isComplete,
     Integer currentLessonId,
     Integer completedLessons) {}

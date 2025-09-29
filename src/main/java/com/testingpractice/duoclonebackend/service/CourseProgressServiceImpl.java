@@ -1,6 +1,7 @@
 package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.LessonDto;
+import com.testingpractice.duoclonebackend.dto.NextLessonDto;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.LessonCompletion;
 import com.testingpractice.duoclonebackend.entity.Unit;
@@ -45,13 +46,28 @@ public class CourseProgressServiceImpl implements CourseProgressService {
     Integer userCourseProgressCurrentLessonId = userCourseProgress.getCurrentLessonId();
     boolean isCurrentCourseLesson = userCourseProgressCurrentLessonId.equals(currentLesson.getId());
 
+    boolean isCourseCompleted = userCourseProgress.getIsComplete();
+
     if (!isCompleted) {
-      Lesson nextLesson = curriculumNavigator.getNextLesson(currentLesson, userId, courseId);
-      if (nextLesson == null) throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
-      userCourseProgress.setCurrentLessonId(nextLesson.getId());
+      NextLessonDto nextLessonDto = curriculumNavigator.getNextLesson(currentLesson, userId, courseId);
+      if (nextLessonDto.isCourseCompleted()) {
+        isCourseCompleted = true;
+        userCourseProgress.setIsComplete(true);
+      }
+
+      Lesson nextLesson = nextLessonDto.nextLesson();
+
+      if (isCourseCompleted) {
+        userCourseProgress.setCurrentLessonId(currentLesson.getId());
+      } else if (nextLesson != null) {
+        userCourseProgress.setCurrentLessonId(nextLesson.getId());
+      } else {
+        throw new ApiException(ErrorCode.LESSON_NOT_FOUND);
+      }
+
     }
 
-    if (!isCompleted && !isCurrentCourseLesson) {
+    if (!isCompleted && !isCurrentCourseLesson && !isCourseCompleted) {
       Lesson currentCourseProgressLesson = lookupService.lessonOrThrow(userCourseProgressCurrentLessonId);
       List<Lesson> skippedLessons = curriculumNavigator.getLessonsBetweenInclusive(courseId, currentCourseProgressLesson, currentLesson, userId);
       Timestamp now = Timestamp.from((Instant.now()));
