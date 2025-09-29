@@ -9,4 +9,7 @@ public interface CourseProgressService {
   List<LessonDto> updateUsersNextLesson(Integer userId, Integer courseId, Lesson currentLesson, boolean isCompleted, Integer scoreForLesson);
 
   Integer getLessonSectionId(Integer lessonId);
+
+  List<Integer> getUserCourseIds(Integer userId);
+
 }

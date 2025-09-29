@@ -44,7 +44,6 @@ public class CourseServiceImpl implements CourseService {
       newProgress.setUpdatedAt(Timestamp.from(Instant.now()));
       userCourseProgressRepository.save(newProgress);
     }
-
     user.setCurrentCourseId(newCourseId);
     return userMapper.toDto(user);
   }

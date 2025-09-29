@@ -11,4 +11,6 @@ public interface CourseService {
   Integer getFirstLessonIdOfCourse(Integer courseId);
 
   List<Course> getAllCourses();
+
+
 }

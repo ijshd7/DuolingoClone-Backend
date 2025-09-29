@@ -80,6 +80,16 @@ public class CourseProgressServiceImpl implements CourseProgressService {
     return lessonsPassed;
   }
 
+  @Override
+    public List<Integer> getUserCourseIds(Integer userId) {
+        List<UserCourseProgress> allUserCourseProgresses = userCourseProgressRepository.findAllByUserId(userId);
+        List<Integer> courseIds = new ArrayList<>();
+        for (UserCourseProgress progress : allUserCourseProgresses) {
+            courseIds.add(progress.getCourseId());
+        }
+        return courseIds;
+    }
+
 
   @Override
   public Integer getLessonSectionId(Integer lessonId) {
