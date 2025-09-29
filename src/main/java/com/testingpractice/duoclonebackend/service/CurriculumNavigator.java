@@ -9,10 +9,9 @@ import com.testingpractice.duoclonebackend.repository.LessonRepository;
 import com.testingpractice.duoclonebackend.repository.SectionRepository;
 import com.testingpractice.duoclonebackend.repository.UnitRepository;
 import jakarta.annotation.Nullable;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

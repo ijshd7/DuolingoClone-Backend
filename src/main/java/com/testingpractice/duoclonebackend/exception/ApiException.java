@@ -15,6 +15,11 @@ public class ApiException extends RuntimeException {
     this.code = code;
   }
 
-  public ErrorCode code() { return code; }
-  public HttpStatus status() { return code.status(); }
+  public ErrorCode code() {
+    return code;
+  }
+
+  public HttpStatus status() {
+    return code.status();
+  }
 }

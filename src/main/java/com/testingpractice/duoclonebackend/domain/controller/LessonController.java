@@ -3,13 +3,10 @@ package com.testingpractice.duoclonebackend.domain.controller;
 import com.testingpractice.duoclonebackend.auth.JwtService;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.ExerciseDto;
-import com.testingpractice.duoclonebackend.dto.LessonCompleteRequest;
-import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.service.ExerciseService;
 import com.testingpractice.duoclonebackend.service.LessonService;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

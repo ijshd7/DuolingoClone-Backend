@@ -8,10 +8,9 @@ import java.util.Optional;
 
 public interface QuestDefinitionRepository extends JpaRepository<QuestDefinition, Integer> {
 
+  List<QuestDefinition> findAllByActive(boolean active);
 
-    List<QuestDefinition> findAllByActive(boolean active);
+  Optional<QuestDefinition> findByCode(String code);
 
-    Optional<QuestDefinition> findByCode(String code);
-
-    Optional<QuestDefinition> findByCodeAndActiveTrue(String code);
+  Optional<QuestDefinition> findByCodeAndActiveTrue(String code);
 }

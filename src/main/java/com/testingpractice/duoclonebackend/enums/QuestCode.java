@@ -1,10 +1,8 @@
 package com.testingpractice.duoclonebackend.enums;
 
 public enum QuestCode {
-
-    STREAK,
-    PERFECT,
-    ACCURACY,
-    COMPLETE_QUESTS
-
+  STREAK,
+  PERFECT,
+  ACCURACY,
+  COMPLETE_QUESTS
 }

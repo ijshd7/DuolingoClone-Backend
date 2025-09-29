@@ -6,9 +6,10 @@ import com.testingpractice.duoclonebackend.entity.UserMonthlyChallenge;
 
 public interface MonthlyChallengeService {
 
-    QuestResponse getMonthlyChallengeForUser (Integer userId);
-    void addChallengeProgress (Integer userId);
-    UserMonthlyChallenge getUserMCOrElseCreateNew (MonthlyChallengeDefinition monthlyChallengeDefinition, Integer userId, int year, int month);
+  QuestResponse getMonthlyChallengeForUser(Integer userId);
 
+  void addChallengeProgress(Integer userId);
 
+  UserMonthlyChallenge getUserMCOrElseCreateNew(
+      MonthlyChallengeDefinition monthlyChallengeDefinition, Integer userId, int year, int month);
 }

@@ -17,25 +17,23 @@ import org.springframework.context.annotation.Import;
 @Import({UnitServiceImpl.class, UnitMapperImpl.class})
 class UnitServiceTest {
 
-    @Autowired private UnitServiceImpl service;
-    @Autowired private UnitRepository repo;
+  @Autowired private UnitServiceImpl service;
+  @Autowired private UnitRepository repo;
 
+  @Test
+  void getUnitsByCourse_returnsExpectedDtos() {
 
-    @Test
-    void getUnitsByCourse_returnsExpectedDtos() {
+    repo.saveAll(
+        List.of(
+            makeUnit(UNIT_1_TITLE, 10, 1, 1),
+            makeUnit(UNIT_2_TITLE, 10, 2, 5),
+            makeUnit(UNIT_3_TITLE, 20, 1, 2)));
 
-        repo.saveAll(List.of(
-                makeUnit(UNIT_1_TITLE, 10, 1, 1),
-                makeUnit(UNIT_2_TITLE, 10, 2, 5),
-                makeUnit(UNIT_3_TITLE, 20, 1, 2)
-        ));
+    List<UnitDto> result = service.getUnitsByCourse(10);
 
-        List<UnitDto> result = service.getUnitsByCourse(10);
-
-        assertThat(result).hasSize(2);
-        assertThat(result).extracting(UnitDto::title)
-                .containsExactlyInAnyOrder(UNIT_1_TITLE, UNIT_2_TITLE);
-    }
-
-
+    assertThat(result).hasSize(2);
+    assertThat(result)
+        .extracting(UnitDto::title)
+        .containsExactlyInAnyOrder(UNIT_1_TITLE, UNIT_2_TITLE);
+  }
 }

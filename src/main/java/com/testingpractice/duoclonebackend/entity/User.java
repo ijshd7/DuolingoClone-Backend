@@ -17,7 +17,7 @@ public class User {
   private Integer id;
 
   @Column(name = "current_course_id")
-    private Integer currentCourseId;
+  private Integer currentCourseId;
 
   @Column(name = "username")
   private String username;
@@ -29,7 +29,7 @@ public class User {
   private String lastName;
 
   @Column(name = "email")
-    private String email;
+  private String email;
 
   @Column(name = "pfp_source")
   private String pfpSrc;

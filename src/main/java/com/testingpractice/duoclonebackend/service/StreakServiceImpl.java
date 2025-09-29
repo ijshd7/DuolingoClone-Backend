@@ -2,12 +2,11 @@ package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.NewStreakCount;
 import com.testingpractice.duoclonebackend.entity.User;
-import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import org.springframework.stereotype.Service;
 
 @Service
 public class StreakServiceImpl implements StreakService {

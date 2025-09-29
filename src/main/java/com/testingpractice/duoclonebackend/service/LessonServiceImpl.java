@@ -3,12 +3,10 @@ import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.entity.*;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
 import com.testingpractice.duoclonebackend.repository.*;
-import lombok.RequiredArgsConstructor;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service

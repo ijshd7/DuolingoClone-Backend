@@ -2,14 +2,10 @@ package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.ExerciseDto;
 import com.testingpractice.duoclonebackend.entity.Exercise;
-import com.testingpractice.duoclonebackend.repository.ExerciseAttemptOptionRepository;
 import com.testingpractice.duoclonebackend.repository.ExerciseAttemptRepository;
-import com.testingpractice.duoclonebackend.repository.ExerciseOptionRepository;
 import com.testingpractice.duoclonebackend.repository.ExerciseRepository;
 import jakarta.transaction.Transactional;
-
 import java.util.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +26,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     List<Exercise> exercises = new ArrayList<>(exerciseRepository.findAllByLessonId(lessonId));
     exercises.sort(Comparator.comparingInt(Exercise::getOrderIndex));
 
-    List<ExerciseDto> exerciseDtosWithRandomizedOptionOrder = exerciseOptionServiceImpl.getRandomizedExercisesForLesson(exercises, userId);
+    List<ExerciseDto> exerciseDtosWithRandomizedOptionOrder =
+        exerciseOptionServiceImpl.getRandomizedExercisesForLesson(exercises, userId);
     return exerciseDtosWithRandomizedOptionOrder;
-
   }
-
-
-
 }

@@ -8,100 +8,100 @@ import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.enums.QuestCode;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
-import com.testingpractice.duoclonebackend.mapper.UserCourseProgressMapper;
 import com.testingpractice.duoclonebackend.repository.LessonCompletionRepository;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
 import com.testingpractice.duoclonebackend.utils.AccuracyScoreUtils;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LessonCompletionServiceImpl implements LessonCompletionService{
+public class LessonCompletionServiceImpl implements LessonCompletionService {
 
-    private final LookupService lookupService;
-    private final StreakService streakService;
-    private final ExerciseAttemptService exerciseAttemptService;
-    private final LessonCompletionRepository lessonCompletionRepository;
-    private final CourseProgressService courseProgressService;
-    private final UserRepository userRepository;
-    private final LessonMapper lessonMapper;
-    private final QuestService questService;
-    private final UserService userService;
+  private final LookupService lookupService;
+  private final StreakService streakService;
+  private final ExerciseAttemptService exerciseAttemptService;
+  private final LessonCompletionRepository lessonCompletionRepository;
+  private final CourseProgressService courseProgressService;
+  private final UserRepository userRepository;
+  private final LessonMapper lessonMapper;
+  private final QuestService questService;
+  private final UserService userService;
 
-    @Override
-    @Transactional
-    public LessonCompleteResponse getCompletedLesson (Integer lessonId, Integer userId, Integer courseId) {
+  @Override
+  @Transactional
+  public LessonCompleteResponse getCompletedLesson(
+      Integer lessonId, Integer userId, Integer courseId) {
 
-        List<ExerciseAttempt> exerciseAttempts = exerciseAttemptService.getLessonExerciseAttemptsForUser(lessonId, userId);
-        User user = lookupService.userOrThrow(userId);
-        Lesson lesson = lookupService.lessonOrThrow(lessonId);
+    List<ExerciseAttempt> exerciseAttempts =
+        exerciseAttemptService.getLessonExerciseAttemptsForUser(lessonId, userId);
+    User user = lookupService.userOrThrow(userId);
+    Lesson lesson = lookupService.lessonOrThrow(lessonId);
 
-        Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts);
-        Integer lessonAccuracy = AccuracyScoreUtils.getLessonAccuracy(exerciseAttempts);
+    Integer scoreForLesson = AccuracyScoreUtils.getLessonPoints(exerciseAttempts);
+    Integer lessonAccuracy = AccuracyScoreUtils.getLessonAccuracy(exerciseAttempts);
 
-        // -- UPDATE USERS SCORE -- //
-        user.setPoints(user.getPoints() + scoreForLesson);
+    // -- UPDATE USERS SCORE -- //
+    user.setPoints(user.getPoints() + scoreForLesson);
 
-        // -- MARK ALL ATTEMPTS FROM THE LESSON AS CHECKED (I.E. SOFT DELETE) -- //
-        exerciseAttemptService.markAttemptsAsChecked(userId, lessonId);
+    // -- MARK ALL ATTEMPTS FROM THE LESSON AS CHECKED (I.E. SOFT DELETE) -- //
+    exerciseAttemptService.markAttemptsAsChecked(userId, lessonId);
 
-        // -- UPDATE USER STREAK -- //
-        NewStreakCount newStreakCount = streakService.updateUserStreak(user);
+    // -- UPDATE USER STREAK -- //
+    NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
-        // -- UPDATE USERS NEXT LESSON -- //
-        courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
-        UserCourseProgressDto userCourseProgressDto = userService.getUserCourseProgress(courseId, userId);
+    // -- UPDATE USERS NEXT LESSON -- //
+    courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
+    UserCourseProgressDto userCourseProgressDto =
+        userService.getUserCourseProgress(courseId, userId);
 
-        lessonCompletionRepository.insertIfAbsent(userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
-        userRepository.save(user);
+    lessonCompletionRepository.insertIfAbsent(
+        userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
+    userRepository.save(user);
 
-        updateQuests(userId, lessonAccuracy, newStreakCount);
+    updateQuests(userId, lessonAccuracy, newStreakCount);
 
-        return new LessonCompleteResponse(
-                scoreForLesson,
-                user.getPoints(),
-                lessonAccuracy,
-                lessonId,
-                lessonMapper.toDto(
-                        lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
-                userCourseProgressDto, newStreakCount,
-                AccuracyScoreUtils.getAccuracyMessage(lessonAccuracy));
+    return new LessonCompleteResponse(
+        scoreForLesson,
+        user.getPoints(),
+        lessonAccuracy,
+        lessonId,
+        lessonMapper.toDto(
+            lesson, lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId)),
+        userCourseProgressDto,
+        newStreakCount,
+        AccuracyScoreUtils.getAccuracyMessage(lessonAccuracy));
+  }
+
+  private Integer getCompletedLessonsInCourse(Integer userId, Integer courseId) {
+    Integer completedLessonsInCourse =
+        lessonCompletionRepository.countByUserAndCourse(userId, courseId);
+
+    if (completedLessonsInCourse == null) return 0;
+    else return completedLessonsInCourse;
+  }
+
+  @Transactional
+  protected void updateQuests(
+      Integer userId, Integer lessonAccuracy, NewStreakCount newStreakCount) {
+
+    if (lessonAccuracy == 100) {
+      questService.updateQuestProgress(userId, QuestCode.PERFECT);
     }
 
-    private Integer getCompletedLessonsInCourse (Integer userId, Integer courseId) {
-        Integer completedLessonsInCourse =
-                lessonCompletionRepository.countByUserAndCourse(userId, courseId);
-
-        if (completedLessonsInCourse == null) return 0;
-        else return completedLessonsInCourse;
-
+    if (lessonAccuracy > 90) {
+      questService.updateQuestProgress(userId, QuestCode.ACCURACY);
     }
 
-    @Transactional
-    protected void updateQuests (Integer userId, Integer lessonAccuracy, NewStreakCount newStreakCount) {
+    Integer prev = newStreakCount.oldCount();
+    Integer next = newStreakCount.newCount();
 
-        if (lessonAccuracy == 100) {
-            questService.updateQuestProgress(userId, QuestCode.PERFECT);
-        }
-
-        if (lessonAccuracy > 90) {
-            questService.updateQuestProgress(userId, QuestCode.ACCURACY);
-        }
-
-        Integer prev = newStreakCount.oldCount();
-        Integer next = newStreakCount.newCount();
-
-        if (next > prev) {
-            questService.updateQuestProgress(userId, QuestCode.STREAK);
-        }
-
+    if (next > prev) {
+      questService.updateQuestProgress(userId, QuestCode.STREAK);
     }
-
-
+  }
 }

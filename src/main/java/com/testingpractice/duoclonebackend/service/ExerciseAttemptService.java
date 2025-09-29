@@ -8,11 +8,10 @@ import java.util.List;
 
 public interface ExerciseAttemptService {
 
-    ExerciseAttemptResponse submitExerciseAttempt(
-            Integer exerciseId, ArrayList<Integer> optionIds, Integer userId);
+  ExerciseAttemptResponse submitExerciseAttempt(
+      Integer exerciseId, ArrayList<Integer> optionIds, Integer userId);
 
-    List<ExerciseAttempt> getLessonExerciseAttemptsForUser(Integer lessonId, Integer userId);
+  List<ExerciseAttempt> getLessonExerciseAttemptsForUser(Integer lessonId, Integer userId);
 
-    void markAttemptsAsChecked(Integer userId, Integer lessonId);
-
+  void markAttemptsAsChecked(Integer userId, Integer lessonId);
 }

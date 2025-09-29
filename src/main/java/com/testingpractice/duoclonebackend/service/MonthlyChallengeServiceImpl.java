@@ -9,75 +9,81 @@ import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.repository.MonthlyChallengeDefinitionRepository;
 import com.testingpractice.duoclonebackend.repository.UserMonthlyChallengeRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MonthlyChallengeServiceImpl implements MonthlyChallengeService {
 
-    private final MonthlyChallengeDefinitionRepository monthlyChallengeDefinitionRepository;
-    private final UserMonthlyChallengeRepository userMonthlyChallengeRepository;
+  private final MonthlyChallengeDefinitionRepository monthlyChallengeDefinitionRepository;
+  private final UserMonthlyChallengeRepository userMonthlyChallengeRepository;
 
-    @Override
-    @Transactional
-    public QuestResponse getMonthlyChallengeForUser (Integer userId) {
+  @Override
+  @Transactional
+  public QuestResponse getMonthlyChallengeForUser(Integer userId) {
 
-       ZoneId tz = ZoneId.systemDefault();
-       LocalDate today = LocalDate.now(tz);
-       int year = today.getYear();
-       int month = today.getMonthValue();
+    ZoneId tz = ZoneId.systemDefault();
+    LocalDate today = LocalDate.now(tz);
+    int year = today.getYear();
+    int month = today.getMonthValue();
 
-       MonthlyChallengeDefinition monthlyChallengeDefinition = monthlyChallengeDefinitionRepository.findByActive(true);
+    MonthlyChallengeDefinition monthlyChallengeDefinition =
+        monthlyChallengeDefinitionRepository.findByActive(true);
 
-       UserMonthlyChallenge userMonthlyChallenge = getUserMCOrElseCreateNew(monthlyChallengeDefinition, userId, year, month);
-       return new QuestResponse(monthlyChallengeDefinition.getCode(), userMonthlyChallenge.getProgress(), monthlyChallengeDefinition.getTarget(), monthlyChallengeDefinition.isActive());
+    UserMonthlyChallenge userMonthlyChallenge =
+        getUserMCOrElseCreateNew(monthlyChallengeDefinition, userId, year, month);
+    return new QuestResponse(
+        monthlyChallengeDefinition.getCode(),
+        userMonthlyChallenge.getProgress(),
+        monthlyChallengeDefinition.getTarget(),
+        monthlyChallengeDefinition.isActive());
+  }
 
-   }
+  @Override
+  @Transactional
+  public void addChallengeProgress(Integer userId) {
 
-   @Override
-   @Transactional
-   public void addChallengeProgress (Integer userId) {
+    ZoneId tz = ZoneId.systemDefault();
+    LocalDate today = LocalDate.now(tz);
+    int year = today.getYear();
+    int month = today.getMonthValue();
 
-       ZoneId tz = ZoneId.systemDefault();
-       LocalDate today = LocalDate.now(tz);
-       int year = today.getYear();
-       int month = today.getMonthValue();
+    MonthlyChallengeDefinition monthlyChallengeDefinition =
+        monthlyChallengeDefinitionRepository.findByActive(true);
+    UserMonthlyChallenge userMonthlyChallenge =
+        getUserMCOrElseCreateNew(monthlyChallengeDefinition, userId, year, month);
 
-       MonthlyChallengeDefinition monthlyChallengeDefinition = monthlyChallengeDefinitionRepository.findByActive(true);
-       UserMonthlyChallenge userMonthlyChallenge = getUserMCOrElseCreateNew(monthlyChallengeDefinition, userId, year, month);
+    if (userMonthlyChallenge.getProgress() < monthlyChallengeDefinition.getTarget()) {
+      userMonthlyChallenge.setProgress(userMonthlyChallenge.getProgress() + 1);
+      userMonthlyChallengeRepository.save(userMonthlyChallenge);
+    }
+  }
 
-       if (userMonthlyChallenge.getProgress() < monthlyChallengeDefinition.getTarget()) {
-           userMonthlyChallenge.setProgress(userMonthlyChallenge.getProgress() +  1);
-           userMonthlyChallengeRepository.save(userMonthlyChallenge);
-       }
+  @Override
+  @Transactional
+  public UserMonthlyChallenge getUserMCOrElseCreateNew(
+      MonthlyChallengeDefinition monthlyChallengeDefinition, Integer userId, int year, int month) {
 
-   }
+    UserMonthlyChallengeId id = new UserMonthlyChallengeId();
+    id.setUserId(userId);
+    id.setChallengeDefId(monthlyChallengeDefinition.getId());
+    id.setYear(year);
+    id.setMonth(month);
 
-   @Override
-   @Transactional
-   public UserMonthlyChallenge getUserMCOrElseCreateNew (MonthlyChallengeDefinition monthlyChallengeDefinition, Integer userId, int year, int month) {
-
-       UserMonthlyChallengeId id = new UserMonthlyChallengeId();
-       id.setUserId(userId);
-       id.setChallengeDefId(monthlyChallengeDefinition.getId());
-       id.setYear(year);
-       id.setMonth(month);
-
-       if (!userMonthlyChallengeRepository.existsById(id)) {
-           UserMonthlyChallenge umq = new UserMonthlyChallenge();
-           umq.setId(id);
-           umq.setProgress(0);
-           umq.setRewardClaimed(false);
-           userMonthlyChallengeRepository.save(umq);
-           return umq;
-       } else {
-           return userMonthlyChallengeRepository.findById(id).orElseThrow(() -> new ApiException(ErrorCode.USER_DAILY_QUEST_NOT_FOUND));
-       }
-
-   }
-
+    if (!userMonthlyChallengeRepository.existsById(id)) {
+      UserMonthlyChallenge umq = new UserMonthlyChallenge();
+      umq.setId(id);
+      umq.setProgress(0);
+      umq.setRewardClaimed(false);
+      userMonthlyChallengeRepository.save(umq);
+      return umq;
+    } else {
+      return userMonthlyChallengeRepository
+          .findById(id)
+          .orElseThrow(() -> new ApiException(ErrorCode.USER_DAILY_QUEST_NOT_FOUND));
+    }
+  }
 }

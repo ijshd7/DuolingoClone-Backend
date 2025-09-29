@@ -23,7 +23,7 @@ public interface ExerciseAttemptRepository extends JpaRepository<ExerciseAttempt
   @Modifying
   @Query(
       """
-    UPDATE ExerciseAttempt exerciseAttempt 
+    UPDATE ExerciseAttempt exerciseAttempt
        SET exerciseAttempt.isChecked = true
      WHERE exerciseAttempt.userId = :userId
        AND exerciseAttempt.isChecked = false

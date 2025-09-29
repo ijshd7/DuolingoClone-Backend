@@ -5,6 +5,5 @@ import com.testingpractice.duoclonebackend.entity.User;
 
 public interface StreakService {
 
-    NewStreakCount updateUserStreak(User user);
-
+  NewStreakCount updateUserStreak(User user);
 }

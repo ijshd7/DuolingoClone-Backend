@@ -1,18 +1,15 @@
 package com.testingpractice.duoclonebackend.auth;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.testingpractice.duoclonebackend.dto.GoogleUserInfo;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
 import com.testingpractice.duoclonebackend.service.UserCreationService;
-import com.testingpractice.duoclonebackend.utils.UserCreationUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -22,11 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Locale;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

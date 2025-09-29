@@ -5,9 +5,7 @@ import com.testingpractice.duoclonebackend.entity.Unit;
 import com.testingpractice.duoclonebackend.mapper.UnitMapper;
 import com.testingpractice.duoclonebackend.repository.UnitRepository;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

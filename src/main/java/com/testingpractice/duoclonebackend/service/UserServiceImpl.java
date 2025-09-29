@@ -12,15 +12,14 @@ import com.testingpractice.duoclonebackend.repository.LessonCompletionRepository
 import com.testingpractice.duoclonebackend.repository.UserCourseProgressRepository;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

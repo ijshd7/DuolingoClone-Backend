@@ -14,17 +14,16 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AttemptOption {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
 
-    @Column(name = "attempt_id")
-    private Integer attemptId;
+  @Column(name = "attempt_id")
+  private Integer attemptId;
 
-    @Column(name = "option_id")
-    private Integer optionId;
+  @Column(name = "option_id")
+  private Integer optionId;
 
-    @Column(name = "position")
-    private Integer position;
-
+  @Column(name = "position")
+  private Integer position;
 }

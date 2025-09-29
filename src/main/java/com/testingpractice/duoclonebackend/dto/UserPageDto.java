@@ -1,10 +1,3 @@
 package com.testingpractice.duoclonebackend.dto;
 
-public record UserPageDto(
-
-) {
-
-
-
-
-}
+public record UserPageDto() {}

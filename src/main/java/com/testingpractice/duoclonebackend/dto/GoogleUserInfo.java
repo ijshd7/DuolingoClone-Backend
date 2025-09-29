@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Data
 public class GoogleUserInfo {
-    private String email;
-    private String name;
+  private String email;
+  private String name;
 
-    @JsonProperty("given_name")
-    private String givenName;
+  @JsonProperty("given_name")
+  private String givenName;
 
-    @JsonProperty("family_name")
-    private String familyName;
+  @JsonProperty("family_name")
+  private String familyName;
 }

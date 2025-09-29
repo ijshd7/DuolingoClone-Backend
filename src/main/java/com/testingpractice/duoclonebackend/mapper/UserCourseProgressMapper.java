@@ -10,5 +10,6 @@ public interface UserCourseProgressMapper {
 
   @Mapping(target = "completedLessons", expression = "java(completedLessons)")
   @Mapping(target = "sectionId", expression = "java(sectionId)")
-  UserCourseProgressDto toDto(UserCourseProgress entity, Integer completedLessons, Integer sectionId);
+  UserCourseProgressDto toDto(
+      UserCourseProgress entity, Integer completedLessons, Integer sectionId);
 }

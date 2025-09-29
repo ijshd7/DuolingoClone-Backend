@@ -7,7 +7,6 @@ import com.testingpractice.duoclonebackend.dto.UnitDto;
 import com.testingpractice.duoclonebackend.service.SectionService;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,6 @@ public class SectionController {
 
   private final SectionService sectionService;
   private final UnitService unitService;
-
 
   @GetMapping(pathConstants.GET_SECTIONS_FROM_IDS)
   public List<SectionDto> getSectionsByIds(@RequestParam List<Integer> sectionIds) {

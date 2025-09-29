@@ -5,8 +5,7 @@ import com.testingpractice.duoclonebackend.entity.UserCourseProgress;
 
 public interface CourseProgressService {
 
-    UserCourseProgress updateUsersNextLesson (Integer userId, Integer courseId, Lesson currentLesson);
+  UserCourseProgress updateUsersNextLesson(Integer userId, Integer courseId, Lesson currentLesson);
 
-    public Integer getLessonSectionId (Integer lessonId);
-
+  Integer getLessonSectionId(Integer lessonId);
 }
