@@ -15,6 +15,8 @@ import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,8 +56,10 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
     // -- UPDATE USER STREAK -- //
     NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
+
     // -- UPDATE USERS NEXT LESSON -- //
-    courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
+    boolean isCompleted = isLessonComplete(userId, lessonId);
+    courseProgressService.updateUsersNextLesson(userId, courseId, lesson, isCompleted);
     UserCourseProgressDto userCourseProgressDto =
         userService.getUserCourseProgress(courseId, userId);
 
@@ -84,6 +88,10 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
 
     if (completedLessonsInCourse == null) return 0;
     else return completedLessonsInCourse;
+  }
+
+  private boolean isLessonComplete(Integer userId, Integer lessonId) {
+    return lessonCompletionRepository.existsByIdUserIdAndIdLessonId(userId, lessonId);
   }
 
   @Transactional
