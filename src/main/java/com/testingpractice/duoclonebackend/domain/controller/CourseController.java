@@ -1,6 +1,7 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
+import com.testingpractice.duoclonebackend.dto.ChangeCourseDto;
 import com.testingpractice.duoclonebackend.dto.NewCourseRequest;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.Course;
@@ -33,8 +34,8 @@ public class CourseController {
   }
 
   @PostMapping(pathConstants.CHANGE_COURSE)
-  public UserDto changeUserCourse(@RequestBody NewCourseRequest req,
-                                  @AuthenticationPrincipal(expression = "id") Integer userId) {
+  public ChangeCourseDto changeUserCourse(@RequestBody NewCourseRequest req,
+                                          @AuthenticationPrincipal(expression = "id") Integer userId) {
     return courseService.changeUserCourse(userId, req.newCourse());
   }
 

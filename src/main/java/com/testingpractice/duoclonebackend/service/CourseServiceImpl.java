@@ -1,5 +1,6 @@
 package com.testingpractice.duoclonebackend.service;
 
+import com.testingpractice.duoclonebackend.dto.ChangeCourseDto;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.*;
 import com.testingpractice.duoclonebackend.exception.ApiException;
@@ -24,6 +25,7 @@ public class CourseServiceImpl implements CourseService {
   private final UnitRepository unitRepository;
   private final LessonRepository lessonRepository;
   private final UserCourseProgressRepository userCourseProgressRepository;
+  private final CourseProgressService courseProgressService;
 
   @Override
   public List<Course> getAllCourses() {
@@ -32,7 +34,7 @@ public class CourseServiceImpl implements CourseService {
 
   @Override
   @Transactional
-  public UserDto changeUserCourse(Integer userId, Integer newCourseId) {
+  public ChangeCourseDto changeUserCourse(Integer userId, Integer newCourseId) {
     User user = lookupService.userOrThrow(userId);
     UserCourseProgress userCourseProgressOptional =
         userCourseProgressRepository.findByUserIdAndCourseId(userId, newCourseId);
@@ -45,7 +47,10 @@ public class CourseServiceImpl implements CourseService {
       userCourseProgressRepository.save(newProgress);
     }
     user.setCurrentCourseId(newCourseId);
-    return userMapper.toDto(user);
+
+    List<Integer> updatedUserCourseIds = courseProgressService.getUserCourseIds(userId);
+
+    return new ChangeCourseDto(userMapper.toDto(user), updatedUserCourseIds);
   }
 
   @Override
