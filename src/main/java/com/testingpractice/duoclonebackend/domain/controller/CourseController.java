@@ -9,8 +9,6 @@ import com.testingpractice.duoclonebackend.service.JwtService;
 import com.testingpractice.duoclonebackend.service.SectionService;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import java.util.List;
-
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

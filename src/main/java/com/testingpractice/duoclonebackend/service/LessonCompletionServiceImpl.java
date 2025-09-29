@@ -16,8 +16,6 @@ import jakarta.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -84,14 +82,6 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
         userCourseProgressDto,
         newStreakCount,
         AccuracyScoreUtils.getAccuracyMessage(lessonAccuracy));
-  }
-
-  private Integer getCompletedLessonsInCourse(Integer userId, Integer courseId) {
-    Integer completedLessonsInCourse =
-        lessonCompletionRepository.countByUserAndCourse(userId, courseId);
-
-    if (completedLessonsInCourse == null) return 0;
-    else return completedLessonsInCourse;
   }
 
   private boolean isLessonComplete(Integer userId, Integer lessonId) {

@@ -18,14 +18,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserDailyQuest {
 
-    @EmbeddedId private UserDailyQuestId id;
-    @Column(nullable = false)
-    private Integer progress = 0;
+  @EmbeddedId private UserDailyQuestId id;
 
-    @Column(name = "completed_at")
-    private Timestamp completedAt;
+  @Column(nullable = false)
+  private Integer progress = 0;
 
-    @Column(name = "reward_claimed", nullable = false)
-    private boolean rewardClaimed = false;
+  @Column(name = "completed_at")
+  private Timestamp completedAt;
 
+  @Column(name = "reward_claimed", nullable = false)
+  private boolean rewardClaimed = false;
 }

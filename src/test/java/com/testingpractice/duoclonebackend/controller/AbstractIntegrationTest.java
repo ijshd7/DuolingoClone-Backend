@@ -22,6 +22,7 @@ public abstract class AbstractIntegrationTest {
           .withDatabaseName("duotest")
           .withUsername("test")
           .withPassword("test");
+  @LocalServerPort protected int port;
 
   @DynamicPropertySource
   static void postgresProps(DynamicPropertyRegistry r) {
@@ -31,8 +32,6 @@ public abstract class AbstractIntegrationTest {
     r.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
     r.add("spring.jpa.hibernate.ddl-auto", () -> "update");
   }
-
-  @LocalServerPort protected int port;
 
   @BeforeAll
   static void restAssuredLogging() {

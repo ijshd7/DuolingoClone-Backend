@@ -1,7 +1,6 @@
 package com.testingpractice.duoclonebackend.constants;
 
 import static com.testingpractice.duoclonebackend.constants.pathConstants.*;
-import static com.testingpractice.duoclonebackend.constants.pathConstants.API_V1;
 import static com.testingpractice.duoclonebackend.constants.pathConstants.AUTH;
 import static com.testingpractice.duoclonebackend.constants.pathConstants.COURSES;
 import static com.testingpractice.duoclonebackend.constants.pathConstants.FOLLOWS;

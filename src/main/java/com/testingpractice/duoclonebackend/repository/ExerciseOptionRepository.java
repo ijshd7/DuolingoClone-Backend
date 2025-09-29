@@ -12,12 +12,12 @@ public interface ExerciseOptionRepository extends JpaRepository<ExerciseOption, 
 
   List<ExerciseOption> findAllByIdIn(Collection<Integer> ids);
 
-  @Query("""
+  @Query(
+      """
     select eo.id
     from ExerciseOption eo
     where eo.exerciseId = :exerciseId and eo.answerOrder is not null
     order by eo.answerOrder asc, eo.id asc
   """)
   List<Integer> findCorrectOptionIds(@Param("exerciseId") Integer exerciseId);
-
 }

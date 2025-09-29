@@ -5,6 +5,4 @@ import java.util.List;
 
 public interface ExerciseService {
   List<ExerciseDto> getExercisesForLesson(Integer lessonId, Integer userId);
-
-
 }

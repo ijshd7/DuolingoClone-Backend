@@ -9,12 +9,13 @@ import java.util.List;
 
 public interface QuestService {
 
-    List<QuestResponse> getQuestsForUser(Integer userId);
+  List<QuestResponse> getQuestsForUser(Integer userId);
 
-    void updateQuestProgress(Integer userId, QuestCode questCode);
+  void updateQuestProgress(Integer userId, QuestCode questCode);
 
-    void refreshDailyActiveQuests(Integer userId, List<QuestDefinition> questDefinitions, LocalDate today);
+  void refreshDailyActiveQuests(
+      Integer userId, List<QuestDefinition> questDefinitions, LocalDate today);
 
-    UserDailyQuest createNewUserDailyQuest (QuestDefinition questDefinition, Integer userId, LocalDate today);
-
+  UserDailyQuest createNewUserDailyQuest(
+      QuestDefinition questDefinition, Integer userId, LocalDate today);
 }

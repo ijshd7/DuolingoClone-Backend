@@ -36,7 +36,8 @@ public class SectionController {
 
   @GetMapping(pathConstants.GET_BULK_SECTIONS)
   public SectionTreeNode getBulkSection(
-      @PathVariable("sectionId") Integer sectionId, @AuthenticationPrincipal(expression = "id") Integer userId) {
+      @PathVariable("sectionId") Integer sectionId,
+      @AuthenticationPrincipal(expression = "id") Integer userId) {
     return sectionService.getBulkSection(sectionId, userId);
   }
 }

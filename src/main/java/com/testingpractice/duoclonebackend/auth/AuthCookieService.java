@@ -13,55 +13,56 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthCookieService {
 
-    @Value("${auth.cookie.name:jwt}")
-    private String cookieName;
+  @Value("${auth.cookie.name:jwt}")
+  private String cookieName;
 
-    @Value("${auth.cookie.path:/}")
-    private String cookiePath;
+  @Value("${auth.cookie.path:/}")
+  private String cookiePath;
 
-    @Value("${auth.cookie.domain:}")
-    private String cookieDomain;
+  @Value("${auth.cookie.domain:}")
+  private String cookieDomain;
 
-    @Value("${auth.cookie.same-site:Lax}")
-    private String sameSite;
+  @Value("${auth.cookie.same-site:Lax}")
+  private String sameSite;
 
-    @Value("${auth.cookie.secure:false}")
-    private boolean secure;
+  @Value("${auth.cookie.secure:false}")
+  private boolean secure;
 
-    @Value("${auth.cookie.max-age-seconds:86400}")
-    private long defaultMaxAge;
+  @Value("${auth.cookie.max-age-seconds:86400}")
+  private long defaultMaxAge;
 
-    public void setJwt(HttpServletResponse response, String jwt) {
-        addCookie(response, jwt, defaultMaxAge);
+  public void setJwt(HttpServletResponse response, String jwt) {
+    addCookie(response, jwt, defaultMaxAge);
+  }
+
+  public void setJwt(HttpServletResponse response, String jwt, long maxAgeSeconds) {
+    addCookie(response, jwt, maxAgeSeconds);
+  }
+
+  public void clearJwt(HttpServletResponse response) {
+    addCookie(response, "", 0);
+  }
+
+  public @Nullable String readJwt(HttpServletRequest request) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies == null) return null;
+    for (Cookie c : cookies) {
+      if (cookieName.equals(c.getName())) return c.getValue();
     }
+    return null;
+  }
 
-    public void setJwt(HttpServletResponse response, String jwt, long maxAgeSeconds) {
-        addCookie(response, jwt, maxAgeSeconds);
-    }
+  private void addCookie(HttpServletResponse response, String value, long maxAgeSeconds) {
+    ResponseCookie cookie =
+        ResponseCookie.from(cookieName, value)
+            .httpOnly(true)
+            .secure(secure)
+            .sameSite(sameSite)
+            .path(cookiePath)
+            .maxAge(maxAgeSeconds)
+            .domain(cookieDomain.isBlank() ? null : cookieDomain)
+            .build();
 
-    public void clearJwt(HttpServletResponse response) {
-        addCookie(response, "", 0);
-    }
-
-    public @Nullable String readJwt(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) return null;
-        for (Cookie c : cookies) {
-            if (cookieName.equals(c.getName())) return c.getValue();
-        }
-        return null;
-    }
-
-    private void addCookie(HttpServletResponse response, String value, long maxAgeSeconds) {
-        ResponseCookie cookie = ResponseCookie.from(cookieName, value)
-                .httpOnly(true)
-                .secure(secure)
-                .sameSite(sameSite)
-                .path(cookiePath)
-                .maxAge(maxAgeSeconds)
-                .domain(cookieDomain.isBlank() ? null : cookieDomain)
-                .build();
-
-        response.addHeader("Set-Cookie", cookie.toString());
-    }
+    response.addHeader("Set-Cookie", cookie.toString());
+  }
 }

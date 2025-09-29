@@ -17,48 +17,42 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserCreationService {
 
-    private final UserRepository userRepository;
-    private final QuestService questService;
-    private final MonthlyChallengeService monthlyChallengeService;
-    private final LookupService lookupService;
-    private final UserMapper userMapper;
+  private final UserRepository userRepository;
+  private final QuestService questService;
+  private final MonthlyChallengeService monthlyChallengeService;
+  private final LookupService lookupService;
+  private final UserMapper userMapper;
 
-    @Transactional
-    public User createUser(GoogleUserInfo googleUser) {
+  @Transactional
+  public User createUser(GoogleUserInfo googleUser) {
 
-        User newUser = new User();
-        newUser.setEmail(googleUser.getEmail());
-        newUser.setFirstName(googleUser.getGivenName());
-        newUser.setLastName(googleUser.getFamilyName());
-        newUser.setUsername(UserCreationUtils.generateUsername(googleUser.getName()));
-        newUser.setPfpSrc(UserCreationUtils.getRandomProfilePic());
-        newUser.setPoints(0);
-        newUser.setStreakLength(0);
-        newUser.setCreatedAt(Timestamp.from(Instant.now()));
-        userRepository.save(newUser);
+    User newUser = new User();
+    newUser.setEmail(googleUser.getEmail());
+    newUser.setFirstName(googleUser.getGivenName());
+    newUser.setLastName(googleUser.getFamilyName());
+    newUser.setUsername(UserCreationUtils.generateUsername(googleUser.getName()));
+    newUser.setPfpSrc(UserCreationUtils.getRandomProfilePic());
+    newUser.setPoints(0);
+    newUser.setStreakLength(0);
+    newUser.setCreatedAt(Timestamp.from(Instant.now()));
+    userRepository.save(newUser);
 
-        //This generates daily quests and monthly challenge for the new user
-        questService.getQuestsForUser(newUser.getId());
-        monthlyChallengeService.getMonthlyChallengeForUser(newUser.getId());
+    // This generates daily quests and monthly challenge for the new user
+    questService.getQuestsForUser(newUser.getId());
+    monthlyChallengeService.getMonthlyChallengeForUser(newUser.getId());
 
-        return newUser;
+    return newUser;
+  }
 
+  @Transactional
+  public UserDto updateAvatar(Integer userId, String newAvatarSrc) {
+    User user = lookupService.userOrThrow(userId);
+    user.setPfpSrc(newAvatarSrc);
+    userRepository.save(user);
+    return userMapper.toDto(user);
+  }
 
-    }
-
-    @Transactional
-    public UserDto updateAvatar (Integer userId, String newAvatarSrc) {
-        User user = lookupService.userOrThrow(userId);
-        user.setPfpSrc(newAvatarSrc);
-        userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-
-    public List<String> getDefaultProfilePics() {
-        return UserCreationUtils.getAllProfilePics();
-    }
-
-
-
-
+  public List<String> getDefaultProfilePics() {
+    return UserCreationUtils.getAllProfilePics();
+  }
 }

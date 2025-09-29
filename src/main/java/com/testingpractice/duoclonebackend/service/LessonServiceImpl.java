@@ -1,4 +1,5 @@
 package com.testingpractice.duoclonebackend.service;
+
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.entity.*;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
@@ -42,5 +43,4 @@ public class LessonServiceImpl implements LessonService {
     if (lessonIds.isEmpty()) return Set.of();
     return new HashSet<>(lessonCompletionRepository.findCompletedLessonIdsIn(userId, lessonIds));
   }
-
 }

@@ -21,12 +21,8 @@ public class ExerciseAttemptController {
   @PostMapping(pathConstants.SUBMIT_EXERCISE)
   public ExerciseAttemptResponse submitExerciseAttempt(
       @RequestBody ExerciseAttemptRequest exerciseAttemptRequest,
-      @AuthenticationPrincipal(expression = "id") Integer userId
-      ) {
+      @AuthenticationPrincipal(expression = "id") Integer userId) {
     return exerciseAttemptService.submitExerciseAttempt(
-        exerciseAttemptRequest.exerciseId(),
-        exerciseAttemptRequest.optionIds(),
-        userId
-    );
+        exerciseAttemptRequest.exerciseId(), exerciseAttemptRequest.optionIds(), userId);
   }
 }

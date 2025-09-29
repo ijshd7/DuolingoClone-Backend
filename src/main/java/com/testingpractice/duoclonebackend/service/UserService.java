@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface UserService {
 
-    UserDto getUser(Integer userId);
-    UserCourseProgressDto getUserCourseProgress(Integer courseId, Integer userId);
-    List<UserDto> getUsersFromIds(List<Integer> userIds);
-    void potentiallyResetStreak (User user);
+  UserDto getUser(Integer userId);
+
+  UserCourseProgressDto getUserCourseProgress(Integer courseId, Integer userId);
+
+  List<UserDto> getUsersFromIds(List<Integer> userIds);
+
+  void potentiallyResetStreak(User user);
 }

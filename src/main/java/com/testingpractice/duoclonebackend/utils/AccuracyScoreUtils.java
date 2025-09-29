@@ -26,7 +26,8 @@ public class AccuracyScoreUtils {
     return accuracyPercent;
   }
 
-  public static Integer getLessonPoints(List<ExerciseAttempt> exerciseAttempts, boolean isFirstAttempt, Integer accuracy) {
+  public static Integer getLessonPoints(
+      List<ExerciseAttempt> exerciseAttempts, boolean isFirstAttempt, Integer accuracy) {
 
     boolean isPerfect = accuracy >= 100;
 
@@ -43,6 +44,5 @@ public class AccuracyScoreUtils {
     }
 
     return basePoints;
-
   }
 }

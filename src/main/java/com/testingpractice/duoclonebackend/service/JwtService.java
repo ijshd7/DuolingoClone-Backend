@@ -1,6 +1,5 @@
 package com.testingpractice.duoclonebackend.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 public interface JwtService {
 

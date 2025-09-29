@@ -9,8 +9,6 @@ import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class JwtServiceImpl implements JwtService{
 
     private final AuthCookieService authCookieService;
+    private final long expirationMillis = 1000 * 60 * 60 * 24; // 24 hrs
     @Value("${jwt.secret}")
     private String jwtSecret;
 
@@ -30,8 +29,6 @@ public class JwtServiceImpl implements JwtService{
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
-
-    private final long expirationMillis = 1000 * 60 * 60 * 24; // 24 hrs
 
     @Override
     public String createToken(Integer userId) {

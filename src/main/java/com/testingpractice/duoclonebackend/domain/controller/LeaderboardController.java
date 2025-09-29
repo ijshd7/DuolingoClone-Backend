@@ -14,18 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LeaderboardController {
 
-    private final LeaderboardService leaderboardService;
+  private final LeaderboardService leaderboardService;
 
-    @GetMapping(pathConstants.GET_PAGINATED_LEADERBOARD)
-    public LeaderboardPageDto get(
-            @RequestParam(required = false) String cursor,
-            @RequestParam(defaultValue = "20") int limit) {
-        limit = Math.min(Math.max(limit, 1), 100); // 1..100
-        return leaderboardService.getLeaderboardPage(cursor, limit);
-    }
-
-
-
-
+  @GetMapping(pathConstants.GET_PAGINATED_LEADERBOARD)
+  public LeaderboardPageDto get(
+      @RequestParam(required = false) String cursor, @RequestParam(defaultValue = "20") int limit) {
+    limit = Math.min(Math.max(limit, 1), 100); // 1..100
+    return leaderboardService.getLeaderboardPage(cursor, limit);
+  }
 }
-

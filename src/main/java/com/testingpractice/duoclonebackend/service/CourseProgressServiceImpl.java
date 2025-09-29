@@ -3,24 +3,20 @@ package com.testingpractice.duoclonebackend.service;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.dto.NextLessonDto;
 import com.testingpractice.duoclonebackend.entity.Lesson;
-import com.testingpractice.duoclonebackend.entity.LessonCompletion;
 import com.testingpractice.duoclonebackend.entity.Unit;
 import com.testingpractice.duoclonebackend.entity.UserCourseProgress;
 import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
 import com.testingpractice.duoclonebackend.repository.LessonCompletionRepository;
-import com.testingpractice.duoclonebackend.repository.LessonRepository;
 import com.testingpractice.duoclonebackend.repository.UserCourseProgressRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

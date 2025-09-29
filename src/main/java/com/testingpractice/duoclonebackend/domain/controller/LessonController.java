@@ -1,17 +1,15 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
-import com.testingpractice.duoclonebackend.service.JwtServiceImpl;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.ExerciseDto;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.service.ExerciseService;
+import com.testingpractice.duoclonebackend.service.JwtServiceImpl;
 import com.testingpractice.duoclonebackend.service.LessonService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequiredArgsConstructor

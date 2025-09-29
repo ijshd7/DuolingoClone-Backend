@@ -7,18 +7,17 @@ public class pathConstants {
   // ----------------------------- API PREFIXES -----------------------------
   public static final String COURSES = API_V1 + "/courses";
   public static final String EXERCISES = API_V1 + "/exercises";
+  public static final String EXERCISES_ATTEMPTS = EXERCISES + "/attempts";
   public static final String UNITS = API_V1 + "/units";
   public static final String USERS = API_V1 + "/users";
   public static final String LESSONS = API_V1 + "/lessons";
+  public static final String LESSONS_COMPLETIONS = LESSONS + "/completions";
   public static final String SECTIONS = API_V1 + "/sections";
   public static final String QUESTS = API_V1 + "/quests";
   public static final String FOLLOWS = API_V1 + "/follows";
   public static final String MONTHLY_CHALLENGES = API_V1 + "/monthly-challenges";
   public static final String LEADERBOARD = API_V1 + "/leaderboard";
   public static final String AUTH = API_V1 + "/auth";
-  public static final String EXERCISES_ATTEMPTS = EXERCISES + "/attempts";
-  public static final String LESSONS_COMPLETIONS = LESSONS + "/completions";
-
   // ----------------------------- GET REQUESTS -----------------------------
   public static final String GET_USER_COURSE_PROGRESS = "/progress/{courseId}";
   public static final String GET_USER_BY_ID = "/{userId}";

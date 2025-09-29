@@ -11,22 +11,22 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends JpaRepository<User, Integer> {
   Optional<User> findById(Integer id);
 
-  @Query("""
+  @Query(
+      """
     SELECT u FROM User u
     ORDER BY u.points DESC, u.id ASC
   """)
   List<User> findTopOrdered(Pageable pageable);
 
   // next pages using cursor
-  @Query("""
+  @Query(
+      """
     SELECT u FROM User u
     WHERE (u.points < :points)
        OR (u.points = :points AND u.id > :id)
     ORDER BY u.points DESC, u.id ASC
   """)
-  List<User> findAfterCursor(@Param("points") int points,
-                             @Param("id") int id,
-                             Pageable pageable);
+  List<User> findAfterCursor(@Param("points") int points, @Param("id") int id, Pageable pageable);
 
   Optional<Object> findByEmail(String email);
 }

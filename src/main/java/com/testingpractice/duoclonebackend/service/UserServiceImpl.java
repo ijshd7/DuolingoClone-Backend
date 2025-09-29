@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
   private final UserCourseProgressRepository userCourseProgressRepository;
   private final UserCourseProgressMapper userCourseProgressMapper;
@@ -42,21 +42,21 @@ public class UserServiceImpl implements UserService{
 
     if (userCourseProgress == null) {
       UserCourseProgress newProgress = new UserCourseProgress();
-        newProgress.setUserId(userId);
-        newProgress.setCourseId(courseId);
-        newProgress.setCurrentLessonId(courseService.getFirstLessonIdOfCourse(courseId));
-        newProgress.setUpdatedAt(Timestamp.from(Instant.now()));
-        userCourseProgressRepository.save(newProgress);
-        userCourseProgress = newProgress;
+      newProgress.setUserId(userId);
+      newProgress.setCourseId(courseId);
+      newProgress.setCurrentLessonId(courseService.getFirstLessonIdOfCourse(courseId));
+      newProgress.setUpdatedAt(Timestamp.from(Instant.now()));
+      userCourseProgressRepository.save(newProgress);
+      userCourseProgress = newProgress;
     }
 
     Integer totalLessonCount = lessonCompletionRepository.countByUserAndCourse(userId, courseId);
     if (totalLessonCount == null) totalLessonCount = 0;
 
-    Integer lessonSectionId = courseProgressService.getLessonSectionId(userCourseProgress.getCurrentLessonId());
+    Integer lessonSectionId =
+        courseProgressService.getLessonSectionId(userCourseProgress.getCurrentLessonId());
 
     return userCourseProgressMapper.toDto(userCourseProgress, totalLessonCount, lessonSectionId);
-
   }
 
   @Override
@@ -81,14 +81,14 @@ public class UserServiceImpl implements UserService{
     }
 
     return userRepository.findAllById(userIds).stream()
-            .peek(this::potentiallyResetStreak)
-            .map(userMapper::toDto)
-            .toList();
+        .peek(this::potentiallyResetStreak)
+        .map(userMapper::toDto)
+        .toList();
   }
 
   @Override
   @Transactional
-  public void potentiallyResetStreak (User user) {
+  public void potentiallyResetStreak(User user) {
     Timestamp lastSubmission = user.getLastSubmission();
     if (lastSubmission != null) {
 
@@ -104,5 +104,4 @@ public class UserServiceImpl implements UserService{
       }
     }
   }
-
 }

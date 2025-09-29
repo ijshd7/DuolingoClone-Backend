@@ -1,5 +1,8 @@
 package com.testingpractice.duoclonebackend.security;
 
+import static com.testingpractice.duoclonebackend.constants.pathConstants.*;
+import static com.testingpractice.duoclonebackend.constants.publicEndpointConstants.PUBLIC_ENDPOINTS;
+
 import com.testingpractice.duoclonebackend.auth.JwtCookieAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,9 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static com.testingpractice.duoclonebackend.constants.pathConstants.*;
-import static com.testingpractice.duoclonebackend.constants.publicEndpointConstants.PUBLIC_ENDPOINTS;
 
 @Configuration
 @RequiredArgsConstructor

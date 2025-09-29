@@ -13,10 +13,10 @@ public class WebConfig {
       @Override
       public void addCorsMappings(CorsRegistry r) {
         r.addMapping("/**")
-                .allowedOrigins("http://localhost:5173")
-                .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+            .allowedOrigins("http://localhost:5173")
+            .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .allowCredentials(true);
       }
     };
   }

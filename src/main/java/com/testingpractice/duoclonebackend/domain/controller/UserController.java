@@ -25,7 +25,6 @@ public class UserController {
     return userService.getUserCourseProgress(courseId, userId);
   }
 
-
   @GetMapping(pathConstants.GET_USER_BY_ID)
   public UserDto getUserById(@PathVariable Integer userId) {
     return userService.getUser(userId);
@@ -42,9 +41,9 @@ public class UserController {
   }
 
   @PostMapping(pathConstants.UPDATE_AVATAR)
-  public UserDto updateAvatar(@RequestBody UpdateAvatarRequest updateAvatarRequest, @AuthenticationPrincipal(expression = "id") Integer userId) {
-    return userCreationService.updateAvatar(
-        userId, updateAvatarRequest.selectedAvatar());
+  public UserDto updateAvatar(
+      @RequestBody UpdateAvatarRequest updateAvatarRequest,
+      @AuthenticationPrincipal(expression = "id") Integer userId) {
+    return userCreationService.updateAvatar(userId, updateAvatarRequest.selectedAvatar());
   }
-
 }

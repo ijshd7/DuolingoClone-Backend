@@ -1,4 +1,5 @@
 package com.testingpractice.duoclonebackend.entity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -17,15 +18,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserMonthlyChallenge {
 
-    @EmbeddedId
-    private UserMonthlyChallengeId id;
+  @EmbeddedId private UserMonthlyChallengeId id;
 
-    @Column(nullable = false)
-    private Integer progress = 0;
+  @Column(nullable = false)
+  private Integer progress = 0;
 
-    @Column(name = "completed_at")
-    private Timestamp completedAt;
+  @Column(name = "completed_at")
+  private Timestamp completedAt;
 
-    @Column(name = "reward_claimed", nullable = false)
-    private boolean rewardClaimed = false;
+  @Column(name = "reward_claimed", nullable = false)
+  private boolean rewardClaimed = false;
 }

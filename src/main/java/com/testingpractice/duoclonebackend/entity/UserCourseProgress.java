@@ -26,7 +26,7 @@ public class UserCourseProgress {
   private Integer courseId;
 
   @Column(name = "is_complete", nullable = false)
-    private Boolean isComplete;
+  private Boolean isComplete;
 
   @Column(name = "current_lesson_id", nullable = false)
   private Integer currentLessonId;

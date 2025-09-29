@@ -15,7 +15,6 @@ public interface LessonCompletionRepository
 
   boolean existsByIdUserIdAndIdLessonId(Integer userId, Integer lessonId);
 
-
   @Query(
       """
     select lc.id.lessonId
@@ -36,11 +35,12 @@ public interface LessonCompletionRepository
       nativeQuery = true)
   int insertIfAbsent(long userId, long lessonId, long courseId, int score, Timestamp completedAt);
 
-  @Query("""
+  @Query(
+"""
   select count(lc)
   from LessonCompletion lc
   where lc.id.userId = :userId and lc.courseId = :courseId
 """)
-  Integer countByUserAndCourse(@Param("userId") Integer userId,
-                               @Param("courseId") Integer courseId);
+  Integer countByUserAndCourse(
+      @Param("userId") Integer userId, @Param("courseId") Integer courseId);
 }

@@ -15,57 +15,54 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class FollowServiceImpl implements FollowService{
+public class FollowServiceImpl implements FollowService {
 
-    private final FollowRepository followRepository;
+  private final FollowRepository followRepository;
 
-    @Override
-    public FollowFollowingListResponse getFollowersAndFollowingForUser (Integer userId) {
+  @Override
+  public FollowFollowingListResponse getFollowersAndFollowingForUser(Integer userId) {
 
-        List<Integer> followers = followRepository.findFollowerIdsByFollowedId(userId);
-        List<Integer> following = followRepository.findFollowedIdsByFollowerId(userId);
+    List<Integer> followers = followRepository.findFollowerIdsByFollowedId(userId);
+    List<Integer> following = followRepository.findFollowedIdsByFollowerId(userId);
 
-        return new FollowFollowingListResponse(following, followers);
+    return new FollowFollowingListResponse(following, followers);
+  }
 
-    }
+  @Override
+  @Transactional
+  public FollowResponse handleFollow(Integer followerId, Integer followedId) {
 
-    @Override
-    @Transactional
-    public FollowResponse handleFollow (Integer followerId, Integer followedId) {
+    boolean alreadyFollows =
+        followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
+    if (alreadyFollows) throw new ApiException(ErrorCode.ALREADY_FOLLOWS);
 
-        boolean alreadyFollows = followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
-        if (alreadyFollows) throw new ApiException(ErrorCode.ALREADY_FOLLOWS);
+    Follow newFollow = new Follow();
+    newFollow.setFollowerId(followerId);
+    newFollow.setFollowedId(followedId);
+    newFollow.setCreatedAt(Timestamp.from(Instant.now()));
 
-        Follow newFollow = new Follow();
-        newFollow.setFollowerId(followerId);
-        newFollow.setFollowedId(followedId);
-        newFollow.setCreatedAt(Timestamp.from(Instant.now()));
+    followRepository.save(newFollow);
 
-        followRepository.save(newFollow);
+    return getNewStatsForParties(followerId, followedId);
+  }
 
-        return getNewStatsForParties(followerId, followedId);
+  @Transactional
+  public FollowResponse handleUnfollow(Integer followerId, Integer followedId) {
 
-    }
+    boolean alreadyFollows =
+        followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
+    if (!alreadyFollows) throw new ApiException(ErrorCode.DOES_NOT_FOLLOW);
 
-    @Transactional
-    public FollowResponse handleUnfollow (Integer followerId, Integer followedId) {
+    Follow toDelete = followRepository.findByFollowerIdAndFollowedId(followerId, followedId);
+    followRepository.delete(toDelete);
 
-        boolean alreadyFollows = followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
-        if (!alreadyFollows) throw new ApiException(ErrorCode.DOES_NOT_FOLLOW);
+    return getNewStatsForParties(followerId, followedId);
+  }
 
-        Follow toDelete = followRepository.findByFollowerIdAndFollowedId(followerId, followedId);
-        followRepository.delete(toDelete);
+  private FollowResponse getNewStatsForParties(Integer followerId, Integer followedId) {
+    FollowFollowingListResponse followerNewStats = getFollowersAndFollowingForUser(followerId);
+    FollowFollowingListResponse followedNewStats = getFollowersAndFollowingForUser(followedId);
 
-        return getNewStatsForParties(followerId, followedId);
-
-    }
-
-    private FollowResponse getNewStatsForParties (Integer followerId, Integer followedId) {
-        FollowFollowingListResponse followerNewStats = getFollowersAndFollowingForUser(followerId);
-        FollowFollowingListResponse followedNewStats = getFollowersAndFollowingForUser(followedId);
-
-        return new FollowResponse(followerId, followedId, followerNewStats, followedNewStats);
-    }
-
-
+    return new FollowResponse(followerId, followedId, followerNewStats, followedNewStats);
+  }
 }
