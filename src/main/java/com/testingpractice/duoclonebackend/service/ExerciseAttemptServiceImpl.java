@@ -28,17 +28,20 @@ public class ExerciseAttemptServiceImpl implements ExerciseAttemptService {
     private final ExerciseOptionService exerciseOptionService;
     private final ExerciseAttemptOptionRepository exerciseAttemptOptionRepository;
 
+    @Override
     public List<ExerciseAttempt> getLessonExerciseAttemptsForUser(Integer lessonId, Integer userId) {
         List<Exercise> lessonExercises = exerciseRepository.findAllByLessonId(lessonId);
         List<Integer> exerciseIds = lessonExercises.stream().map(Exercise::getId).toList();
         return exerciseAttemptRepository.findAllByExerciseIdInAndUserIdAndUnchecked(exerciseIds, userId);
     }
 
+    @Override
     @Transactional
     public void markAttemptsAsChecked (Integer userId, Integer lessonId) {
         exerciseAttemptRepository.markUncheckedByUserAndLesson(userId, lessonId);
     }
 
+    @Override
     @Transactional
     public ExerciseAttemptResponse submitExerciseAttempt(Integer exerciseId, ArrayList<Integer> optionIds, Integer userId) {
 

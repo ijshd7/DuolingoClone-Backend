@@ -6,7 +6,6 @@ import com.testingpractice.duoclonebackend.dto.UserCourseProgressDto;
 import com.testingpractice.duoclonebackend.entity.ExerciseAttempt;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.User;
-import com.testingpractice.duoclonebackend.entity.UserCourseProgress;
 import com.testingpractice.duoclonebackend.enums.QuestCode;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
 import com.testingpractice.duoclonebackend.mapper.UserCourseProgressMapper;
@@ -32,10 +31,10 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
     private final CourseProgressService courseProgressService;
     private final UserRepository userRepository;
     private final LessonMapper lessonMapper;
-    private final UserCourseProgressMapper userCourseProgressMapper;
     private final QuestService questService;
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
+    @Override
     @Transactional
     public LessonCompleteResponse getCompletedLesson (Integer lessonId, Integer userId, Integer courseId) {
 
@@ -57,7 +56,7 @@ public class LessonCompletionServiceImpl implements LessonCompletionService{
 
         // -- UPDATE USERS NEXT LESSON -- //
         courseProgressService.updateUsersNextLesson(userId, courseId, lesson);
-        UserCourseProgressDto userCourseProgressDto = userServiceImpl.getUserCourseProgress(courseId, userId);
+        UserCourseProgressDto userCourseProgressDto = userService.getUserCourseProgress(courseId, userId);
 
         lessonCompletionRepository.insertIfAbsent(userId, lessonId, courseId, 15, Timestamp.from((Instant.now())));
         userRepository.save(user);

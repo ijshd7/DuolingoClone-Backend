@@ -5,10 +5,9 @@ import com.testingpractice.duoclonebackend.dto.FollowFollowingListResponse;
 import com.testingpractice.duoclonebackend.dto.FollowRequest;
 import com.testingpractice.duoclonebackend.dto.FollowResponse;
 import com.testingpractice.duoclonebackend.service.FollowService;
+import com.testingpractice.duoclonebackend.service.FollowServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(pathConstants.FOLLOWS)

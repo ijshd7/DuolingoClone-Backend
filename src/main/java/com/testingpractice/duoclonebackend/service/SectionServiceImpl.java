@@ -46,6 +46,7 @@ public class SectionServiceImpl implements SectionService {
     return sectionIds;
   }
 
+  @Override
   public SectionTreeNode getBulkSection(Integer sectionId, Integer userId) {
     Section section = sectionRepository.findById(sectionId).orElse(null);
     if (section == null) throw new ApiException(ErrorCode.SECTION_NOT_FOUND);

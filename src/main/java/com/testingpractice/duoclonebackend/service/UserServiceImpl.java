@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService{
   private final CourseProgressService courseProgressService;
   private final CourseService courseService;
 
+  @Override
   @Transactional
   public UserCourseProgressDto getUserCourseProgress(Integer courseId, Integer userId) {
 
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService{
 
   }
 
+  @Override
   @Transactional
   public UserDto getUser(Integer userId) {
     Optional<User> optionalUser = userRepository.findById(userId);
@@ -72,6 +74,7 @@ public class UserServiceImpl implements UserService{
     return userMapper.toDto(user);
   }
 
+  @Override
   @Transactional
   public List<UserDto> getUsersFromIds(List<Integer> userIds) {
     if (userIds == null || userIds.isEmpty()) {
@@ -84,6 +87,7 @@ public class UserServiceImpl implements UserService{
             .toList();
   }
 
+  @Override
   @Transactional
   public void potentiallyResetStreak (User user) {
     Timestamp lastSubmission = user.getLastSubmission();

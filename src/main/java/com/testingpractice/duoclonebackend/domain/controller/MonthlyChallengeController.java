@@ -4,6 +4,7 @@ package com.testingpractice.duoclonebackend.domain.controller;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.QuestResponse;
 import com.testingpractice.duoclonebackend.service.MonthlyChallengeService;
+import com.testingpractice.duoclonebackend.service.MonthlyChallengeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

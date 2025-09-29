@@ -3,6 +3,7 @@ package com.testingpractice.duoclonebackend.domain.controller;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.QuestResponse;
 import com.testingpractice.duoclonebackend.service.QuestService;
+import com.testingpractice.duoclonebackend.service.QuestServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
