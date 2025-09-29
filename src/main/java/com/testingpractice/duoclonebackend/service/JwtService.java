@@ -1,5 +1,7 @@
 package com.testingpractice.duoclonebackend.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 public interface JwtService {
 
     String createToken(Integer userId);
@@ -7,5 +9,7 @@ public interface JwtService {
     Integer extractUserId(String token);
 
     int requireUserId(String token);
+
+    int getUserIdFromaRequest(HttpServletRequest authorizationHeader);
 
 }

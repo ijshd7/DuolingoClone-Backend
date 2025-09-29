@@ -27,12 +27,7 @@ public class LessonController {
           @RequestParam List<Integer> lessonIds,
           @CookieValue(name = "jwt", required = false) String token) {
 
-    if (token == null || !jwtService.isTokenValid(token)) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
-
-    Integer userId = jwtService.extractUserId(token);
-
+    int userId = jwtService.requireUserId(token);
     // Delegate to your service
     return lessonService.getLessonsByIds(lessonIds, userId);
   }
