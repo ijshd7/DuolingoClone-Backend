@@ -1,5 +1,6 @@
 package com.testingpractice.duoclonebackend.service;
 
+import com.testingpractice.duoclonebackend.auth.AuthCookieService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -8,14 +9,23 @@ import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class JwtServiceImpl implements JwtService{
 
+    private final AuthCookieService authCookieService;
     @Value("${jwt.secret}")
     private String jwtSecret;
+
+    public JwtServiceImpl(AuthCookieService authCookieService) {
+        this.authCookieService = authCookieService;
+    }
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
@@ -34,22 +44,19 @@ public class JwtServiceImpl implements JwtService{
     }
 
     @Override
-    public boolean isTokenValid(String token) {
+    public int requireUserId(String token) {
+        if (token == null || token.isBlank())
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing token");
         try {
-            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
-            return true;
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return Integer.parseInt(claims.getSubject());
         } catch (JwtException e) {
-            return false;
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
         }
     }
 
-    @Override
-    public Integer extractUserId(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return Integer.parseInt(claims.getSubject());
-    }
 }

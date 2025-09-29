@@ -66,6 +66,7 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
     updateQuests(userId, lessonAccuracy, newStreakCount);
 
     return new LessonCompleteResponse(
+            userId,
         scoreForLesson,
         user.getPoints(),
         lessonAccuracy,

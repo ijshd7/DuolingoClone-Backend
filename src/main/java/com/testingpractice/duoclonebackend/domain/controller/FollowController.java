@@ -6,6 +6,7 @@ import com.testingpractice.duoclonebackend.dto.FollowRequest;
 import com.testingpractice.duoclonebackend.dto.FollowResponse;
 import com.testingpractice.duoclonebackend.service.FollowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,15 +22,13 @@ public class FollowController {
     }
 
     @PostMapping(pathConstants.FOLLOW_USER)
-    public FollowResponse followUser (@RequestBody FollowRequest followRequest) {
-
-        return followService.handleFollow(followRequest.followerId(), followRequest.followedId());
-
+    public FollowResponse followUser (@RequestBody FollowRequest followRequest, @AuthenticationPrincipal(expression = "id") Integer followerId) {
+        return followService.handleFollow(followerId, followRequest.followedId());
     }
 
     @PostMapping(pathConstants.UNFOLLOW_USER)
-    public FollowResponse unfollowUser (@RequestBody FollowRequest followRequest) {
-        return followService.handleUnfollow(followRequest.followerId(), followRequest.followedId());
+    public FollowResponse unfollowUser (@RequestBody FollowRequest followRequest, @AuthenticationPrincipal(expression = "id") Integer followerId) {
+        return followService.handleUnfollow(followerId, followRequest.followedId());
     }
 
 }

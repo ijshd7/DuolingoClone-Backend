@@ -9,14 +9,18 @@ import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
+import com.testingpractice.duoclonebackend.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import static com.testingpractice.duoclonebackend.constants.pathConstants.GOOGLE_LOGOUT;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,10 +28,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthController {
 
   private final GoogleService googleService;
-  private final JwtServiceImpl jwtService;
-  private final UserRepository userRepository;
-  private final UserMapper userMapper;
   private final AuthCookieService authCookieService;
+  private final UserService userService;
 
   @PostMapping(pathConstants.GOOGLE_LOGIN)
   public ResponseEntity<UserDto> loginWithGoogle(@RequestBody TokenDto dto,
@@ -36,13 +38,13 @@ public class AuthController {
     return ResponseEntity.ok(userDto);
   }
 
-  @GetMapping("/me")
-  public ResponseEntity<UserDto> getCurrentUser(@CookieValue(name = "jwt", required = false) String token) {
-    if (token == null || !jwtService.isTokenValid(token)) return ResponseEntity.status(401).build();
-    return ResponseEntity.ok(googleService.getCurrentUser(token));
+  @GetMapping(pathConstants.AUTH_ME)
+  public ResponseEntity<UserDto> getCurrentUser(
+          @AuthenticationPrincipal(expression = "id") Integer userId) {
+    return ResponseEntity.ok(userService.getUser(userId));
   }
 
-  @PostMapping("/logout")
+  @PostMapping(pathConstants.GOOGLE_LOGOUT)
   public ResponseEntity<Void> logout(HttpServletResponse response) {
     authCookieService.clearJwt(response);
     return ResponseEntity.ok().build();

@@ -6,6 +6,7 @@ import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
 import com.testingpractice.duoclonebackend.service.LessonCompletionService;
 import com.testingpractice.duoclonebackend.service.LessonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,10 @@ public class LessonCompletionController {
 
   @PostMapping(pathConstants.SUBMIT_COMPLETED_LESSON)
   public LessonCompleteResponse completeLesson(
-      @RequestBody LessonCompleteRequest lessonCompleteRequest) {
+      @RequestBody LessonCompleteRequest lessonCompleteRequest, @AuthenticationPrincipal(expression = "id") Integer userId) {
     return lessonCompletionService.getCompletedLesson(
         lessonCompleteRequest.lessonId(),
-        lessonCompleteRequest.userId(),
+        userId,
         lessonCompleteRequest.courseId());
   }
 }

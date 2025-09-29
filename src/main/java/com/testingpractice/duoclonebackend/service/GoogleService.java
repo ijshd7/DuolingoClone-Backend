@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public interface GoogleService {
 
     UserDto loginOrRegisterWithCode(String code, HttpServletResponse response);
-    UserDto getCurrentUser(String token);
 
 }
 
