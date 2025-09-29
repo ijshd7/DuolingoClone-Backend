@@ -35,6 +35,8 @@ public class pathConstants {
   public static final String GET_LESSONS_BY_UNIT = "/{unitId}/{userId}/lessons";
   public static final String GET_SECTIONS_BY_COURSE = "/{courseID}/sections";
 
+  public static final String GET_BULK_SECTIONS = "/getBulk/{sectionId}/{userId}";
+
   // !! TRANSACTIONAL !!//
   public static final String GET_EXERCISES_BY_LESSON = "{lessonId}/{userId}/exercises";
 
