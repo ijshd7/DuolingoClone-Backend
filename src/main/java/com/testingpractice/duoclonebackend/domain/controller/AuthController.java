@@ -38,7 +38,7 @@ public class AuthController {
     return ResponseEntity.ok(userDto);
   }
 
-  @GetMapping("/me")
+  @GetMapping(pathConstants.AUTH_ME)
   public ResponseEntity<UserDto> getCurrentUser(
           @AuthenticationPrincipal(expression = "id") Integer userId) {
     return ResponseEntity.ok(userService.getUser(userId));

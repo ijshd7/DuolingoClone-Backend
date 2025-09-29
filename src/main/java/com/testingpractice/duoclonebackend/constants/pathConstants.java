@@ -66,4 +66,5 @@ public class pathConstants {
   public static final String GOOGLE_LOGIN = "/google-login";
   public static final String UPDATE_AVATAR = "/update-avatar";
   public static final String GOOGLE_LOGOUT = "/logout";
+  public static final String AUTH_ME = "/me";
 }
