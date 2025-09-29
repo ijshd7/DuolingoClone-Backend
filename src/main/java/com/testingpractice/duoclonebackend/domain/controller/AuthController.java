@@ -1,5 +1,8 @@
-package com.testingpractice.duoclonebackend.auth;
+package com.testingpractice.duoclonebackend.domain.controller;
 
+import com.testingpractice.duoclonebackend.service.GoogleService;
+import com.testingpractice.duoclonebackend.service.JwtServiceImpl;
+import com.testingpractice.duoclonebackend.dto.TokenDto;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
@@ -19,13 +22,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthController {
 
   private final GoogleService googleService;
-  private final JwtService jwtService;
+  private final JwtServiceImpl jwtService;
   private final UserRepository userRepository;
   private final UserMapper userMapper;
 
   @PostMapping(pathConstants.GOOGLE_LOGIN)
   public ResponseEntity<UserDto> loginWithGoogle(
-      @RequestBody TokenDto dto, HttpServletResponse response) {
+          @RequestBody TokenDto dto, HttpServletResponse response) {
     UserDto userDto = googleService.loginOrRegisterWithCode(dto.getCode(), response);
     return ResponseEntity.ok(userDto);
   }

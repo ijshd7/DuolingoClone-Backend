@@ -1,11 +1,10 @@
-package com.testingpractice.duoclonebackend.auth;
+package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.dto.GoogleUserInfo;
 import com.testingpractice.duoclonebackend.dto.UserDto;
 import com.testingpractice.duoclonebackend.entity.User;
 import com.testingpractice.duoclonebackend.mapper.UserMapper;
 import com.testingpractice.duoclonebackend.repository.UserRepository;
-import com.testingpractice.duoclonebackend.service.UserCreationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -22,11 +21,11 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class GoogleService {
+public class GoogleServiceImpl implements GoogleService{
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final JwtService jwtService;
+    private final JwtServiceImpl jwtService;
     private final UserCreationService userCreationService;
 
     @Value("${google.client-id}")
@@ -35,6 +34,7 @@ public class GoogleService {
     @Value("${google.client-secret}")
     private String clientSecret;
 
+    @Override
     @Transactional
     public UserDto loginOrRegisterWithCode(String code, HttpServletResponse response) {
         RestTemplate rest = new RestTemplate();

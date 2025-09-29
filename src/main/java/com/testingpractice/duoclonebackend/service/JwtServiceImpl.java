@@ -1,4 +1,4 @@
-package com.testingpractice.duoclonebackend.auth;
+package com.testingpractice.duoclonebackend.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JwtService {
+public class JwtServiceImpl implements JwtService{
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -23,6 +23,7 @@ public class JwtService {
 
     private final long expirationMillis = 1000 * 60 * 60 * 24; // 24 hrs
 
+    @Override
     public String createToken(Integer userId) {
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
@@ -32,6 +33,7 @@ public class JwtService {
                 .compact();
     }
 
+    @Override
     public boolean isTokenValid(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
@@ -41,6 +43,7 @@ public class JwtService {
         }
     }
 
+    @Override
     public Integer extractUserId(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())

@@ -1,6 +1,6 @@
 package com.testingpractice.duoclonebackend.domain.controller;
 
-import com.testingpractice.duoclonebackend.auth.JwtService;
+import com.testingpractice.duoclonebackend.service.JwtServiceImpl;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.ExerciseDto;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
@@ -19,7 +19,7 @@ public class LessonController {
 
   private final LessonService lessonService;
   private final ExerciseService exerciseService;
-  private final JwtService jwtService;
+  private final JwtServiceImpl jwtService;
 
 
   @GetMapping(pathConstants.GET_LESSONS_FROM_IDS)
