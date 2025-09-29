@@ -8,6 +8,7 @@ import com.testingpractice.duoclonebackend.service.UserCreationService;
 import com.testingpractice.duoclonebackend.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,9 +21,10 @@ public class UserController {
 
   @GetMapping(pathConstants.GET_USER_COURSE_PROGRESS)
   public UserCourseProgressDto getUserCourseProgress(
-      @PathVariable Integer courseId, @PathVariable Integer userId) {
+      @PathVariable Integer courseId, @AuthenticationPrincipal(expression = "id") Integer userId) {
     return userService.getUserCourseProgress(courseId, userId);
   }
+
 
   @GetMapping(pathConstants.GET_USER_BY_ID)
   public UserDto getUserById(@PathVariable Integer userId) {
@@ -40,9 +42,9 @@ public class UserController {
   }
 
   @PostMapping(pathConstants.UPDATE_AVATAR)
-  public UserDto updateAvatar(@RequestBody UpdateAvatarRequest updateAvatarRequest) {
+  public UserDto updateAvatar(@RequestBody UpdateAvatarRequest updateAvatarRequest, @AuthenticationPrincipal(expression = "id") Integer userId) {
     return userCreationService.updateAvatar(
-        updateAvatarRequest.userId(), updateAvatarRequest.selectedAvatar());
+        userId, updateAvatarRequest.selectedAvatar());
   }
 
 }

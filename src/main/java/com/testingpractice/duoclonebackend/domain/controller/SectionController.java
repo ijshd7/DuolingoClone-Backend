@@ -8,6 +8,7 @@ import com.testingpractice.duoclonebackend.service.SectionService;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,7 +36,7 @@ public class SectionController {
 
   @GetMapping(pathConstants.GET_BULK_SECTIONS)
   public SectionTreeNode getBulkSection(
-      @PathVariable("sectionId") Integer sectionId, @PathVariable("userId") Integer userId) {
-    return sectionService.getBulkSection(sectionId, userId); // will throw if not found
+      @PathVariable("sectionId") Integer sectionId, @AuthenticationPrincipal(expression = "id") Integer userId) {
+    return sectionService.getBulkSection(sectionId, userId);
   }
 }

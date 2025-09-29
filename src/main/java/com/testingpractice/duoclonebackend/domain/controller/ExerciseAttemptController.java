@@ -5,6 +5,7 @@ import com.testingpractice.duoclonebackend.dto.ExerciseAttemptRequest;
 import com.testingpractice.duoclonebackend.dto.ExerciseAttemptResponse;
 import com.testingpractice.duoclonebackend.service.ExerciseAttemptService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +20,13 @@ public class ExerciseAttemptController {
 
   @PostMapping(pathConstants.SUBMIT_EXERCISE)
   public ExerciseAttemptResponse submitExerciseAttempt(
-      @RequestBody ExerciseAttemptRequest exerciseAttemptRequest
-      // Add Later Authentication Auth
+      @RequestBody ExerciseAttemptRequest exerciseAttemptRequest,
+      @AuthenticationPrincipal(expression = "id") Integer userId
       ) {
     return exerciseAttemptService.submitExerciseAttempt(
         exerciseAttemptRequest.exerciseId(),
         exerciseAttemptRequest.optionIds(),
-        exerciseAttemptRequest.userId());
+        userId
+    );
   }
 }

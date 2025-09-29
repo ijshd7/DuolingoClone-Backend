@@ -12,6 +12,7 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,10 +36,9 @@ public class CourseController {
   }
 
   @PostMapping(pathConstants.CHANGE_COURSE)
-  public UserDto changeUserCourse(@RequestBody NewCourseRequest req, HttpServletRequest httpReq) {
-    int userId = jwtService.getUserIdFromaRequest(httpReq);
+  public UserDto changeUserCourse(@RequestBody NewCourseRequest req,
+                                  @AuthenticationPrincipal(expression = "id") Integer userId) {
     return courseService.changeUserCourse(userId, req.newCourse());
   }
-
 
 }

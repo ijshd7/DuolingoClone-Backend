@@ -64,7 +64,7 @@ public class FollowServiceImpl implements FollowService{
         FollowFollowingListResponse followerNewStats = getFollowersAndFollowingForUser(followerId);
         FollowFollowingListResponse followedNewStats = getFollowersAndFollowingForUser(followedId);
 
-        return new FollowResponse(followerNewStats, followedNewStats);
+        return new FollowResponse(followerId, followedId, followerNewStats, followedNewStats);
     }
 
 

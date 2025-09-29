@@ -59,21 +59,4 @@ public class JwtServiceImpl implements JwtService{
         }
     }
 
-    @Override
-    public int getUserIdFromaRequest(HttpServletRequest authorizationHeader) {
-        String token = authCookieService.readJwt(authorizationHeader);
-        int userId = requireUserId(token);
-        return userId;
-    }
-
-
-    @Override
-    public Integer extractUserId(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return Integer.parseInt(claims.getSubject());
-    }
 }

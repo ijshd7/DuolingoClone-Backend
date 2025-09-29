@@ -1,6 +1,7 @@
 package com.testingpractice.duoclonebackend.dto;
 
 public record LessonCompleteResponse(
+    Integer userId,
     Integer totalScore,
     Integer newUserScore,
     Integer accuracy,

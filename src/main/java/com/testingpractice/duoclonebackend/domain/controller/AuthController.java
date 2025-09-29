@@ -16,8 +16,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import static com.testingpractice.duoclonebackend.constants.pathConstants.GOOGLE_LOGOUT;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +28,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthController {
 
   private final GoogleService googleService;
-  private final JwtServiceImpl jwtService;
   private final AuthCookieService authCookieService;
   private final UserService userService;
 
@@ -37,12 +39,12 @@ public class AuthController {
   }
 
   @GetMapping("/me")
-  public ResponseEntity<UserDto> getCurrentUser(@CookieValue(name = "jwt", required = false) String token) {
-    int userId = jwtService.requireUserId(token);
+  public ResponseEntity<UserDto> getCurrentUser(
+          @AuthenticationPrincipal(expression = "id") Integer userId) {
     return ResponseEntity.ok(userService.getUser(userId));
   }
 
-  @PostMapping("/logout")
+  @PostMapping(pathConstants.GOOGLE_LOGOUT)
   public ResponseEntity<Void> logout(HttpServletResponse response) {
     authCookieService.clearJwt(response);
     return ResponseEntity.ok().build();

@@ -20,10 +20,10 @@ public class pathConstants {
   public static final String LESSONS_COMPLETIONS = LESSONS + "/completions";
 
   // ----------------------------- GET REQUESTS -----------------------------
-  public static final String GET_USER_COURSE_PROGRESS = "/progress/{courseId}/{userId}";
+  public static final String GET_USER_COURSE_PROGRESS = "/progress/{courseId}";
   public static final String GET_USER_BY_ID = "/{userId}";
-  public static final String GET_QUESTS_BY_USER = "/{userId}";
-  public static final String GET_MONTHLY_CHALLENGE_BY_USER = "/{userId}";
+  public static final String GET_QUESTS_BY_USER = "/get";
+  public static final String GET_MONTHLY_CHALLENGE_BY_USER = "/get";
   public static final String GET_FOLLOWS_BY_USER = "/{userId}";
   public static final String GET_TOP_LEADERBOARD = "/top";
   public static final String GET_ALL_COURSES = "/all";
@@ -31,13 +31,13 @@ public class pathConstants {
 
   // ===== GET DTO LIST BY PARENT =====
   public static final String GET_UNITS_BY_SECTION = "/{sectionId}/units";
-  public static final String GET_LESSONS_BY_UNIT = "/{unitId}/{userId}/lessons";
+  public static final String GET_LESSONS_BY_UNIT = "/{unitId}/lessons";
   public static final String GET_SECTIONS_BY_COURSE = "/{courseID}/sections";
 
-  public static final String GET_BULK_SECTIONS = "/getBulk/{sectionId}/{userId}";
+  public static final String GET_BULK_SECTIONS = "/getBulk/{sectionId}";
 
   // !! TRANSACTIONAL !!//
-  public static final String GET_EXERCISES_BY_LESSON = "{lessonId}/{userId}/exercises";
+  public static final String GET_EXERCISES_BY_LESSON = "{lessonId}/exercises";
 
   // ===== GET DTO LIST FROM IDS =====
   public static final String GET_UNITS_FROM_IDS = "/ids";
@@ -65,4 +65,5 @@ public class pathConstants {
 
   public static final String GOOGLE_LOGIN = "/google-login";
   public static final String UPDATE_AVATAR = "/update-avatar";
+  public static final String GOOGLE_LOGOUT = "/logout";
 }

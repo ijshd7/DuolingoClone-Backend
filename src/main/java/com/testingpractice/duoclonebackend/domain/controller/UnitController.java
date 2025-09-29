@@ -7,6 +7,7 @@ import com.testingpractice.duoclonebackend.service.LessonService;
 import com.testingpractice.duoclonebackend.service.UnitService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +20,7 @@ public class UnitController {
 
   @GetMapping(pathConstants.GET_LESSONS_BY_UNIT)
   public List<LessonDto> getLessonsByUnit(
-      @PathVariable Integer unitId, @PathVariable Integer userId) {
+      @PathVariable Integer unitId, @AuthenticationPrincipal(expression = "id") Integer userId) {
     return lessonService.getLessonsByUnit(unitId, userId);
   }
 
