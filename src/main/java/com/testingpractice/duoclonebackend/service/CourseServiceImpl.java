@@ -41,6 +41,7 @@ public class CourseServiceImpl implements CourseService {
       UserCourseProgress newProgress = new UserCourseProgress();
       newProgress.setUserId(userId);
       newProgress.setCourseId(newCourseId);
+      newProgress.setIsComplete(false);
       newProgress.setCurrentLessonId(getFirstLessonIdOfCourse(newCourseId));
       newProgress.setUpdatedAt(Timestamp.from(Instant.now()));
       userCourseProgressRepository.save(newProgress);
