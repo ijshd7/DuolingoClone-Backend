@@ -4,6 +4,8 @@ import com.testingpractice.duoclonebackend.entity.*;
 
 import java.sql.Timestamp;
 
+import static com.testingpractice.duoclonebackend.testutils.TestConstants.FIXED_TIMESTAMP_1;
+
 public class TestUtils {
 
   public static Unit makeUnit(String title, int courseId, int section, int orderIndex) {
@@ -30,8 +32,8 @@ public class TestUtils {
     return User.builder().currentCourseId(1).username(username).firstName(firstName).lastName(lastName).email(email).pfpSrc(pfpSrc).points(points).createdAt(createdAt).lastSubmission(lastSubmission).streakLength(streakLength).build();
   }
 
-  public static UserCourseProgress makeUserCourseProgress(Integer userId, Integer courseId, Boolean isComplete, Integer currentLessonId) {
-    return UserCourseProgress.builder().userId(userId).courseId(courseId).isComplete(isComplete).currentLessonId(currentLessonId).build();
+  public static UserCourseProgress makeUserCourseProgress(Integer userId, Integer courseId, Boolean isComplete, Integer currentLessonId, Timestamp updatedAt) {
+    return UserCourseProgress.builder().userId(userId).courseId(courseId).isComplete(isComplete).currentLessonId(currentLessonId).updatedAt(updatedAt) .build();
   }
 
   public static Section makeSection(String title, Integer courseId, Integer orderIndex) {

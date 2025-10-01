@@ -9,14 +9,15 @@ import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.repository.QuestDefinitionRepository;
 import com.testingpractice.duoclonebackend.repository.UserDailyQuestRepository;
+import com.testingpractice.duoclonebackend.utils.DateUtils;
 import jakarta.transaction.Transactional;
+
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import static com.testingpractice.duoclonebackend.utils.DateUtils.getDate;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +26,13 @@ public class QuestServiceImpl implements QuestService {
   private final QuestDefinitionRepository questDefinitionRepository;
   private final UserDailyQuestRepository userDailyQuestRepository;
   private final MonthlyChallengeService monthlyChallengeService;
+  private final Clock clock;
 
   @Override
   @Transactional
   public List<QuestResponse> getQuestsForUser(Integer userId) {
 
-    LocalDate today = getDate();
+    LocalDate today = DateUtils.today(clock);
 
     List<QuestDefinition> questDefinitions = questDefinitionRepository.findAllByActive(true);
 
@@ -50,7 +52,7 @@ public class QuestServiceImpl implements QuestService {
             .findByCodeAndActiveTrue(questCode.name())
             .orElseThrow(() -> new ApiException(ErrorCode.QUEST_NOT_FOUND));
 
-    LocalDate today = getDate();
+    LocalDate today = DateUtils.today(clock);
     UserDailyQuest userDailyQuest = userDailyQuestRepository
             .findByIdUserIdAndIdQuestDefIdAndIdDate(userId, questDefinition.getId(), today)
             .orElseGet(() -> createNewUserDailyQuest(questDefinition, userId, today));

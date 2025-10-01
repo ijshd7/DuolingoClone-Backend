@@ -2,15 +2,20 @@ package com.testingpractice.duoclonebackend.controller;
 
 import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
 import static com.testingpractice.duoclonebackend.testutils.TestUtils.*;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import com.testingpractice.duoclonebackend.constants.pathConstants;
+import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
 import com.testingpractice.duoclonebackend.entity.Exercise;
 import com.testingpractice.duoclonebackend.entity.Lesson;
 import com.testingpractice.duoclonebackend.entity.User;
-import com.testingpractice.duoclonebackend.enums.QuestCode;
-import com.testingpractice.duoclonebackend.repository.*;
+
 import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -73,7 +78,7 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
     User user = userRepository.save(makeUser(1, "testuser", "test", "user", "emailOne", "default", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_1, 1));
     Integer userId = user.getId();
 
-    userCourseProgressRepository.save(makeUserCourseProgress(userId, 1, false, l4.getId()));
+    userCourseProgressRepository.save(makeUserCourseProgress(userId, 1, false, l4.getId(), FIXED_TIMESTAMP_1));
 
     exerciseAttemptRepository.saveAll(
         List.of(
@@ -88,4 +93,39 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
             makeLessonCompletion(userId, l3.getId(), 1, 10),
             makeLessonCompletion(userId, l4.getId(), 1, 10)));
   }
+
+  @Test
+  void submitLesson_happyPath_returnsCorrectResponse () {
+    Integer userId = 1;
+    Integer lessonId = completedLesson.getId();
+
+    LessonCompleteResponse response =
+        given()
+            .contentType("application/json")
+            .body(
+                Map.of(
+                    "lessonId", lessonId,
+                    "userId", userId))
+            .when()
+            .post(pathConstants.LESSONS_COMPLETIONS + pathConstants.SUBMIT_COMPLETED_LESSON)
+            .then()
+            .statusCode(200)
+            .extract()
+            .as(LessonCompleteResponse.class);
+
+    assertThat(response.userId()).isEqualTo(userId);
+    assertThat(response.lessonId()).isEqualTo(lessonId);
+    assertThat(response.newUserScore()).isGreaterThan(0);
+    assertThat(response.totalScore()).isGreaterThan(0);
+    assertThat(response.accuracy()).isLessThan(100);
+    assertThat(response.message()).isNotNull();
+    assertThat(response.accuracy()).isGreaterThan(0);
+    assertThat(response.updatedUserCourseProgress().currentLessonId()).isEqualTo(lessonId);
+
+
+
+  }
+
+
+
 }

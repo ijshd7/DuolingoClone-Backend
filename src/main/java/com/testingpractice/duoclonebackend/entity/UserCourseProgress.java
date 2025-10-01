@@ -19,21 +19,21 @@ public class UserCourseProgress {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
-  @Column(name = "user_id", nullable = false)
+  @Column(name = "user_id")
   private Integer userId;
 
-  @Column(name = "course_id", nullable = false)
+  @Column(name = "course_id")
   private Integer courseId;
 
-  @Column(name = "is_complete", nullable = false)
+  @Column(name = "is_complete")
   private Boolean isComplete;
 
-  @Column(name = "current_lesson_id", nullable = false)
+  @Column(name = "current_lesson_id")
   private Integer currentLessonId;
 
   @Column(
       name = "updated_at",
-      nullable = false,
       columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
   private Timestamp updatedAt;
+
 }

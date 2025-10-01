@@ -22,4 +22,5 @@ public class LeaderboardController {
     limit = Math.min(Math.max(limit, 1), 100); // 1..100
     return leaderboardService.getLeaderboardPage(cursor, limit);
   }
+
 }
