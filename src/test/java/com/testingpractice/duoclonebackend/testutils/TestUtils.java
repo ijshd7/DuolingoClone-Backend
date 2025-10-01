@@ -28,8 +28,12 @@ public class TestUtils {
     return MonthlyChallengeDefinition.builder().code(code).target(target).rewardPoints(rewardPoints).active(active).build();
   }
 
-  public static User makeUser(Integer currenCourseId, String username, String firstName, String lastName, String email, String pfpSrc, Integer points, Timestamp createdAt, Timestamp lastSubmission, Integer streakLength) {
-    return User.builder().currentCourseId(1).username(username).firstName(firstName).lastName(lastName).email(email).pfpSrc(pfpSrc).points(points).createdAt(createdAt).lastSubmission(lastSubmission).streakLength(streakLength).build();
+  public static User makeUser(Integer currentCourseId, String username, String firstName, String lastName, String email, String pfpSrc, Integer points, Timestamp createdAt, Timestamp lastSubmission, Integer streakLength) {
+    return User.builder().currentCourseId(currentCourseId).username(username).firstName(firstName).lastName(lastName).email(email).pfpSrc(pfpSrc).points(points).createdAt(createdAt).lastSubmission(lastSubmission).streakLength(streakLength).build();
+  }
+
+  public static Course makeCourse(String title, String imgSrc) {
+    return Course.builder().title(title).imgSrc(imgSrc).build();
   }
 
   public static UserCourseProgress makeUserCourseProgress(Integer userId, Integer courseId, Boolean isComplete, Integer currentLessonId, Timestamp updatedAt) {

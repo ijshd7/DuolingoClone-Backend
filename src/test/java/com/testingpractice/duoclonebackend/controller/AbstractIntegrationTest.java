@@ -13,6 +13,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.Clock;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.testingpractice.duoclonebackend.testutils.TestConstants.FIXED_TIMESTAMP_2;
 
@@ -80,6 +82,9 @@ public abstract class AbstractIntegrationTest {
   @Autowired protected LessonCompletionRepository lessonCompletionRepository;
   @Autowired protected UserCourseProgressRepository userCourseProgressRepository;
 
+  @Autowired
+  JdbcTemplate jdbc;
+
 
 
   @BeforeAll
@@ -112,10 +117,14 @@ public abstract class AbstractIntegrationTest {
       http.csrf(csrf -> csrf.disable())
               .authorizeHttpRequests(a -> a.anyRequest().authenticated())
               .addFilterBefore((req, res, chain) -> {
-                var principal = new AuthUser(1); // test user id
-                var auth = new UsernamePasswordAuthenticationToken(principal, null, List.of());
-                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails((HttpServletRequest) req));
+                var request = (HttpServletRequest) req;
+                String header = request.getHeader("X-Test-User-Id");
+                int uid = (header != null) ? Integer.parseInt(header) : 1;
+
+                var auth = new UsernamePasswordAuthenticationToken(new AuthUser(uid), null, List.of());
+                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(auth);
+
                 chain.doFilter(req, res);
               }, UsernamePasswordAuthenticationFilter.class);
       return http.build();
@@ -123,24 +132,32 @@ public abstract class AbstractIntegrationTest {
   }
 
   protected void cleanTestData() {
-    exerciseAttemptOptionRepository.deleteAll();
-    exerciseAttemptRepository.deleteAll();
-    userDailyQuestRepository.deleteAll();
-    userMonthlyChallengeRepository.deleteAll();
-    followRepository.deleteAll();
-    exerciseOptionRepository.deleteAll();
-    exerciseRepository.deleteAll();
-    lessonCompletionRepository.deleteAll();
-    userCourseProgressRepository.deleteAll();
-    lessonRepository.deleteAll();
-    unitRepository.deleteAll();
-    sectionRepository.deleteAll();
-    courseRepository.deleteAll();
-    questDefinitionRepository.deleteAll();
-    monthlyChallengeDefinitionRepository.deleteAll();
-    userRepository.deleteAll();
-  }
 
+    jdbc.execute("SET FOREIGN_KEY_CHECKS = 0");
+
+    // Use TRUNCATE for all tables to ensure a clean state and reset auto-increment
+    jdbc.execute("TRUNCATE TABLE users");
+    jdbc.execute("ALTER TABLE users AUTO_INCREMENT = 1");
+    jdbc.execute("TRUNCATE TABLE course");
+    jdbc.execute("ALTER TABLE course AUTO_INCREMENT = 1");
+    jdbc.execute("TRUNCATE TABLE sections");
+    jdbc.execute("TRUNCATE TABLE units");
+    jdbc.execute("TRUNCATE TABLE lessons");
+    jdbc.execute("TRUNCATE TABLE exercises");
+    jdbc.execute("TRUNCATE TABLE exercise_attempts");
+    jdbc.execute("TRUNCATE TABLE lesson_completions");
+    jdbc.execute("TRUNCATE TABLE user_course_progress");
+    jdbc.execute("TRUNCATE TABLE quest_definition");
+    jdbc.execute("TRUNCATE TABLE monthly_challenge_definition");
+    jdbc.execute("TRUNCATE TABLE user_daily_quest");
+    jdbc.execute("TRUNCATE TABLE user_monthly_challenge");
+    jdbc.execute("TRUNCATE TABLE follows");
+    jdbc.execute("TRUNCATE TABLE exercise_options");
+    jdbc.execute("TRUNCATE TABLE exercise_attempt_option");
+
+
+    jdbc.execute("SET FOREIGN_KEY_CHECKS = 1");
+  }
 
 
 }
