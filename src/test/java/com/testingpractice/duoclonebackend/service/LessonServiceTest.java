@@ -53,11 +53,11 @@ public class LessonServiceTest {
             makeLessonCompletion(1, l2.getId(), 1, 20),
             makeLessonCompletion(1, l4.getId(), 1, 10)
     ));
-
   }
 
   @Test
   void getLessonsByUnit_returnsExpectedDtos() {
+
     //Should only have one because l3 is not passed and l4 is not in unit 2
     List<LessonDto> result = service.getLessonsByUnit(2, 1);
     assertThat(result).hasSize(3);
@@ -65,5 +65,10 @@ public class LessonServiceTest {
             .extracting(LessonDto::isPassed)
             .filteredOn(completed -> !completed)
             .hasSize(1);
+
   }
+
+
+
+
 }

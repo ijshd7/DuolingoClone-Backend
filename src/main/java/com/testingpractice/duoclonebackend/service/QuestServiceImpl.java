@@ -45,6 +45,7 @@ public class QuestServiceImpl implements QuestService {
   @Override
   @Transactional
   public void updateQuestProgress(Integer userId, QuestCode questCode) {
+
     QuestDefinition questDefinition = questDefinitionRepository
             .findByCodeAndActiveTrue(questCode.name())
             .orElseThrow(() -> new ApiException(ErrorCode.QUEST_NOT_FOUND));
@@ -58,6 +59,7 @@ public class QuestServiceImpl implements QuestService {
       userDailyQuest.setProgress(userDailyQuest.getProgress() + 1);
       monthlyChallengeService.addChallengeProgress(userId);
     }
+
   }
 
   private List<QuestResponse> parseToQuestionResponseList(
