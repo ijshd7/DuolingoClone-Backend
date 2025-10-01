@@ -1,8 +1,10 @@
 package com.testingpractice.duoclonebackend.controller;
 
+import com.testingpractice.duoclonebackend.repository.*;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -32,6 +34,23 @@ public abstract class AbstractIntegrationTest {
     r.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
     r.add("spring.jpa.hibernate.ddl-auto", () -> "update");
   }
+
+  @Autowired protected UnitRepository unitRepository;
+  @Autowired protected SectionRepository sectionRepository;
+  @Autowired protected CourseRepository courseRepository;
+  @Autowired protected QuestDefinitionRepository questDefinitionRepository;
+  @Autowired protected ExerciseAttemptRepository exerciseAttemptRepository;
+  @Autowired protected ExerciseRepository exerciseRepository;
+  @Autowired protected FollowRepository followRepository;
+  @Autowired protected ExerciseOptionRepository exerciseOptionRepository;
+  @Autowired protected ExerciseAttemptOptionRepository exerciseAttemptOptionRepository;
+  @Autowired protected UserDailyQuestRepository userDailyQuestRepository;
+  @Autowired protected MonthlyChallengeDefinitionRepository monthlyChallengeDefinitionRepository;
+  @Autowired protected UserMonthlyChallengeRepository userMonthlyChallengeRepository;
+  @Autowired protected UserRepository userRepository;
+  @Autowired protected LessonRepository lessonRepository;
+  @Autowired protected LessonCompletionRepository lessonCompletionRepository;
+  @Autowired protected UserCourseProgressRepository userCourseProgressRepository;
 
   @BeforeAll
   static void restAssuredLogging() {

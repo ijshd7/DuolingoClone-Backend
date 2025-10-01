@@ -19,13 +19,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public class UnitControllerIT extends AbstractIntegrationTest {
 
-  @Autowired LessonRepository lessonRepo;
-
   @BeforeEach
   void seed() {
-    lessonRepo.deleteAll();
+    lessonRepository.deleteAll();
 
-    lessonRepo.saveAll(
+    lessonRepository.saveAll(
         List.of(
             makeLesson(LESSON_1_TITLE, 2, 1, "Exercise"),
             makeLesson(LESSON_2_TITLE, 2, 2, "Exercise"),

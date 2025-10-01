@@ -1,9 +1,6 @@
 package com.testingpractice.duoclonebackend.testutils;
 
-import com.testingpractice.duoclonebackend.entity.Lesson;
-import com.testingpractice.duoclonebackend.entity.LessonCompletion;
-import com.testingpractice.duoclonebackend.entity.LessonCompletionId;
-import com.testingpractice.duoclonebackend.entity.Unit;
+import com.testingpractice.duoclonebackend.entity.*;
 
 import java.sql.Timestamp;
 
@@ -19,6 +16,47 @@ public class TestUtils {
             .color("GREEN")
             .animationPath("Default animation path")
         .build();
+  }
+
+  public static QuestDefinition makeQuestDefition (String code, Integer target, Integer rewardPoints, boolean active) {
+    return QuestDefinition.builder().code(code).target(target).rewardPoints(rewardPoints).active(active).build();
+  }
+
+  public static MonthlyChallengeDefinition makeMonthlyChallengeDefinition (String code, Integer target, Integer rewardPoints, boolean active) {
+    return MonthlyChallengeDefinition.builder().code(code).target(target).rewardPoints(rewardPoints).active(active).build();
+  }
+
+  public static User makeUser(Integer currenCourseId, String username, String firstName, String lastName, String email, String pfpSrc, Integer points, Timestamp createdAt, Timestamp lastSubmission, Integer streakLength) {
+    return User.builder().currentCourseId(1).username(username).firstName(firstName).lastName(lastName).email(email).pfpSrc(pfpSrc).points(points).createdAt(createdAt).lastSubmission(lastSubmission).streakLength(streakLength).build();
+  }
+
+  public static UserCourseProgress makeUserCourseProgress(Integer userId, Integer courseId, Boolean isComplete, Integer currentLessonId) {
+    return UserCourseProgress.builder().userId(userId).courseId(courseId).isComplete(isComplete).currentLessonId(currentLessonId).build();
+  }
+
+  public static Section makeSection(String title, Integer courseId, Integer orderIndex) {
+    return Section.builder().title(title).courseId(courseId).orderIndex(orderIndex).build();
+  }
+
+  public static Exercise makeExercise(Integer lessonId, String prompt, Integer orderIndex) {
+    return Exercise.builder().lessonId(lessonId).prompt(prompt).orderIndex(orderIndex).type("CLOZE").build();
+  }
+
+  public static ExerciseAttempt makeExerciseAttempt(
+          Integer exerciseId, Integer userId, boolean isChecked, Timestamp submittedAt, Integer optionId, Integer score
+  ) {
+    return ExerciseAttempt.builder()
+            .exerciseId(exerciseId)
+            .userId(userId)
+            .isChecked(isChecked)
+            .submittedAt(submittedAt)
+            .optionId(optionId)
+            .score(score)
+            .build();
+  }
+
+  public static Course makeCourse(String title) {
+    return Course.builder().title(title).imgSrc("Default").build();
   }
 
   public static Lesson makeLesson(String title, Integer unitId, Integer orderIndex, String lessonType) {
