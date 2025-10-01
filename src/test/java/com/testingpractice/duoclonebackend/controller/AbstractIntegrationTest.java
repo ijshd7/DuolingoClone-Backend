@@ -60,7 +60,7 @@ public abstract class AbstractIntegrationTest {
     r.add("spring.datasource.username", MYSQL::getUsername);
     r.add("spring.datasource.password", MYSQL::getPassword);
     r.add("spring.datasource.driver-class-name", () -> "com.mysql.cj.jdbc.Driver");
-    r.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop"); // or update/validate
+    r.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
     r.add("spring.jpa.properties.hibernate.dialect",
             () -> "org.hibernate.dialect.MySQL8Dialect");
   }
@@ -135,7 +135,6 @@ public abstract class AbstractIntegrationTest {
 
     jdbc.execute("SET FOREIGN_KEY_CHECKS = 0");
 
-    // Use TRUNCATE for all tables to ensure a clean state and reset auto-increment
     jdbc.execute("TRUNCATE TABLE users");
     jdbc.execute("ALTER TABLE users AUTO_INCREMENT = 1");
     jdbc.execute("TRUNCATE TABLE course");

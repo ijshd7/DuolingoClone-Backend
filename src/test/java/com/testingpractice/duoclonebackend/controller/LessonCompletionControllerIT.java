@@ -84,8 +84,8 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
     List<Exercise> savedExercises = exerciseRepository.saveAll(
             List.of(
                     makeExercise(completedLessonId, "Translate", 1),
-                    makeExercise(completedLessonId, "Translate", 1),
-                    makeExercise(completedLessonId, "Translate", 1)
+                    makeExercise(completedLessonId, "Translate", 2),
+                    makeExercise(completedLessonId, "Translate", 3)
             )
     );
 
@@ -127,34 +127,7 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
 
   }
 
-  @Test
-  void submitLesson_happyPath_returnsCorrectResponse_noUpdatedLessonId () {
-    Integer userId = setupUserCompletionForTest(0, 0, 1, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2);
-    Integer lessonId = previousLesson.getId();
-    Integer currentLessonId = currentCourseLesson.getId();
 
-    LessonCompleteResponse response =
-        given()
-                .header("X-Test-User-Id", userId)
-            .contentType("application/json")
-            .body(
-                Map.of(
-                    "lessonId", lessonId,
-                    "courseId", course1.getId()))
-            .when()
-            .post(pathConstants.LESSONS_COMPLETIONS + pathConstants.SUBMIT_COMPLETED_LESSON)
-            .then()
-            .statusCode(200)
-            .extract()
-            .as(LessonCompleteResponse.class);
-
-    assertThat(response.userId()).isEqualTo(userId);
-    assertThat(response.totalScore()).isLessThanOrEqualTo(5);
-    assertThat(response.accuracy()).isEqualTo(0);
-    assertThat(response.updatedUserCourseProgress().currentLessonId()).isEqualTo(currentLessonId);
-    assertThat(response.newUserScore()).isLessThanOrEqualTo(5);
-
-  }
 
   @Test
   void submitLesson_happyPath_returnsCorrectResponse () {
@@ -185,6 +158,36 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
     assertThat(response.accuracy()).isEqualTo(100);
     assertThat(response.message()).isNotNull();
     assertThat(response.updatedUserCourseProgress().currentLessonId()).isEqualTo(nextLessonId);
+
+  }
+
+
+  @Test
+  void submitLesson_happyPath_returnsCorrectResponse_noUpdatedLessonId () {
+    Integer userId = setupUserCompletionForTest(0, 0, 1, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2);
+    Integer lessonId = previousLesson.getId();
+    Integer currentLessonId = currentCourseLesson.getId();
+
+    LessonCompleteResponse response =
+            given()
+                    .header("X-Test-User-Id", userId)
+                    .contentType("application/json")
+                    .body(
+                            Map.of(
+                                    "lessonId", lessonId,
+                                    "courseId", course1.getId()))
+                    .when()
+                    .post(pathConstants.LESSONS_COMPLETIONS + pathConstants.SUBMIT_COMPLETED_LESSON)
+                    .then()
+                    .statusCode(200)
+                    .extract()
+                    .as(LessonCompleteResponse.class);
+
+    assertThat(response.userId()).isEqualTo(userId);
+    assertThat(response.totalScore()).isLessThanOrEqualTo(5);
+    assertThat(response.accuracy()).isEqualTo(0);
+    assertThat(response.updatedUserCourseProgress().currentLessonId()).isEqualTo(currentLessonId);
+    assertThat(response.newUserScore()).isLessThanOrEqualTo(5);
 
   }
 
