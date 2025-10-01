@@ -1,7 +1,11 @@
 package com.testingpractice.duoclonebackend.testutils;
 
 import com.testingpractice.duoclonebackend.entity.Lesson;
+import com.testingpractice.duoclonebackend.entity.LessonCompletion;
+import com.testingpractice.duoclonebackend.entity.LessonCompletionId;
 import com.testingpractice.duoclonebackend.entity.Unit;
+
+import java.sql.Timestamp;
 
 public class TestUtils {
 
@@ -17,7 +21,19 @@ public class TestUtils {
         .build();
   }
 
-  public static Lesson makeLesson(String title, Integer unitId, Integer orderIndex) {
-    return Lesson.builder().title(title).unitId(unitId).orderIndex(orderIndex).build();
+  public static Lesson makeLesson(String title, Integer unitId, Integer orderIndex, String lessonType) {
+    return Lesson.builder().title(title).unitId(unitId).orderIndex(orderIndex).lessonType(lessonType).build();
   }
+
+  public static LessonCompletion makeLessonCompletion(
+          Integer userId, Integer lessonId, Integer courseId, Integer score
+  ) {
+    return LessonCompletion.builder()
+            .id(new LessonCompletionId(userId, lessonId))
+            .score(100)
+            .courseId(1)
+            .completedAt(new Timestamp(System.currentTimeMillis()))
+            .build();
+  }
+
 }

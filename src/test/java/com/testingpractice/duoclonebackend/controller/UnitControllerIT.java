@@ -27,10 +27,10 @@ public class UnitControllerIT extends AbstractIntegrationTest {
 
     lessonRepo.saveAll(
         List.of(
-            makeLesson(LESSON_1_TITLE, 2, 1),
-            makeLesson(LESSON_2_TITLE, 2, 2),
-            makeLesson(LESSON_3_TITLE, 2, 3),
-            makeLesson(LESSON_4_TITLE, 1, 3)));
+            makeLesson(LESSON_1_TITLE, 2, 1, "Exercise"),
+            makeLesson(LESSON_2_TITLE, 2, 2, "Exercise"),
+            makeLesson(LESSON_3_TITLE, 2, 3, "Exercise"),
+            makeLesson(LESSON_4_TITLE, 1, 3, "Exercise")));
   }
 
   @Test
