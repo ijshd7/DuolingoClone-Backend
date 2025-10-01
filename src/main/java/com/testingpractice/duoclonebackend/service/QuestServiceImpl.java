@@ -16,6 +16,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.testingpractice.duoclonebackend.utils.DateUtils.getDate;
+
 @Service
 @RequiredArgsConstructor
 public class QuestServiceImpl implements QuestService {
@@ -28,8 +30,7 @@ public class QuestServiceImpl implements QuestService {
   @Transactional
   public List<QuestResponse> getQuestsForUser(Integer userId) {
 
-    ZoneId tz = ZoneId.systemDefault();
-    LocalDate today = LocalDate.now(tz);
+    LocalDate today = getDate();
 
     List<QuestDefinition> questDefinitions = questDefinitionRepository.findAllByActive(true);
 
@@ -44,25 +45,18 @@ public class QuestServiceImpl implements QuestService {
   @Override
   @Transactional
   public void updateQuestProgress(Integer userId, QuestCode questCode) {
-
-    QuestDefinition questDefinition =
-        questDefinitionRepository
+    QuestDefinition questDefinition = questDefinitionRepository
             .findByCodeAndActiveTrue(questCode.name())
             .orElseThrow(() -> new ApiException(ErrorCode.QUEST_NOT_FOUND));
 
-    if (questDefinition != null) {
-      ZoneId tz = ZoneId.systemDefault();
-      LocalDate today = LocalDate.now(tz);
+    LocalDate today = getDate();
+    UserDailyQuest userDailyQuest = userDailyQuestRepository
+            .findByIdUserIdAndIdQuestDefIdAndIdDate(userId, questDefinition.getId(), today)
+            .orElseGet(() -> createNewUserDailyQuest(questDefinition, userId, today));
 
-      UserDailyQuest userDailyQuest =
-          userDailyQuestRepository
-              .findByIdUserIdAndIdQuestDefIdAndIdDate(userId, questDefinition.getId(), today)
-              .orElseGet(() -> createNewUserDailyQuest(questDefinition, userId, today));
-
-      if (userDailyQuest.getProgress() < questDefinition.getTarget()) {
-        userDailyQuest.setProgress(userDailyQuest.getProgress() + 1);
-        monthlyChallengeService.addChallengeProgress(userId);
-      }
+    if (userDailyQuest.getProgress() < questDefinition.getTarget()) {
+      userDailyQuest.setProgress(userDailyQuest.getProgress() + 1);
+      monthlyChallengeService.addChallengeProgress(userId);
     }
   }
 
@@ -97,27 +91,14 @@ public class QuestServiceImpl implements QuestService {
     }
   }
 
-  @Override
   @Transactional
   public UserDailyQuest createNewUserDailyQuest(
-      QuestDefinition questDefinition, Integer userId, LocalDate today) {
+          QuestDefinition questDefinition, Integer userId, LocalDate today) {
 
-    UserDailyQuestId id = new UserDailyQuestId();
-    id.setUserId(userId);
-    id.setQuestDefId(questDefinition.getId());
-    id.setDate(today);
+    userDailyQuestRepository.upsertCreate(userId, questDefinition.getId(), today);
 
-    if (!userDailyQuestRepository.existsById(id)) {
-      UserDailyQuest udq = new UserDailyQuest();
-      udq.setId(id);
-      udq.setProgress(0);
-      udq.setRewardClaimed(false);
-      userDailyQuestRepository.save(udq);
-      return udq;
-    } else {
-      return userDailyQuestRepository
-          .findById(id)
-          .orElseThrow(() -> new ApiException(ErrorCode.USER_DAILY_QUEST_NOT_FOUND));
-    }
+    return userDailyQuestRepository
+            .findByIdUserIdAndIdQuestDefIdAndIdDate(userId, questDefinition.getId(), today)
+            .orElseThrow(() -> new ApiException(ErrorCode.USER_DAILY_QUEST_NOT_FOUND));
   }
 }
