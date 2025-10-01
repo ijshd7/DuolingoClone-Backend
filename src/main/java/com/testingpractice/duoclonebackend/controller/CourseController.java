@@ -1,8 +1,7 @@
-package com.testingpractice.duoclonebackend.domain.controller;
+package com.testingpractice.duoclonebackend.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.ChangeCourseDto;
-import com.testingpractice.duoclonebackend.dto.CourseDTO;
 import com.testingpractice.duoclonebackend.dto.NewCourseRequest;
 import com.testingpractice.duoclonebackend.entity.Course;
 import com.testingpractice.duoclonebackend.service.*;

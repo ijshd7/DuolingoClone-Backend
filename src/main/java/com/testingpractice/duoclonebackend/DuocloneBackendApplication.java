@@ -17,6 +17,7 @@ public class DuocloneBackendApplication {
 
 
   @Configuration
+  @Profile("!test") // Add this line to exclude it from test profile
   class ClockConfig {
     @Bean Clock clock() { return Clock.systemDefaultZone(); }
   }

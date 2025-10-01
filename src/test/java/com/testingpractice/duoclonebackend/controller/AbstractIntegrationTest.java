@@ -80,6 +80,8 @@ public abstract class AbstractIntegrationTest {
   @Autowired protected LessonCompletionRepository lessonCompletionRepository;
   @Autowired protected UserCourseProgressRepository userCourseProgressRepository;
 
+
+
   @BeforeAll
   static void restAssuredLogging() {
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
@@ -89,8 +91,8 @@ public abstract class AbstractIntegrationTest {
   void restAssuredBase() {
     RestAssured.baseURI = "http://localhost";
     RestAssured.port = port;
+    cleanTestData();
   }
-
 
 
   @TestConfiguration(proxyBeanMethods = false)
@@ -119,5 +121,26 @@ public abstract class AbstractIntegrationTest {
       return http.build();
     }
   }
+
+  protected void cleanTestData() {
+    exerciseAttemptOptionRepository.deleteAll();
+    exerciseAttemptRepository.deleteAll();
+    userDailyQuestRepository.deleteAll();
+    userMonthlyChallengeRepository.deleteAll();
+    followRepository.deleteAll();
+    exerciseOptionRepository.deleteAll();
+    exerciseRepository.deleteAll();
+    lessonCompletionRepository.deleteAll();
+    userCourseProgressRepository.deleteAll();
+    lessonRepository.deleteAll();
+    unitRepository.deleteAll();
+    sectionRepository.deleteAll();
+    courseRepository.deleteAll();
+    questDefinitionRepository.deleteAll();
+    monthlyChallengeDefinitionRepository.deleteAll();
+    userRepository.deleteAll();
+  }
+
+
 
 }
