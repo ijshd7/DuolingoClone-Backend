@@ -3,7 +3,6 @@ package com.testingpractice.duoclonebackend.controller;
 import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
 import static com.testingpractice.duoclonebackend.testutils.TestUtils.*;
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
@@ -26,15 +25,11 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
     private Lesson l1;
     private Lesson l2;
     private Lesson l3;
-  private Lesson previousLesson;
-  private Lesson currentCourseLesson;
-  private Lesson nextLesson;
+  private Lesson l4;
+  private Lesson l5;
+  private Lesson l6;
 
   private Course course1;
-
-  private Exercise e1;
-  private Exercise e2;
-  private Exercise e3;
 
 
   @BeforeEach
@@ -68,10 +63,10 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
     l2 = savedLessons.get(1);
     l3 = savedLessons.get(2);
 
-    previousLesson = savedLessons.get(3);
-    currentCourseLesson = savedLessons.get(4);
-    nextLesson = savedLessons.get(5);
-    Integer completedLessonId = currentCourseLesson.getId();
+    l4 = savedLessons.get(3);
+    l5 = savedLessons.get(4);
+    l6 = savedLessons.get(5);
+    Integer completedLessonId = l5.getId();
 
     questDefinitionRepository.saveAll(List.of(
             makeQuestDefition("STREAK", 1, 10, true),
@@ -81,29 +76,26 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
 
     monthlyChallengeDefinitionRepository.save(makeMonthlyChallengeDefinition("COMPLETE_QUESTS", 30, 200, true));
 
-    List<Exercise> savedExercises = exerciseRepository.saveAll(
-            List.of(
-                    makeExercise(completedLessonId, "Translate", 1),
-                    makeExercise(completedLessonId, "Translate", 2),
-                    makeExercise(completedLessonId, "Translate", 3)
-            )
-    );
-
-    e1 = savedExercises.get(0);
-    e2 = savedExercises.get(1);
-    e3 = savedExercises.get(2);
-
-
-
-
   }
 
-  private Integer setupUserCompletionForTest (Integer correctScores, Integer usersPoints, Integer streakLength, Timestamp lastSubmission, Timestamp AttemptTime) {
+  private Integer setupUserCompletionForTest (Integer correctScores, Integer submittedLessonId, Integer currentLessonId, Integer completedLessonsCount, Integer usersPoints, Integer streakLength, Timestamp lastSubmission, Timestamp AttemptTime) {
 
     User user = userRepository.save(makeUser(course1.getId(), "testuser", "test", "user", "emailOne", "default", usersPoints, FIXED_TIMESTAMP_1, lastSubmission, streakLength));
     Integer userId = user.getId();
 
-    userCourseProgressRepository.save(makeUserCourseProgress(userId, course1.getId(), false, currentCourseLesson.getId(), FIXED_TIMESTAMP_1));
+    userCourseProgressRepository.save(makeUserCourseProgress(userId, course1.getId(), false, currentLessonId, FIXED_TIMESTAMP_1));
+
+    List<Exercise> savedExercises = exerciseRepository.saveAll(
+            List.of(
+                    makeExercise(submittedLessonId, "Translate", 1),
+                    makeExercise(submittedLessonId, "Translate", 2),
+                    makeExercise(submittedLessonId, "Translate", 3)
+            )
+    );
+
+    Exercise e1 = savedExercises.get(0);
+    Exercise e2 = savedExercises.get(1);
+    Exercise e3 = savedExercises.get(2);
 
     List<Integer> exercises = List.of(
             e1.getId(),
@@ -111,45 +103,69 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
             e3.getId()
     );
 
+    List<Integer> completedLessons = List.of(
+            l1.getId(),
+            l2.getId(),
+            l3.getId(),
+            l4.getId(),
+            l5.getId(),
+            l6.getId()
+    );
+
     for (int i = 0; i < 3; i++) {
       Integer score = i < correctScores ? 5 : 0;
       exerciseAttemptRepository.save(makeExerciseAttempt(exercises.get(i), userId, false, AttemptTime, i + 1, score));
     }
 
-    lessonCompletionRepository.saveAll(
-            List.of(
-                    makeLessonCompletion(userId, l1.getId(), course1.getId(), 15),
-                    makeLessonCompletion(userId, l2.getId(), course1.getId(), 20),
-                    makeLessonCompletion(userId, l3.getId(), course1.getId(), 10),
-                    makeLessonCompletion(userId, previousLesson.getId(), course1.getId(), 10)));
+    for (int i = 0; i < completedLessonsCount; i++) {
+      Integer lessonId = completedLessons.get(i);
+      lessonCompletionRepository.save(makeLessonCompletion(userId, lessonId, course1.getId(), 10));
+    }
 
     return userId;
 
   }
 
 
+  @Test
+  void submitLesson_happyPath_endCourse_returnsCourseComplete () {
+
+    Integer lessonId = l6.getId();
+    Integer userId = setupUserCompletionForTest(3, lessonId, l6.getId(), 5, 0, 1, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2);
+
+
+    LessonCompleteResponse response = submitLessonBody(userId, lessonId, course1.getId());
+
+    assertThat(response.updatedUserCourseProgress().isComplete()).isTrue();
+    assertThat(response.message()).isNotNull();
+    assertThat(response.updatedUserCourseProgress().currentLessonId().equals(lessonId));
+
+
+  }
+
+  @Test
+  void submitLesson_happyPath_jumpAhead_returnsListToUpdate () {
+
+    Integer lessonId = l5.getId();
+    Integer userId = setupUserCompletionForTest(3, lessonId, l3.getId(), 2, 0, 1, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2);
+    Integer nextLessonId = l6.getId();
+
+    LessonCompleteResponse response = submitLessonBody(userId, lessonId, course1.getId());
+
+    assertThat(response.updatedUserCourseProgress().currentLessonId()).isEqualTo(nextLessonId);
+    assertThat(response.lessonsToUpdate().size()).isEqualTo(2);
+
+  }
+
 
   @Test
   void submitLesson_happyPath_returnsCorrectResponse () {
 
-    Integer userId = setupUserCompletionForTest(3, 0, 1, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2);
-    Integer lessonId = currentCourseLesson.getId();
-    Integer nextLessonId = nextLesson.getId();
+    Integer lessonId = l5.getId();
+    Integer userId = setupUserCompletionForTest(3, lessonId, l5.getId(), 4, 0, 1, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2);
+    Integer nextLessonId = l6.getId();
 
-    LessonCompleteResponse response =
-        given()
-                .header("X-Test-User-Id", userId)
-            .contentType("application/json")
-            .body(
-                Map.of(
-                    "lessonId", lessonId,
-                    "courseId", course1.getId()))
-            .when()
-            .post(pathConstants.LESSONS_COMPLETIONS + pathConstants.SUBMIT_COMPLETED_LESSON)
-            .then()
-            .statusCode(200)
-            .extract()
-            .as(LessonCompleteResponse.class);
+    LessonCompleteResponse response = submitLessonBody(userId, lessonId, course1.getId());
 
     assertThat(response.userId()).isEqualTo(userId);
     assertThat(response.lessonId()).isEqualTo(lessonId);
@@ -164,31 +180,35 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
 
   @Test
   void submitLesson_happyPath_returnsCorrectResponse_noUpdatedLessonId () {
-    Integer userId = setupUserCompletionForTest(0, 0, 1, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2);
-    Integer lessonId = previousLesson.getId();
-    Integer currentLessonId = currentCourseLesson.getId();
 
-    LessonCompleteResponse response =
-            given()
-                    .header("X-Test-User-Id", userId)
-                    .contentType("application/json")
-                    .body(
-                            Map.of(
-                                    "lessonId", lessonId,
-                                    "courseId", course1.getId()))
-                    .when()
-                    .post(pathConstants.LESSONS_COMPLETIONS + pathConstants.SUBMIT_COMPLETED_LESSON)
-                    .then()
-                    .statusCode(200)
-                    .extract()
-                    .as(LessonCompleteResponse.class);
+    Integer lessonId = l4.getId();
+    Integer userId = setupUserCompletionForTest(0, lessonId, l5.getId(), 4, 0, 1, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2);
+    Integer currentLessonId = l5.getId();
 
+    LessonCompleteResponse response = submitLessonBody(userId, lessonId, course1.getId());
     assertThat(response.userId()).isEqualTo(userId);
     assertThat(response.totalScore()).isLessThanOrEqualTo(5);
     assertThat(response.accuracy()).isEqualTo(0);
     assertThat(response.updatedUserCourseProgress().currentLessonId()).isEqualTo(currentLessonId);
     assertThat(response.newUserScore()).isLessThanOrEqualTo(5);
 
+  }
+
+  private LessonCompleteResponse submitLessonBody (Integer userId, Integer lessonId, Integer courseId) {
+    return
+        given()
+            .header("X-Test-User-Id", userId)
+            .contentType("application/json")
+            .body(
+                Map.of(
+                    "lessonId", lessonId,
+                    "courseId", courseId))
+            .when()
+            .post(pathConstants.LESSONS_COMPLETIONS + pathConstants.SUBMIT_COMPLETED_LESSON)
+            .then()
+            .statusCode(200)
+            .extract()
+            .as(LessonCompleteResponse.class);
   }
 
 
