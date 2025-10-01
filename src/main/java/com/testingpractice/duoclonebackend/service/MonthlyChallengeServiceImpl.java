@@ -8,7 +8,10 @@ import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.repository.MonthlyChallengeDefinitionRepository;
 import com.testingpractice.duoclonebackend.repository.UserMonthlyChallengeRepository;
+import com.testingpractice.duoclonebackend.utils.DateUtils;
 import jakarta.transaction.Transactional;
+
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +23,19 @@ public class MonthlyChallengeServiceImpl implements MonthlyChallengeService {
 
   private final MonthlyChallengeDefinitionRepository monthlyChallengeDefinitionRepository;
   private final UserMonthlyChallengeRepository userMonthlyChallengeRepository;
+  private final Clock clock;
 
   @Override
   @Transactional
   public QuestResponse getMonthlyChallengeForUser(Integer userId) {
-    ZoneId tz = ZoneId.systemDefault();
-    LocalDate today = LocalDate.now(tz);
+    LocalDate today = DateUtils.today(clock);
     MonthlyChallengeDefinition def = monthlyChallengeDefinitionRepository.findByActive(true);
 
     userMonthlyChallengeRepository.upsertCreate(userId, def.getId(), today.getYear(), today.getMonthValue());
 
     UserMonthlyChallengeId userMonthlyChallengeId = getMonthlyChallengeId(userId, def.getId(), today);
 
-    var umc = userMonthlyChallengeRepository.findById(userMonthlyChallengeId)
+    UserMonthlyChallenge umc = userMonthlyChallengeRepository.findById(userMonthlyChallengeId)
             .orElseThrow();
 
     return new QuestResponse(def.getCode(), umc.getProgress(), def.getTarget(), def.isActive());
@@ -41,16 +44,16 @@ public class MonthlyChallengeServiceImpl implements MonthlyChallengeService {
   @Override
   @Transactional
   public void addChallengeProgress(Integer userId) {
-    var tz = ZoneId.systemDefault();
-    var today = LocalDate.now(tz);
-    var def = monthlyChallengeDefinitionRepository.findByActive(true);
+    LocalDate today = DateUtils.today(clock);
+
+    MonthlyChallengeDefinition def = monthlyChallengeDefinitionRepository.findByActive(true);
 
     userMonthlyChallengeRepository.upsertIncrement(
             userId, def.getId(), today.getYear(), today.getMonthValue(), 1);
   }
 
   private UserMonthlyChallengeId getMonthlyChallengeId(Integer userId, Integer challengeDefId, LocalDate date) {
-    var id = new UserMonthlyChallengeId();
+    UserMonthlyChallengeId id = new UserMonthlyChallengeId();
     id.setUserId(userId);
     id.setChallengeDefId(challengeDefId);
     id.setYear(date.getYear());

@@ -20,12 +20,12 @@ public class UserDailyQuest {
 
   @EmbeddedId private UserDailyQuestId id;
 
-  @Column(nullable = false)
+  @Column
   private Integer progress = 0;
 
   @Column(name = "completed_at")
   private Timestamp completedAt;
 
-  @Column(name = "reward_claimed", nullable = false)
+  @Column(name = "reward_claimed")
   private boolean rewardClaimed = false;
 }

@@ -25,11 +25,11 @@ class UnitServiceTest {
 
     repo.saveAll(
         List.of(
-            makeUnit(UNIT_1_TITLE, 10, 1, 1),
-            makeUnit(UNIT_2_TITLE, 10, 2, 5),
-            makeUnit(UNIT_3_TITLE, 20, 1, 2)));
+            makeUnit(UNIT_1_TITLE, 1, 1, 1),
+            makeUnit(UNIT_2_TITLE, 1, 2, 5),
+            makeUnit(UNIT_3_TITLE, 2, 1, 2)));
 
-    List<UnitDto> result = service.getUnitsByCourse(10);
+    List<UnitDto> result = service.getUnitsBySection(1);
 
     assertThat(result).hasSize(2);
     assertThat(result)

@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
     Timestamp lastSubmission = user.getLastSubmission();
     if (lastSubmission != null) {
 
-      ZoneId tz = ZoneId.systemDefault(); // or user-specific
+      ZoneId tz = ZoneId.systemDefault();
 
       LocalDate today = LocalDate.now(tz);
       LocalDate lastDate = lastSubmission.toInstant().atZone(tz).toLocalDate();

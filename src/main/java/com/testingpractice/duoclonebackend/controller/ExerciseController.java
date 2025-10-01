@@ -1,4 +1,4 @@
-package com.testingpractice.duoclonebackend.domain.controller;
+package com.testingpractice.duoclonebackend.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import org.springframework.web.bind.annotation.*;

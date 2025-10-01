@@ -1,4 +1,4 @@
-package com.testingpractice.duoclonebackend.domain.controller;
+package com.testingpractice.duoclonebackend.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.LeaderboardPageDto;
@@ -22,4 +22,5 @@ public class LeaderboardController {
     limit = Math.min(Math.max(limit, 1), 100); // 1..100
     return leaderboardService.getLeaderboardPage(cursor, limit);
   }
+
 }

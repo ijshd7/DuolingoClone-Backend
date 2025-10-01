@@ -1,10 +1,13 @@
 package com.testingpractice.duoclonebackend.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MonthlyChallengeDefinition {
 
   @Id
