@@ -9,9 +9,11 @@ public class TestUtils {
     return Unit.builder()
         .title(title)
         .description("Default description")
-        .orderIndex(section)
+        .orderIndex(orderIndex)
         .courseId(courseId)
-        .section(section)
+        .sectionId(section)
+            .color("GREEN")
+            .animationPath("Default animation path")
         .build();
   }
 

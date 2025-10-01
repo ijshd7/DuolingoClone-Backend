@@ -43,6 +43,7 @@ public class Unit {
       Integer orderIndex,
       Integer courseId,
       Integer sectionId,
+      String animationPath,
       String color) {
     this.title = title;
     this.description = description;
@@ -50,5 +51,6 @@ public class Unit {
     this.courseId = courseId;
     this.sectionId = sectionId;
     this.color = color;
+    this.animationPath = animationPath;
   }
 }
