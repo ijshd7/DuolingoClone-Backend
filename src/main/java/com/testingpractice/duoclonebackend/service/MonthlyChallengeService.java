@@ -10,6 +10,4 @@ public interface MonthlyChallengeService {
 
   void addChallengeProgress(Integer userId);
 
-  UserMonthlyChallenge getUserMCOrElseCreateNew(
-      MonthlyChallengeDefinition monthlyChallengeDefinition, Integer userId, int year, int month);
 }

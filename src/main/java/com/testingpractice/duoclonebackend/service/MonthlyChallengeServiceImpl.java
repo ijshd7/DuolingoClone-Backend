@@ -24,66 +24,38 @@ public class MonthlyChallengeServiceImpl implements MonthlyChallengeService {
   @Override
   @Transactional
   public QuestResponse getMonthlyChallengeForUser(Integer userId) {
-
     ZoneId tz = ZoneId.systemDefault();
     LocalDate today = LocalDate.now(tz);
-    int year = today.getYear();
-    int month = today.getMonthValue();
+    MonthlyChallengeDefinition def = monthlyChallengeDefinitionRepository.findByActive(true);
 
-    MonthlyChallengeDefinition monthlyChallengeDefinition =
-        monthlyChallengeDefinitionRepository.findByActive(true);
+    userMonthlyChallengeRepository.upsertCreate(userId, def.getId(), today.getYear(), today.getMonthValue());
 
-    UserMonthlyChallenge userMonthlyChallenge =
-        getUserMCOrElseCreateNew(monthlyChallengeDefinition, userId, year, month);
-    return new QuestResponse(
-        monthlyChallengeDefinition.getCode(),
-        userMonthlyChallenge.getProgress(),
-        monthlyChallengeDefinition.getTarget(),
-        monthlyChallengeDefinition.isActive());
+    UserMonthlyChallengeId userMonthlyChallengeId = getMonthlyChallengeId(userId, def.getId(), today);
+
+    var umc = userMonthlyChallengeRepository.findById(userMonthlyChallengeId)
+            .orElseThrow();
+
+    return new QuestResponse(def.getCode(), umc.getProgress(), def.getTarget(), def.isActive());
   }
 
   @Override
   @Transactional
   public void addChallengeProgress(Integer userId) {
+    var tz = ZoneId.systemDefault();
+    var today = LocalDate.now(tz);
+    var def = monthlyChallengeDefinitionRepository.findByActive(true);
 
-    ZoneId tz = ZoneId.systemDefault();
-    LocalDate today = LocalDate.now(tz);
-    int year = today.getYear();
-    int month = today.getMonthValue();
-
-    MonthlyChallengeDefinition monthlyChallengeDefinition =
-        monthlyChallengeDefinitionRepository.findByActive(true);
-    UserMonthlyChallenge userMonthlyChallenge =
-        getUserMCOrElseCreateNew(monthlyChallengeDefinition, userId, year, month);
-
-    if (userMonthlyChallenge.getProgress() < monthlyChallengeDefinition.getTarget()) {
-      userMonthlyChallenge.setProgress(userMonthlyChallenge.getProgress() + 1);
-      userMonthlyChallengeRepository.save(userMonthlyChallenge);
-    }
+    userMonthlyChallengeRepository.upsertIncrement(
+            userId, def.getId(), today.getYear(), today.getMonthValue(), 1);
   }
 
-  @Override
-  @Transactional
-  public UserMonthlyChallenge getUserMCOrElseCreateNew(
-      MonthlyChallengeDefinition monthlyChallengeDefinition, Integer userId, int year, int month) {
-
-    UserMonthlyChallengeId id = new UserMonthlyChallengeId();
+  private UserMonthlyChallengeId getMonthlyChallengeId(Integer userId, Integer challengeDefId, LocalDate date) {
+    var id = new UserMonthlyChallengeId();
     id.setUserId(userId);
-    id.setChallengeDefId(monthlyChallengeDefinition.getId());
-    id.setYear(year);
-    id.setMonth(month);
-
-    if (!userMonthlyChallengeRepository.existsById(id)) {
-      UserMonthlyChallenge umq = new UserMonthlyChallenge();
-      umq.setId(id);
-      umq.setProgress(0);
-      umq.setRewardClaimed(false);
-      userMonthlyChallengeRepository.save(umq);
-      return umq;
-    } else {
-      return userMonthlyChallengeRepository
-          .findById(id)
-          .orElseThrow(() -> new ApiException(ErrorCode.USER_DAILY_QUEST_NOT_FOUND));
-    }
+    id.setChallengeDefId(challengeDefId);
+    id.setYear(date.getYear());
+    id.setMonth(date.getMonthValue());
+    return id;
   }
+
 }
