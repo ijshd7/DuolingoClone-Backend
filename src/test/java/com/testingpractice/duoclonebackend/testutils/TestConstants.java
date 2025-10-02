@@ -33,10 +33,23 @@ public class TestConstants {
   public static final LocalDate FIXED_DATE_2 = LocalDate.of(2025, 1, 2);
   public static final LocalDate FIXED_DATE_3 = LocalDate.of(2025, 1, 3);
 
+  // For month 2 (February)
+  public static final LocalDate FIXED_DATE_2_1 = LocalDate.of(2025, 2, 1);
+  public static final LocalDate FIXED_DATE_2_2 = LocalDate.of(2025, 2, 2);
+  public static final LocalDate FIXED_DATE_2_3 = LocalDate.of(2025, 2, 3);
+
   public static final Timestamp FIXED_TIMESTAMP_1 =
           Timestamp.valueOf(FIXED_DATE_1.atStartOfDay());
   public static final Timestamp FIXED_TIMESTAMP_2 =
           Timestamp.valueOf(FIXED_DATE_2.atStartOfDay());
   public static final Timestamp FIXED_TIMESTAMP_3 =
           Timestamp.valueOf(FIXED_DATE_3.atStartOfDay());
+
+  public static final Timestamp FIXED_TIMESTAMP_2_1 =
+          Timestamp.valueOf(FIXED_DATE_2_1.atStartOfDay());
+  public static final Timestamp FIXED_TIMESTAMP_2_2 =
+          Timestamp.valueOf(FIXED_DATE_2_2.atStartOfDay());
+  public static final Timestamp FIXED_TIMESTAMP_2_3 =
+          Timestamp.valueOf(FIXED_DATE_2_3.atStartOfDay());
+
 }

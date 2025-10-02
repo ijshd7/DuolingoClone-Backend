@@ -59,6 +59,8 @@ public abstract class AbstractIntegrationTest {
    protected Lesson l5;
    protected Lesson l6;
 
+   protected MonthlyChallengeDefinition monthlyChallengeDefinition;
+
 
   @Container
   @SuppressWarnings("resource")
@@ -160,6 +162,7 @@ public abstract class AbstractIntegrationTest {
     jdbc.execute("TRUNCATE TABLE sections");
     jdbc.execute("TRUNCATE TABLE units");
     jdbc.execute("TRUNCATE TABLE lessons");
+    jdbc.execute("TRUNCATE TABLE user_monthly_challenge");
     jdbc.execute("TRUNCATE TABLE exercises");
     jdbc.execute("TRUNCATE TABLE exercise_attempts");
     jdbc.execute("TRUNCATE TABLE lesson_completions");
@@ -217,7 +220,7 @@ public abstract class AbstractIntegrationTest {
             makeQuestDefition("PERFECT", 1, 10, true)
     ));
 
-    monthlyChallengeDefinitionRepository.save(makeMonthlyChallengeDefinition("COMPLETE_QUESTS", 30, 200, true));
+    monthlyChallengeDefinition = monthlyChallengeDefinitionRepository.save(makeMonthlyChallengeDefinition("COMPLETE_QUESTS", 30, 200, true));
 
 
   }
