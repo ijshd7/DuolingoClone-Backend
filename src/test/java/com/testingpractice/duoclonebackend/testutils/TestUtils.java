@@ -48,6 +48,20 @@ public class TestUtils {
             .build();
   }
 
+  public static UserDailyQuest makeUserDailyQuest (Integer userId, Integer defId, LocalDate today, Integer progress) {
+
+    return UserDailyQuest.builder()
+            .id(UserDailyQuestId.builder()
+                    .userId(userId)
+                    .questDefId(defId)
+                    .date(today)
+                    .build())
+            .progress(progress)
+            .rewardClaimed(false)
+            .completedAt(null)
+            .build();
+  }
+
   public static Course makeCourse(String title, String imgSrc) {
     return Course.builder().title(title).imgSrc(imgSrc).build();
   }
