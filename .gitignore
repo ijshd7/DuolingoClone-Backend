@@ -20,6 +20,7 @@ target/
 *.ipr
 *.env
 
+application.yaml
 
 ### NetBeans ###
 /nbproject/private/
