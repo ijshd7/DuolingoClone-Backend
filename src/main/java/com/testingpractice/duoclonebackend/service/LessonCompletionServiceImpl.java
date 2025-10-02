@@ -58,9 +58,8 @@ public class LessonCompletionServiceImpl implements LessonCompletionService {
     // -- UPDATE USER STREAK -- //
     NewStreakCount newStreakCount = streakService.updateUserStreak(user);
 
-
     // -- UPDATE USERS NEXT LESSON -- //
-    List<LessonDto> passedLessons = courseProgressService.updateUsersNextLesson(userId, courseId, lesson, isCompleted, scoreForLesson);
+    List<LessonDto> passedLessons = courseProgressService.updateUsersNextLesson(user, courseId, lesson, isCompleted, scoreForLesson);
     UserCourseProgressDto userCourseProgressDto =
         userService.getUserCourseProgress(courseId, userId);
 

@@ -34,6 +34,6 @@ class UnitServiceTest {
     assertThat(result).hasSize(2);
     assertThat(result)
         .extracting(UnitDto::title)
-        .containsExactlyInAnyOrder(UNIT_1_TITLE, UNIT_2_TITLE);
+        .containsExactlyInAnyOrder(UNIT_1_TITLE, UNIT_3_TITLE);
   }
 }
