@@ -13,7 +13,6 @@ import static com.testingpractice.duoclonebackend.testutils.TestUtils.makeUserMo
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MonthlyChallengeControllerIT extends AbstractIntegrationTest{
 
     @BeforeEach

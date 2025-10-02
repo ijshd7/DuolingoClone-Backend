@@ -10,18 +10,13 @@ import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.LessonCompleteResponse;
 import com.testingpractice.duoclonebackend.entity.*;
 
-import java.sql.Timestamp;
-import java.util.List;
 import java.util.Map;
 
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
 class LessonCompletionControllerIT extends AbstractIntegrationTest {
 
   @BeforeEach

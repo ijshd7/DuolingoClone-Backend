@@ -25,11 +25,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import support.Containers;
 
 import java.sql.Timestamp;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Stream;
@@ -43,7 +46,6 @@ import static com.testingpractice.duoclonebackend.testutils.TestUtils.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Testcontainers
 @Import({
         AbstractIntegrationTest.FixedClockConfig.class,
         AbstractIntegrationTest.TestSecurityConfig.class
@@ -51,39 +53,23 @@ import static com.testingpractice.duoclonebackend.testutils.TestUtils.*;
 public abstract class AbstractIntegrationTest {
 
 
-   protected Course course1;
-   protected Lesson l1;
-   protected Lesson l2;
-   protected Lesson l3;
-   protected Lesson l4;
-   protected Lesson l5;
-   protected Lesson l6;
-
-   protected MonthlyChallengeDefinition monthlyChallengeDefinition;
-   protected List<QuestDefinition> questDefinitions;
 
 
-  @Container
-  @SuppressWarnings("resource")
-  protected static final MySQLContainer<?> MYSQL =
-          new MySQLContainer<>("mysql:8.0.39")
-                  .withDatabaseName("duotest")
-                  .withUsername("test")
-                  .withPassword("test");
 
-  @LocalServerPort
-  protected int port;
+
+  static { Containers.MYSQL.isRunning(); } // forces class load/start
 
   @DynamicPropertySource
   static void mysqlProps(DynamicPropertyRegistry r) {
-    r.add("spring.datasource.url", MYSQL::getJdbcUrl);
-    r.add("spring.datasource.username", MYSQL::getUsername);
-    r.add("spring.datasource.password", MYSQL::getPassword);
-    r.add("spring.datasource.driver-class-name", () -> "com.mysql.cj.jdbc.Driver");
+    r.add("spring.datasource.url", Containers.MYSQL::getJdbcUrl);
+    r.add("spring.datasource.username", Containers.MYSQL::getUsername);
+    r.add("spring.datasource.password", Containers.MYSQL::getPassword);
     r.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-    r.add("spring.jpa.properties.hibernate.dialect",
-            () -> "org.hibernate.dialect.MySQL8Dialect");
   }
+  @LocalServerPort
+  protected int port;
+
+
 
   @Autowired protected UnitRepository unitRepository;
   @Autowired protected SectionRepository sectionRepository;
@@ -106,6 +92,24 @@ public abstract class AbstractIntegrationTest {
   JdbcTemplate jdbc;
 
 
+  protected Course course1;
+  protected Lesson l1;
+  protected Lesson l2;
+  protected Lesson l3;
+  protected Lesson l4;
+  protected Lesson l5;
+  protected Lesson l6;
+
+  protected Section s1;
+
+  protected Unit u1;
+  protected Unit u2;
+    protected Unit u3;
+
+  protected MonthlyChallengeDefinition monthlyChallengeDefinition;
+  protected List<QuestDefinition> questDefinitions;
+
+
 
   @BeforeAll
   static void restAssuredLogging() {
@@ -116,10 +120,8 @@ public abstract class AbstractIntegrationTest {
   void restAssuredBase() {
     RestAssured.baseURI = "http://localhost";
     RestAssured.port = port;
-    cleanTestData();
-    initializeCoursesSectionsAndLessons();
+    resetDb(); // keep this
   }
-
 
   @TestConfiguration(proxyBeanMethods = false)
   @Profile("test")
@@ -152,8 +154,8 @@ public abstract class AbstractIntegrationTest {
     }
   }
 
-  protected void cleanTestData() {
-
+  @BeforeEach
+  void resetDb() {
     jdbc.execute("SET FOREIGN_KEY_CHECKS = 0");
 
     jdbc.execute("TRUNCATE TABLE users");
@@ -176,8 +178,9 @@ public abstract class AbstractIntegrationTest {
     jdbc.execute("TRUNCATE TABLE exercise_options");
     jdbc.execute("TRUNCATE TABLE exercise_attempt_option");
 
-
     jdbc.execute("SET FOREIGN_KEY_CHECKS = 1");
+
+    initializeCoursesSectionsAndLessons(); // your seeding
   }
 
   protected void initializeCoursesSectionsAndLessons () {
@@ -185,17 +188,20 @@ public abstract class AbstractIntegrationTest {
 
     course1 = courseRepository.save(makeCourse("Course 1", "defaultImg"));
 
-    Section s1 = sectionRepository.save(makeSection("Section 1", course1.getId(), 1));
+    s1 = sectionRepository.save(makeSection("Section 1", course1.getId(), 1));
     Integer s1Id = s1.getId();
 
     List<Unit> units = unitRepository.saveAll(
             List.of(
                     makeUnit("Unit 1", course1.getId(), s1Id, 1), makeUnit("Unit 2", course1.getId(), s1Id, 2), makeUnit("Unit 3", course1.getId(), s1Id, 3)));
 
-    Integer u1Id = units.get(0).getId();
-    Integer u2Id = units.get(1).getId();
-    Integer u3Id = units.get(2).getId();
+    u1 = units.get(0);
+    u2 = units.get(1);
+    u3 = units.get(2);
 
+    Integer u1Id = u1.getId();
+    Integer u2Id = u2.getId();
+    Integer u3Id = u3.getId();
 
     List<Lesson> savedLessons =
             lessonRepository.saveAll(

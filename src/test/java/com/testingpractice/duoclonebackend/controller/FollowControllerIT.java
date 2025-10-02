@@ -16,11 +16,9 @@ import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
 import static com.testingpractice.duoclonebackend.testutils.TestUtils.makeFollow;
 import static com.testingpractice.duoclonebackend.testutils.TestUtils.makeUser;
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FollowControllerIT extends AbstractIntegrationTest{
 
     @BeforeEach
