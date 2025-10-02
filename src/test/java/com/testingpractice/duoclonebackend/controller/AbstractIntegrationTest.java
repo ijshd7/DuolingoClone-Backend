@@ -227,12 +227,12 @@ public abstract class AbstractIntegrationTest {
   }
 
 
-  protected Integer setupUserCompletionForTest (Integer correctScores, Integer submittedLessonId, Integer currentLessonId, Integer completedLessonsCount, Integer usersPoints, Integer streakLength, Timestamp lastSubmission, Timestamp AttemptTime) {
+  protected Integer setupUserCompletionForTest (Integer correctScores,Integer courseId, Integer submittedLessonId, Integer currentLessonId, Integer completedLessonsCount, Integer usersPoints, Integer streakLength, Timestamp lastSubmission, Timestamp AttemptTime) {
 
-    User user = userRepository.save(makeUser(course1.getId(), "testuser", "test", "user", "emailOne", "default", usersPoints, FIXED_TIMESTAMP_1, lastSubmission, streakLength));
+    User user = userRepository.save(makeUser(courseId, "testuser", "test", "user", "emailOne", "default", usersPoints, FIXED_TIMESTAMP_1, lastSubmission, streakLength));
     Integer userId = user.getId();
 
-    userCourseProgressRepository.save(makeUserCourseProgress(userId, course1.getId(), false, currentLessonId, FIXED_TIMESTAMP_1));
+    userCourseProgressRepository.save(makeUserCourseProgress(userId, courseId, false, currentLessonId, FIXED_TIMESTAMP_1));
 
     List<Exercise> savedExercises = exerciseRepository.saveAll(
             List.of(

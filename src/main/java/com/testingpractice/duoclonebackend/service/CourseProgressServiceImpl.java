@@ -3,10 +3,7 @@ package com.testingpractice.duoclonebackend.service;
 import com.testingpractice.duoclonebackend.dto.CourseDTO;
 import com.testingpractice.duoclonebackend.dto.LessonDto;
 import com.testingpractice.duoclonebackend.dto.NextLessonDto;
-import com.testingpractice.duoclonebackend.entity.Course;
-import com.testingpractice.duoclonebackend.entity.Lesson;
-import com.testingpractice.duoclonebackend.entity.Unit;
-import com.testingpractice.duoclonebackend.entity.UserCourseProgress;
+import com.testingpractice.duoclonebackend.entity.*;
 import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import com.testingpractice.duoclonebackend.mapper.LessonMapper;
@@ -35,7 +32,13 @@ public class CourseProgressServiceImpl implements CourseProgressService {
   @Override
   @Transactional
   public List<LessonDto> updateUsersNextLesson(
-      Integer userId, Integer courseId,  Lesson currentLesson, boolean isCompleted, Integer scoreForLesson) {
+          User user, Integer courseId, Lesson currentLesson, boolean isCompleted, Integer scoreForLesson) {
+
+    Integer userId = user.getId();
+
+    if (!user.getCurrentCourseId().equals(courseId))
+      throw new ApiException(ErrorCode.COURSE_MISMATCH);
+
     UserCourseProgress userCourseProgress =
         userCourseProgressRepository.findByUserIdAndCourseId(userId, courseId);
 

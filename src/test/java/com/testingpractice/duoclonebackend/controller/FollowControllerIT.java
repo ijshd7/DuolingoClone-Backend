@@ -1,18 +1,18 @@
 package com.testingpractice.duoclonebackend.controller;
 
 import com.testingpractice.duoclonebackend.constants.pathConstants;
+import com.testingpractice.duoclonebackend.dto.FollowFollowingListResponse;
 import com.testingpractice.duoclonebackend.dto.FollowResponse;
 import com.testingpractice.duoclonebackend.entity.User;
-import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Map;
 
-import static com.testingpractice.duoclonebackend.testutils.TestConstants.FIXED_TIMESTAMP_1;
-import static com.testingpractice.duoclonebackend.testutils.TestConstants.FIXED_TIMESTAMP_2;
+import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
 import static com.testingpractice.duoclonebackend.testutils.TestUtils.makeFollow;
 import static com.testingpractice.duoclonebackend.testutils.TestUtils.makeUser;
 import static io.restassured.RestAssured.given;
@@ -40,7 +40,7 @@ public class FollowControllerIT extends AbstractIntegrationTest{
         User followed = userRepository.save(makeUser(course1.getId(), "testUser2", "test2", "user2", "testemail2", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
         Integer followedId = followed.getId();
 
-        FollowResponse response = submitFollowBody(followerId, followedId, followPath);
+        FollowResponse response = submitFollowPostBody(followerId, followedId, followPath);
 
         assertThat(response).isNotNull();
         assertThat(response.followedNewStats().followerIds().size()).isEqualTo(1);
@@ -61,7 +61,7 @@ public class FollowControllerIT extends AbstractIntegrationTest{
 
         followRepository.save(makeFollow(followerId, followedId, FIXED_TIMESTAMP_1));
 
-        FollowResponse response = submitFollowBody(followerId, followedId, unfollowPath);
+        FollowResponse response = submitFollowPostBody(followerId, followedId, unfollowPath);
 
         assertThat(response).isNotNull();
         assertThat(response.followedNewStats().followerIds().size()).isEqualTo(0);
@@ -119,9 +119,70 @@ public class FollowControllerIT extends AbstractIntegrationTest{
 
     }
 
+    @Test
+    void getFollowersAndFollowingForUser_noFollows_returnsEmptyLists () {
+
+        User user = userRepository.save(makeUser(course1.getId(), "testUser", "test", "user", "testemail", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
+        Integer userId = user.getId();
+
+        User dummyUser1 =  userRepository.save(makeUser(course1.getId(), "testUser1", "test2", "user2", "testemail2", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
+        User dummyUser2 =  userRepository.save(makeUser(course1.getId(), "testUser2", "test3", "user3", "testemail3", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
+        User dummyUser3 =  userRepository.save(makeUser(course1.getId(), "testUser3", "test4", "user4", "testemail4", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
+
+        followRepository.saveAll(List.of(
+                makeFollow(dummyUser1.getId(), dummyUser2.getId(), FIXED_TIMESTAMP_1),
+                makeFollow(dummyUser2.getId(), dummyUser3.getId(), FIXED_TIMESTAMP_2_2),
+                makeFollow(dummyUser3.getId(), dummyUser1.getId(), FIXED_TIMESTAMP_2)
+        ));
 
 
-    private FollowResponse submitFollowBody(Integer userId, Integer followedId, String path) {
+        FollowFollowingListResponse response = submitFollowRequestBody(userId);
+
+        assertThat(response).isNotNull();
+        assertThat(response.followerIds().size()).isEqualTo(0);
+        assertThat(response.followingIds().size()).isEqualTo(0);
+
+    }
+
+    @Test
+    void getFollowersAndFollowingForUser_followsExist_returnsLists () {
+
+        User user = userRepository.save(makeUser(course1.getId(), "testUser", "test", "user", "testemail", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
+        Integer userId = user.getId();
+
+        User dummyUser1 =  userRepository.save(makeUser(course1.getId(), "testUser1", "test2", "user2", "testemail2", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
+        User dummyUser2 =  userRepository.save(makeUser(course1.getId(), "testUser2", "test3", "user3", "testemail3", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
+        User dummyUser3 =  userRepository.save(makeUser(course1.getId(), "testUser3", "test4", "user4", "testemail4", "pfp", 0, FIXED_TIMESTAMP_1, FIXED_TIMESTAMP_2, 0));
+
+        followRepository.saveAll(List.of(
+                makeFollow(dummyUser1.getId(), userId, FIXED_TIMESTAMP_1),
+                makeFollow(dummyUser2.getId(), userId, FIXED_TIMESTAMP_2),
+                makeFollow(userId, dummyUser3.getId(), FIXED_TIMESTAMP_2_2)
+        ));
+
+        FollowFollowingListResponse response = submitFollowRequestBody(userId);
+        assertThat(response).isNotNull();
+        assertThat(response.followerIds().size()).isEqualTo(2);
+        assertThat(response.followingIds().size()).isEqualTo(1);
+
+    }
+
+
+    private FollowFollowingListResponse submitFollowRequestBody (Integer userId) {
+        return
+                given()
+                        .contentType("application/json")
+                        .when()
+                        .get(pathConstants.FOLLOWS + pathConstants.GET_FOLLOWS_BY_USER.replace("{userId}", userId.toString()))
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .as(FollowFollowingListResponse.class);
+    }
+
+
+
+    private FollowResponse submitFollowPostBody(Integer userId, Integer followedId, String path) {
         return
                 given()
                         .header("X-Test-User-Id", userId)
@@ -138,6 +199,8 @@ public class FollowControllerIT extends AbstractIntegrationTest{
                         .extract()
                         .as(FollowResponse.class);
     }
+
+
 
 
 
