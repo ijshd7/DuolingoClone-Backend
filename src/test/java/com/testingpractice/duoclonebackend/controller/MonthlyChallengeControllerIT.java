@@ -3,10 +3,8 @@ package com.testingpractice.duoclonebackend.controller;
 import com.testingpractice.duoclonebackend.constants.pathConstants;
 import com.testingpractice.duoclonebackend.dto.QuestResponse;
 import com.testingpractice.duoclonebackend.entity.User;
-import com.testingpractice.duoclonebackend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.testingpractice.duoclonebackend.testutils.TestConstants.*;
@@ -17,9 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MonthlyChallengeControllerIT extends AbstractIntegrationTest{
-
-    @Autowired
-    private UserRepository userRepository;
 
     @BeforeEach
     void seed () {

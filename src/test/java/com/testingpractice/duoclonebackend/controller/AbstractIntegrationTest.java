@@ -60,6 +60,7 @@ public abstract class AbstractIntegrationTest {
    protected Lesson l6;
 
    protected MonthlyChallengeDefinition monthlyChallengeDefinition;
+   protected List<QuestDefinition> questDefinitions;
 
 
   @Container
@@ -214,7 +215,7 @@ public abstract class AbstractIntegrationTest {
     l5 = savedLessons.get(4);
     l6 = savedLessons.get(5);
 
-    questDefinitionRepository.saveAll(List.of(
+    questDefinitions = questDefinitionRepository.saveAll(List.of(
             makeQuestDefition("STREAK", 1, 10, true),
             makeQuestDefition("ACCURACY", 2, 10, true),
             makeQuestDefition("PERFECT", 1, 10, true)
