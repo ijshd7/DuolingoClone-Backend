@@ -1,9 +1,7 @@
 package com.testingpractice.duoclonebackend.service;
-
 import com.testingpractice.duoclonebackend.dto.QuestResponse;
 import com.testingpractice.duoclonebackend.entity.QuestDefinition;
 import com.testingpractice.duoclonebackend.entity.UserDailyQuest;
-import com.testingpractice.duoclonebackend.entity.UserDailyQuestId;
 import com.testingpractice.duoclonebackend.enums.QuestCode;
 import com.testingpractice.duoclonebackend.exception.ApiException;
 import com.testingpractice.duoclonebackend.exception.ErrorCode;
@@ -11,10 +9,8 @@ import com.testingpractice.duoclonebackend.repository.QuestDefinitionRepository;
 import com.testingpractice.duoclonebackend.repository.UserDailyQuestRepository;
 import com.testingpractice.duoclonebackend.utils.DateUtils;
 import jakarta.transaction.Transactional;
-
 import java.time.Clock;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

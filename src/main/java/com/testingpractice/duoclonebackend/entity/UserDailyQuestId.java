@@ -5,10 +5,17 @@ import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserDailyQuestId implements Serializable {
 
   @Column(name = "user_id")

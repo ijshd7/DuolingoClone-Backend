@@ -29,14 +29,30 @@ public class TestConstants {
   public static Integer SECTION_1_ID = 1;
   public static Integer SECTION_2_ID = 2;
 
+  // For month 1 (JANUARY 2025)
   public static final LocalDate FIXED_DATE_1 = LocalDate.of(2025, 1, 1);
   public static final LocalDate FIXED_DATE_2 = LocalDate.of(2025, 1, 2);
   public static final LocalDate FIXED_DATE_3 = LocalDate.of(2025, 1, 3);
 
+  // For month 2 (FEBRUARY 2025)
+  public static final LocalDate FIXED_DATE_2_1 = LocalDate.of(2025, 2, 1);
+  public static final LocalDate FIXED_DATE_2_2 = LocalDate.of(2025, 2, 2);
+  public static final LocalDate FIXED_DATE_2_3 = LocalDate.of(2025, 2, 3);
+
+  // First 3 days of January 2025 at start of day
   public static final Timestamp FIXED_TIMESTAMP_1 =
           Timestamp.valueOf(FIXED_DATE_1.atStartOfDay());
   public static final Timestamp FIXED_TIMESTAMP_2 =
           Timestamp.valueOf(FIXED_DATE_2.atStartOfDay());
   public static final Timestamp FIXED_TIMESTAMP_3 =
           Timestamp.valueOf(FIXED_DATE_3.atStartOfDay());
+
+  // First 3 days of February 2025 at start of day
+  public static final Timestamp FIXED_TIMESTAMP_2_1 =
+          Timestamp.valueOf(FIXED_DATE_2_1.atStartOfDay());
+  public static final Timestamp FIXED_TIMESTAMP_2_2 =
+          Timestamp.valueOf(FIXED_DATE_2_2.atStartOfDay());
+  public static final Timestamp FIXED_TIMESTAMP_2_3 =
+          Timestamp.valueOf(FIXED_DATE_2_3.atStartOfDay());
+
 }

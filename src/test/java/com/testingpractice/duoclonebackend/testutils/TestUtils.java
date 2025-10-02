@@ -3,6 +3,7 @@ package com.testingpractice.duoclonebackend.testutils;
 import com.testingpractice.duoclonebackend.entity.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import static com.testingpractice.duoclonebackend.testutils.TestConstants.FIXED_TIMESTAMP_1;
 
@@ -30,6 +31,35 @@ public class TestUtils {
 
   public static User makeUser(Integer currentCourseId, String username, String firstName, String lastName, String email, String pfpSrc, Integer points, Timestamp createdAt, Timestamp lastSubmission, Integer streakLength) {
     return User.builder().currentCourseId(currentCourseId).username(username).firstName(firstName).lastName(lastName).email(email).pfpSrc(pfpSrc).points(points).createdAt(createdAt).lastSubmission(lastSubmission).streakLength(streakLength).build();
+  }
+
+  public static UserMonthlyChallenge makeUserMonthlyChallenge (Integer userId, Integer defId, LocalDate today, Integer progress) {
+
+    return UserMonthlyChallenge.builder()
+            .id(UserMonthlyChallengeId.builder()
+                    .userId(userId)
+                    .challengeDefId(defId)
+                    .year(today.getYear())
+                    .month(today.getMonthValue())
+                    .build())
+            .progress(progress)
+            .rewardClaimed(false)
+            .completedAt(null)
+            .build();
+  }
+
+  public static UserDailyQuest makeUserDailyQuest (Integer userId, Integer defId, LocalDate today, Integer progress) {
+
+    return UserDailyQuest.builder()
+            .id(UserDailyQuestId.builder()
+                    .userId(userId)
+                    .questDefId(defId)
+                    .date(today)
+                    .build())
+            .progress(progress)
+            .rewardClaimed(false)
+            .completedAt(null)
+            .build();
   }
 
   public static Course makeCourse(String title, String imgSrc) {
