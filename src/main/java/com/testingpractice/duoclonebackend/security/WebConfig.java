@@ -13,7 +13,12 @@ public class WebConfig {
       @Override
       public void addCorsMappings(CorsRegistry r) {
         r.addMapping("/**")
-            .allowedOrigins("http://localhost:5173")
+            .allowedOrigins(
+                    "http://localhost:5173",
+                    "https://duoclone.jokerhut.com",
+                    "https://www.duoclone.jokerhut.com",
+                    "https://exquisite-lily-dbf9cd.netlify.app"
+            )
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .allowedHeaders("*")
             .allowCredentials(true);
