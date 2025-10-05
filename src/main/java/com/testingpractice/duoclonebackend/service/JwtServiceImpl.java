@@ -1,6 +1,8 @@
 package com.testingpractice.duoclonebackend.service;
 
 import com.testingpractice.duoclonebackend.auth.AuthCookieService;
+import com.testingpractice.duoclonebackend.exception.ApiException;
+import com.testingpractice.duoclonebackend.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -42,8 +44,7 @@ public class JwtServiceImpl implements JwtService{
 
     @Override
     public int requireUserId(String token) {
-        if (token == null || token.isBlank())
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing token");
+    if (token == null || token.isBlank()) throw new ApiException(ErrorCode.MISSING_TOKEN);
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
@@ -52,7 +53,7 @@ public class JwtServiceImpl implements JwtService{
                     .getBody();
             return Integer.parseInt(claims.getSubject());
         } catch (JwtException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
+      throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
     }
 
