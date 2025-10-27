@@ -70,7 +70,7 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
             .body(
                     Map.of(
                             "lessonId", lessonId,
-                            "courseId", course1.getId()))
+                            "sectionId", course1.getId()))
             .when()
             .post(pathConstants.LESSONS_COMPLETIONS + pathConstants.SUBMIT_COMPLETED_LESSON)
             .then()
@@ -128,7 +128,7 @@ class LessonCompletionControllerIT extends AbstractIntegrationTest {
             .body(
                 Map.of(
                     "lessonId", lessonId,
-                    "courseId", courseId))
+                    "sectionId", courseId))
             .when()
             .post(pathConstants.LESSONS_COMPLETIONS + pathConstants.SUBMIT_COMPLETED_LESSON)
             .then()

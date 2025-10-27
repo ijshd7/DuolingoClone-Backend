@@ -16,6 +16,8 @@ public enum ErrorCode {
   COURSE_MISMATCH(HttpStatus.BAD_REQUEST, "Course id does not match the user's current course"),
   OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "No option found for the submitted option"),
   ALREADY_FOLLOWS(HttpStatus.BAD_REQUEST, "You already follow this user"),
+  MISSING_TOKEN(HttpStatus.UNAUTHORIZED, "Authorization token is missing"),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Authorization token is invalid"),
   DOES_NOT_FOLLOW(HttpStatus.BAD_REQUEST, "You don't follow this user");
 
   private final HttpStatus status;
